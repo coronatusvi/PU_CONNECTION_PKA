@@ -160,6 +160,7 @@ class TweetCard extends ConsumerWidget {
                                     displayDirection:
                                         UIDirection.uiDirectionHorizontal,
                                     link: '${tweet.link}',
+                                    link: 'https://${tweet.link[0]}',
                                   ),
                                 ],
                                 Container(

@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart';
+import 'package:appwrite/models.dart' as model;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:phenikaa_campus/constants/appwrite_constant.dart';
@@ -14,8 +14,7 @@ final userAPIProvider = Provider((ref) {
 
 abstract class IUserAPI {
   FutureEitherVoid saveUserData(UserModel userModel);
-  Future<Document> getUserData(String uid);
-  Future<List<Document>> searchUserByName(String name);
+  Future<model.Document> getUserData(String uid);
 }
 
 class UserAPI implements IUserAPI {
@@ -29,7 +28,7 @@ class UserAPI implements IUserAPI {
     try {
       await _db.createDocument(
         databaseId: AppwriteConstants.databaseId,
-        collectionId: AppwriteConstants.usersCollection,
+        collectionId: AppwriteConstants.userCollection,
         documentId: userModel.uid,
         data: userModel.toMap(),
       );
@@ -50,24 +49,11 @@ class UserAPI implements IUserAPI {
   }
 
   @override
-  Future<Document> getUserData(String uid) {
+  Future<model.Document> getUserData(String uid) {
     return _db.getDocument(
       databaseId: AppwriteConstants.databaseId,
-      collectionId: AppwriteConstants.usersCollection,
+      collectionId: AppwriteConstants.userCollection,
       documentId: uid,
     );
-  }
-
-  @override
-  Future<List<Document>> searchUserByName(String name) async {
-    final documents = await _db.listDocuments(
-      databaseId: AppwriteConstants.databaseId,
-      collectionId: AppwriteConstants.usersCollection,
-      queries: [
-        Query.search('name', name),
-      ],
-    );
-
-    return documents.documents;
-  }
+  } 
 }

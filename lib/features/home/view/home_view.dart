@@ -33,18 +33,16 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _page == 0 ? appBar : null,
+      appBar: appBar,
       body: IndexedStack(index: _page, children: UIConstants.bottomTabBarPages),
-      floatingActionButton: _page == 0
-          ? FloatingActionButton(
-              onPressed: onCreateTweet,
-              child: const Icon(
-                Icons.add,
-                color: Pallete.whiteColor,
-                size: 30,
-              ),
-            )
-          : null,
+      floatingActionButton: FloatingActionButton(
+        onPressed: onCreateTweet,
+        child: const Icon(
+          Icons.add,
+          color: Pallete.whiteColor,
+          size: 30,
+        ),
+      ),
       bottomNavigationBar: CupertinoTabBar(
           currentIndex: _page,
           onTap: onPageChange,
@@ -55,14 +53,12 @@ class _HomeViewState extends State<HomeView> {
               _page == 0
                   ? AssetsConstants.homeFilledIcon
                   : AssetsConstants.homeOutlinedIcon,
-              colorFilter:
-                  const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
+              color: Pallete.whiteColor,
             )),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 AssetsConstants.searchIcon,
-                colorFilter:
-                    const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
+                color: Pallete.whiteColor,
               ),
             ),
             BottomNavigationBarItem(
@@ -70,8 +66,7 @@ class _HomeViewState extends State<HomeView> {
                 _page == 2
                     ? AssetsConstants.notifFilledIcon
                     : AssetsConstants.notifOutlinedIcon,
-                colorFilter:
-                    const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
+                color: Pallete.whiteColor,
               ),
             ),
           ]),

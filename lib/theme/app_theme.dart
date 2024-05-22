@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import 'theme.dart';
+import 'package:phenikaa_campus/theme/pallete.dart';
 
 class AppTheme {
   static ThemeData theme = ThemeData.dark().copyWith(
@@ -12,9 +10,6 @@ class AppTheme {
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Pallete.blueColor,
-    ),
-    textTheme: TextTheme(
-      bodyText2: GoogleFonts.manrope(color: Colors.white, fontSize: 16),
     ),
   );
 }
