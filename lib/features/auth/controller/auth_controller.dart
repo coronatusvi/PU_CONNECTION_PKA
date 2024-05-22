@@ -17,10 +17,23 @@ final authControllerProvider =
   );
 });
 
+
+
+final currentUserDetailsProvider = FutureProvider((ref) {
+  final currentUserId = ref.watch(currentUserAccountProvider).value!.$id;
+  final userDetails = ref.watch(userDetailsProvider(currentUserId));
+  return userDetails.value;
+}); //currentUserDetailsProvider
+
+final userDetailsProvider = FutureProvider.family((ref, String uid) {
+  final authController = ref.watch(authControllerProvider.notifier);
+  return authController.getUserData(uid);
+});  //userDetailsProvider
+
 final currentUserAccountProvider = FutureProvider((ref) {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.currentUser();
-});
+});  //currentUserAccountProvider
 
 class AuthController extends StateNotifier<bool> {
   final AuthAPI _authAPI;
@@ -86,5 +99,11 @@ class AuthController extends StateNotifier<bool> {
         Navigator.push(context, HomeView.route());
       },
     );
+  }
+
+  Future<UserModel> getUserData(String uid) async {
+    final document = await _userAPI.getUserData(uid);
+    final updateUser = UserModel.fromMap(document.data);
+    return updateUser;
   }
 }

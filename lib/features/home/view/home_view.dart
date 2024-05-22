@@ -28,7 +28,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   onCreateTweet() {
-    // Navigator.push(context, CreateTweetScreen.route());
+    Navigator.push(context, CreateTweetScreen.route());
   }
 
   @override
@@ -54,14 +54,12 @@ class _HomeViewState extends State<HomeView> {
               _page == 0
                   ? AssetsConstants.homeFilledIcon
                   : AssetsConstants.homeOutlinedIcon,
-              colorFilter:
-                  const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
+              color: Pallete.whiteColor,
             )),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 AssetsConstants.searchIcon,
-                colorFilter:
-                    const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
+                color: Pallete.whiteColor,
               ),
             ),
             BottomNavigationBarItem(
@@ -69,8 +67,7 @@ class _HomeViewState extends State<HomeView> {
                 _page == 2
                     ? AssetsConstants.notifFilledIcon
                     : AssetsConstants.notifOutlinedIcon,
-                colorFilter:
-                    const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
+                color: Pallete.whiteColor,
               ),
             ),
           ]),
