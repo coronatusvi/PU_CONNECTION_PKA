@@ -28,7 +28,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   onCreateTweet() {
-    Navigator.push(context, CreateTweetScreen.route());
+    // Navigator.push(context, CreateTweetScreen.route());
   }
 
   @override

@@ -9,7 +9,9 @@ import 'package:phenikaa_campus/features/auth/widgets/auth_field.dart';
 import 'package:phenikaa_campus/theme/theme.dart';
 
 class SignUpView extends ConsumerStatefulWidget {
-  static route() => MaterialPageRoute(builder: (context) => const SignUpView());
+  static route() => MaterialPageRoute(
+        builder: (context) => const SignUpView(),
+      );
   const SignUpView({super.key});
 
   @override
@@ -20,9 +22,9 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   final appbar = UIConstants.appBar();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
@@ -38,65 +40,66 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(authControllerProvider);
+
     return Scaffold(
-        appBar: appbar,
-        body: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(children: [
-                //TextField username
-                AuthField(
-                  controller: emailController,
-                  hintText: 'Email',
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                //TextField password
-                AuthField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                //Button done
-                Align(
-                  alignment: Alignment.topRight,
-                  child: RoundedSmallButton(
-                    label: 'Done',
-                    onTap: onSignUp,
-                    textColor: Pallete.backgroundColor,
-                    backgroundColor: Pallete.whiteColor,
+      appBar: appbar,
+      body: isLoading
+          ? const Loader()
+          : Center(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      // textfield 1
+                      AuthField(
+                        controller: emailController,
+                        hintText: 'Email',
+                      ),
+                      const SizedBox(height: 25),
+                      AuthField(
+                        controller: passwordController,
+                        hintText: 'Password',
+                      ),
+                      const SizedBox(height: 40),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: RoundedSmallButton(
+                          onTap: onSignUp,
+                          label: 'Done',
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      RichText(
+                        text: TextSpan(
+                          text: "Already have an account?",
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: ' Login',
+                              style: const TextStyle(
+                                color: Pallete.blueColor,
+                                fontSize: 16,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.push(
+                                    context,
+                                    LoginView.route(),
+                                  );
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 40,
-                ),
-                RichText(
-                  text: TextSpan(
-                      text: "Already have an account?",
-                      style: const TextStyle(fontSize: 16),
-                      children: [
-                        TextSpan(
-                            text: ' Log in',
-                            style: const TextStyle(
-                              color: Pallete.blueColor,
-                              fontSize: 16,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.push(
-                                  context,
-                                  LoginView.route(),
-                                );
-                              })
-                      ]),
-                )
-              ]),
+              ),
             ),
-          ),
-        ));
+    );
   }
 }

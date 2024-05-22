@@ -9,7 +9,8 @@ class UIConstants {
       title: SvgPicture.asset(
         AssetsConstants.phenikaaLogo,
         height: 40,
-        colorFilter: ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
+        colorFilter:
+            const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
       ),
       centerTitle: true,
     );

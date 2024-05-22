@@ -1,21 +1,42 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phenikaa_campus/apis/auth_api.dart';
+import 'package:phenikaa_campus/apis/user_api.dart';
 import 'package:phenikaa_campus/core/utils.dart';
 
+import 'package:phenikaa_campus/features/auth/view/login_view.dart';
+import 'package:phenikaa_campus/features/home/view/home_view.dart';
+import 'package:phenikaa_campus/models/user_models.dart';
+
 final authControllerProvider =
-    StateNotifierProvider<AuthController, dynamic>((ref) {
+    StateNotifierProvider<AuthController, bool>((ref) {
   return AuthController(
     authAPI: ref.watch(authAPIProvider),
+    userAPI: ref.watch(userAPIProvider),
   );
+});
+
+final currentUserAccountProvider = FutureProvider((ref) {
+  final authController = ref.watch(authControllerProvider.notifier);
+  return authController.currentUser();
 });
 
 class AuthController extends StateNotifier<bool> {
   final AuthAPI _authAPI;
-  AuthController({required AuthAPI authAPI})
-      : _authAPI = authAPI,
+  final UserAPI _userAPI;
+  AuthController({
+    required AuthAPI authAPI,
+    required UserAPI userAPI,
+  })  : _authAPI = authAPI,
+        _userAPI = userAPI,
         super(false);
-  //isLoading
+  // state = isLoading
+
+  Future<User?> currentUser() => _authAPI.currentUserAccount();
+
   void signUp({
     required String email,
     required String password,
@@ -26,9 +47,27 @@ class AuthController extends StateNotifier<bool> {
       email: email,
       password: password,
     );
+    state = false;
     res.fold(
       (l) => showSnackBar(context, l.message),
-      (r) => print(r.email),
+      (r) async {
+        UserModel userModel = UserModel(
+          email: email,
+          name: getNameFromEmail(email),
+          followers: const [],
+          following: const [],
+          profilePic: '',
+          bannerPic: '',
+          uid: r.$id,
+          bio: '',
+          isTwitterBlue: false,
+        );
+        final res2 = await _userAPI.saveUserData(userModel);
+        res2.fold((l) => showSnackBar(context, l.message), (r) {
+          showSnackBar(context, 'Accounted created! Please login.');
+          Navigator.push(context, LoginView.route());
+        });
+      },
     );
   }
 
@@ -42,9 +81,12 @@ class AuthController extends StateNotifier<bool> {
       email: email,
       password: password,
     );
+    state = false;
     res.fold(
       (l) => showSnackBar(context, l.message),
-      (r) => print(r.userId),
+      (r) {
+        Navigator.push(context, HomeView.route());
+      },
     );
   }
 }
