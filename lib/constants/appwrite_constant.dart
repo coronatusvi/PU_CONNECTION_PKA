@@ -12,4 +12,9 @@ class AppwriteConstants {
   //cloud
   static const String endPoint = 'https://cloud.appwrite.io/v1';
   static const String userCollection = '650f03426339595225d4';
+  static const String tweetsCollection = '65126c0a014fdbf15c4b';
+  static const String imagesBucket = '651294834052857f51c3';
+
+  static String imageUrl(String imageId) =>
+      "$endPoint/storage/buckets/$imagesBucket/files/$imageId/view?project=$projectId&mode=admin";
 }

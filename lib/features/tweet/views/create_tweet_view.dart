@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:phenikaa_campus/core/utils.dart';
+import 'package:phenikaa_campus/features/tweet/controller/tweet_controller.dart';
 import '../../../common/loading_page.dart';
 import '../../../common/rounded_small_button.dart';
 import '../../../constants/assets_constants.dart';
@@ -31,7 +32,13 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
     tweetTextController.dispose();
   }
 
-  void shareTweet() {}
+  void shareTweet() {
+    ref.watch(tweetControllerProvider.notifier).shareTweet(
+          images: images,
+          text: tweetTextController.text,
+          context: context,
+        );
+  }
 
   void onPickImages() async {
 // Kiểm tra nền tảng và thực hiện hành động tương ứng
@@ -46,7 +53,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(currentUserDetailsProvider).value;
-    final isLoading = false;
+    final isLoading = ref.watch(tweetControllerProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

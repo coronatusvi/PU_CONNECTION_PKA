@@ -5,7 +5,7 @@ import 'package:phenikaa_campus/core/enums/tweet_type_enum.dart';
 class Tweet {
   final String text;
   final List<String> hashtags;
-  final String link;
+  final List<String> link;
   final List<String> imageLinks;
   final String uid;
   final TweetType tweetType;
@@ -35,7 +35,7 @@ class Tweet {
   Tweet copyWith({
     String? text,
     List<String>? hashtags,
-    String? link,
+    List<String>? link,
     List<String>? imageLinks,
     String? uid,
     TweetType? tweetType,
@@ -87,7 +87,7 @@ class Tweet {
     return Tweet(
       text: map['text'] ?? '',
       hashtags: List<String>.from(map['hashtags']),
-      link: map['link'] ?? '',
+      link: List<String>.from(map['link']),
       imageLinks: List<String>.from(map['imageLinks']),
       uid: map['uid'] ?? '',
       tweetType: (map['tweetType'] as String).toTweetTypeEnum(),
@@ -113,7 +113,7 @@ class Tweet {
     return other is Tweet &&
         other.text == text &&
         listEquals(other.hashtags, hashtags) &&
-        other.link == link &&
+        listEquals(other.link, link) &&
         listEquals(other.imageLinks, imageLinks) &&
         other.uid == uid &&
         other.tweetType == tweetType &&
