@@ -26,6 +26,7 @@ abstract class IAuthAPI {
     required String password,
   });
   Future<User?> currentUserAccount();
+  // FutureEitherVoid logout();
 }
 
 class AuthAPI implements IAuthAPI {
@@ -87,4 +88,23 @@ class AuthAPI implements IAuthAPI {
       );
     }
   }
+
+  // @override
+  // FutureEitherVoid logout() async {
+  //   try {
+  //     await _account.deleteSession(
+  //       sessionId: "current",
+  //     );
+  //     return right(null);
+  //   } on AppwriteException catch (e, stackTrace) {
+  //     Failure(
+  //         e.message ??
+  //             "Some unexpected error occurred. - Một số lỗi không mong muốn!",
+  //         stackTrace);
+  //   } catch (e, stackTrace) {
+  //     return left(
+  //       Failure(e.toString(), stackTrace),
+  //     );
+  //   }
+  // }
 }
