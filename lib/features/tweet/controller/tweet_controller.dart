@@ -7,7 +7,6 @@ import 'package:phenikaa_campus/apis/tweet_api.dart';
 import 'package:phenikaa_campus/core/enums/tweet_type_enum.dart';
 import 'package:phenikaa_campus/core/utils.dart';
 import 'package:phenikaa_campus/features/auth/controller/auth_controller.dart';
-import 'package:phenikaa_campus/features/home/view/home_view.dart';
 import 'package:phenikaa_campus/models/tweet_model.dart';
 
 import '../../../models/user_models.dart';
