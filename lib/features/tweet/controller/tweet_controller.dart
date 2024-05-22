@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phenikaa_campus/apis/storage_api.dart';
@@ -7,6 +8,7 @@ import 'package:phenikaa_campus/apis/tweet_api.dart';
 import 'package:phenikaa_campus/core/enums/tweet_type_enum.dart';
 import 'package:phenikaa_campus/core/utils.dart';
 import 'package:phenikaa_campus/features/auth/controller/auth_controller.dart';
+import 'package:phenikaa_campus/features/home/view/home_view.dart';
 import 'package:phenikaa_campus/models/tweet_model.dart';
 
 import '../../../models/user_models.dart';
@@ -106,6 +108,7 @@ class TweetController extends StateNotifier<bool> {
 
     tweet = tweet.copyWith(likes: likes);
     final res = await _tweetAPI.likeTweet(tweet);
+    res.fold((l) => null, (r) => null);
   }
 
   void reshareTweet(
@@ -119,6 +122,14 @@ class TweetController extends StateNotifier<bool> {
       commentIds: [],
       reshareCount: tweet.reshareCount + 1,
     );
+
+    final res = await _tweetAPI.updateReshareCount(tweet);
+    res.fold((l) => showSnackBar(context, l.message), (r) async {
+      tweet = tweet.copyWith(id: ID.unique(), reshareCount: 0);
+      final res2 = await _tweetAPI.shareTweet(tweet);
+      res2.fold((l) => showSnackBar(context, l.message),
+          (r) => showSnackBar(context, "Retweeted"));
+    });
   }
 
   void _shareImageTweet({

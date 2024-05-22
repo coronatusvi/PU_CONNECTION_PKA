@@ -13,23 +13,20 @@ import '../../../models/tweet_model.dart';
 import '../../../theme/pallete.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../controller/tweet_controller.dart';
+import '../views/twitter_reply_view.dart';
 import 'carousel_image.dart';
 import 'hashtag_text.dart';
 import 'tweet_icon_button.dart';
 
 class TweetCard extends ConsumerWidget {
   final Tweet tweet;
-  final changeOnTap;
   const TweetCard({
     super.key,
-    this.changeOnTap,
     required this.tweet,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print("Hàm route $tweet \n\n\ =======> $changeOnTap");
-
     final currentUser = ref.watch(currentUserDetailsProvider).value;
 
     return currentUser == null
@@ -37,7 +34,12 @@ class TweetCard extends ConsumerWidget {
         : ref.watch(userDetailsProvider(tweet.uid)).when(
               data: (user) {
                 return GestureDetector(
-                  onTap: changeOnTap,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      TwitterReplyScreen.route(tweet),
+                    );
+                  },
                   child: Column(
                     children: [
                       Row(
@@ -157,7 +159,7 @@ class TweetCard extends ConsumerWidget {
                                   AnyLinkPreview(
                                     displayDirection:
                                         UIDirection.uiDirectionHorizontal,
-                                    link: 'https://${tweet.link[0]}',
+                                    link: '${tweet.link}',
                                   ),
                                 ],
                                 Container(

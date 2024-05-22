@@ -30,7 +30,9 @@ class MyApp extends ConsumerWidget {
                 return const SignUpView();
               }
             },
-            loading: () => const LoadingPage(),
+            loading: () => const LoadingPage(
+                  backgroundColor: Pallete.rhinoDark500,
+                ),
             error: (error, s) {
               return ErrorText(
                 error: error.toString(),

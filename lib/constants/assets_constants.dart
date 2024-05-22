@@ -1,5 +1,6 @@
 class AssetsConstants {
   static const String _svgsPath = 'assets/svgs';
+  static const String _pngPath = 'assets/png';
   static const String twitterLogo = '$_svgsPath/twitter_logo.svg';
   static const String homeFilledIcon = '$_svgsPath/home_filled.svg';
   static const String homeOutlinedIcon = '$_svgsPath/home_outlined.svg';
@@ -16,4 +17,10 @@ class AssetsConstants {
   static const String viewsIcon = '$_svgsPath/views.svg';
   static const String verifiedIcon = '$_svgsPath/verified.svg';
   static const String phenikaaLogo = '$_svgsPath/phenikaa_logo.svg';
+  static const String profileIcon = '$_svgsPath/profile.svg';
+  static const String darkBlur = '$_pngPath/dark_blur_ornament.png';
+  static const String darkNoContent = '$_pngPath/dark_no_content.png';
+
+  //Light Theme
+  static const String lightNoSearch = '$_svgsPath/light_no_search.svg';
 }

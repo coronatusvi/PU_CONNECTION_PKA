@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:phenikaa_campus/core/utils.dart';
-import 'package:phenikaa_campus/features/home/view/home_view.dart';
 import 'package:phenikaa_campus/features/tweet/controller/tweet_controller.dart';
 import '../../../common/loading_page.dart';
 import '../../../common/rounded_small_button.dart';
@@ -40,9 +39,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
           context: context,
           repliedTo: '',
           repliedToUserId: '',
-    );
-
-    Navigator.push(context, HomeView.route());
+        );
   }
 
   void onPickImages() async {
@@ -70,7 +67,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
         actions: [
           RoundedSmallButton(
             onTap: shareTweet,
-            label: 'Tweet',
+            text: 'Tweet',
             backgroundColor: Pallete.blueColor,
             textColor: Pallete.whiteColor,
           ),

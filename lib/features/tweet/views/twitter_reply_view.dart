@@ -22,15 +22,14 @@ class TwitterReplyScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print("object");
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tweet'),
       ),
       body: Column(
         children: [
-          TweetCard(
-            tweet: tweet,
-          ),
+          TweetCard(tweet: tweet),
           ref.watch(getRepliesToTweetsProvider(tweet)).when(
                 data: (tweets) {
                   return ref.watch(getLatestTweetProvider).when(
@@ -80,9 +79,7 @@ class TwitterReplyScreen extends ConsumerWidget {
                               itemCount: tweets.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final tweet = tweets[index];
-                                return TweetCard(
-                                  tweet: tweet,
-                                );
+                                return TweetCard(tweet: tweet);
                               },
                             ),
                           );
@@ -96,9 +93,7 @@ class TwitterReplyScreen extends ConsumerWidget {
                               itemCount: tweets.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final tweet = tweets[index];
-                                return TweetCard(
-                                  tweet: tweet,
-                                );
+                                return TweetCard(tweet: tweet);
                               },
                             ),
                           );
@@ -113,15 +108,15 @@ class TwitterReplyScreen extends ConsumerWidget {
         ],
       ),
       bottomNavigationBar: TextField(
-        // onSubmitted: (value) {
-        //   ref.read(tweetControllerProvider.notifier).shareTweet(
-        //     images: [],
-        //     text: value,
-        //     context: context,
-        //     repliedTo: '',
-        //     repliedToUserId: '',
-        //   );
-        // },
+        onSubmitted: (value) {
+          ref.read(tweetControllerProvider.notifier).shareTweet(
+            images: [],
+            text: value,
+            context: context,
+            repliedTo: '',
+            repliedToUserId: '',
+          );
+        },
         decoration: const InputDecoration(
           hintText: 'Tweet your reply',
         ),

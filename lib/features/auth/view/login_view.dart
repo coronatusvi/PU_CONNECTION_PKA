@@ -69,7 +69,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         alignment: Alignment.topRight,
                         child: RoundedSmallButton(
                           onTap: onLogin,
-                          label: 'Done',
+                          text: 'Done',
                         ),
                       ),
                       const SizedBox(height: 40),
