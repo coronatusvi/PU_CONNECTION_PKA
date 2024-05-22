@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phenikaa_campus/features/auth/view/login_view.dart';
 import 'package:phenikaa_campus/features/auth/view/signup_view.dart';
+import 'package:phenikaa_campus/features/home/view/home_view.dart';
 import 'package:phenikaa_campus/theme/theme.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: AppTheme.theme,
-      home: const SignUpView(),
+      home: const HomeView(),
     );
   }
 }
