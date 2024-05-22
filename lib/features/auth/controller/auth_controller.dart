@@ -17,8 +17,6 @@ final authControllerProvider =
   );
 });
 
-
-
 final currentUserDetailsProvider = FutureProvider((ref) {
   final currentUserId = ref.watch(currentUserAccountProvider).value!.$id;
   final userDetails = ref.watch(userDetailsProvider(currentUserId));
@@ -28,12 +26,12 @@ final currentUserDetailsProvider = FutureProvider((ref) {
 final userDetailsProvider = FutureProvider.family((ref, String uid) {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.getUserData(uid);
-});  //userDetailsProvider
+}); //userDetailsProvider
 
 final currentUserAccountProvider = FutureProvider((ref) {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.currentUser();
-});  //currentUserAccountProvider
+}); //currentUserAccountProvider
 
 class AuthController extends StateNotifier<bool> {
   final AuthAPI _authAPI;
