@@ -10,6 +10,8 @@ import 'package:phenikaa_campus/features/auth/controller/auth_controller.dart';
 import 'package:phenikaa_campus/features/home/view/home_view.dart';
 import 'package:phenikaa_campus/models/tweet_model.dart';
 
+import '../../../models/user_models.dart';
+
 final tweetControllerProvider = StateNotifierProvider<TweetController, bool>(
   (ref) {
     return TweetController(
@@ -28,6 +30,16 @@ final getTweetsProvider = FutureProvider((ref) {
 final getLatestTweetProvider = StreamProvider((ref) {
   final tweetAPI = ref.watch(tweetAPIProvider);
   return tweetAPI.getLatestTweet();
+});
+
+final getTweetByIdProvider = FutureProvider.family((ref, String id) async {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.getTweetById(id);
+});
+
+final getRepliesToTweetsProvider = FutureProvider.family((ref, Tweet tweet) {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.getRepliesToTweet(tweet);
 });
 
 final getTweetsByHashtagProvider = FutureProvider.family((ref, String hashtag) {
@@ -57,22 +69,65 @@ class TweetController extends StateNotifier<bool> {
     required List<File> images,
     required String text,
     required BuildContext context,
+    required String repliedTo,
+    required String repliedToUserId,
   }) {
     if (text.isEmpty) {
-      showSnackBar(context, "Please enter text");
+      showSnackBar(context, 'Please enter text');
       return;
     }
+
     if (images.isNotEmpty) {
-      _shareImageTweet(images: images, text: text, context: context);
+      _shareImageTweet(
+        images: images,
+        text: text,
+        context: context,
+        repliedTo: repliedTo,
+        repliedToUserId: repliedToUserId,
+      );
     } else {
-      _shareTextTweet(text: text, context: context);
+      _shareTextTweet(
+        text: text,
+        context: context,
+        repliedTo: repliedTo,
+        repliedToUserId: repliedToUserId,
+        images: [],
+      );
     }
+  }
+
+  void likeTweet(Tweet tweet, UserModel user) async {
+    List<String> likes = tweet.likes;
+
+    if (tweet.likes.contains(user.uid)) {
+      likes.remove(user.uid);
+    } else {
+      likes.add(user.uid);
+    }
+
+    tweet = tweet.copyWith(likes: likes);
+    final res = await _tweetAPI.likeTweet(tweet);
+  }
+
+  void reshareTweet(
+    Tweet tweet,
+    UserModel currentUser,
+    BuildContext context,
+  ) async {
+    tweet = tweet.copyWith(
+      retweetedBy: currentUser.name,
+      likes: [],
+      commentIds: [],
+      reshareCount: tweet.reshareCount + 1,
+    );
   }
 
   void _shareImageTweet({
     required List<File> images,
     required String text,
     required BuildContext context,
+    required String repliedTo,
+    required String repliedToUserId,
   }) async {
     state = true;
     final hashtags = _getHashtagsFromText(text);
@@ -97,35 +152,53 @@ class TweetController extends StateNotifier<bool> {
     state = false;
     res.fold((l) => showSnackBar(context, l.message), (r) {
       showSnackBar(context, 'Tweet created!.');
-      Navigator.push(context, HomeView.route());
     });
   }
 
   void _shareTextTweet({
+    required List<File> images,
     required String text,
     required BuildContext context,
+    required String repliedTo,
+    required String repliedToUserId,
   }) async {
     state = true;
     final hashtags = _getHashtagsFromText(text);
     final link = _getLinksFromText(text);
     final user = _ref.read(currentUserDetailsProvider).value;
     Tweet tweet = Tweet(
-        text: text,
-        hashtags: hashtags,
-        link: link,
-        imageLinks: const [],
-        uid: user!.uid,
-        tweetType: TweetType.text,
-        tweetedAt: DateTime.now(),
-        likes: const [],
-        commentIds: const [],
-        id: "",
-        reshareCount: 0,
-        retweetedBy: "",
-        repliedTo: "");
+      text: text,
+      hashtags: hashtags,
+      link: link,
+      imageLinks: const [],
+      uid: user!.uid,
+      tweetType: TweetType.text,
+      tweetedAt: DateTime.now(),
+      likes: const [],
+      commentIds: const [],
+      id: "",
+      reshareCount: 0,
+      retweetedBy: '',
+      repliedTo: repliedTo,
+    );
     final res = await _tweetAPI.shareTweet(tweet);
     state = false;
     res.fold((l) => showSnackBar(context, l.message), (r) => null);
+  }
+
+  Future<List<Tweet>> getTweetsByHashtag(String hashtag) async {
+    final documents = await _tweetAPI.getTweetsByHashtag(hashtag);
+    return documents.map((tweet) => Tweet.fromMap(tweet.data)).toList();
+  }
+
+  Future<List<Tweet>> getRepliesToTweet(Tweet tweet) async {
+    final documents = await _tweetAPI.getRepliesToTweet(tweet);
+    return documents.map((tweet) => Tweet.fromMap(tweet.data)).toList();
+  }
+
+  Future<Tweet> getTweetById(String id) async {
+    final tweet = await _tweetAPI.getTweetById(id);
+    return Tweet.fromMap(tweet.data);
   }
 
   List<String> _getLinksFromText(String text) {
@@ -137,7 +210,6 @@ class TweetController extends StateNotifier<bool> {
     for (Match match in matches) {
       links.add(match.group(0)!);
     }
-
     return links;
   }
 
@@ -151,10 +223,5 @@ class TweetController extends StateNotifier<bool> {
     }
 
     return hashtags;
-  }
-
-  Future<List<Tweet>> getTweetsByHashtag(String hashtag) async {
-    final documents = await _tweetAPI.getTweetsByHashtag(hashtag);
-    return documents.map((tweet) => Tweet.fromMap(tweet.data)).toList();
   }
 }

@@ -15,8 +15,9 @@ class HashtagText extends StatelessWidget {
   Widget build(BuildContext context) {
     List<TextSpan> textspans = [];
 
+    RegExp regex = RegExp(r'(#)\S+');
     text.split(' ').forEach((element) {
-      if (element.startsWith('#')) {
+      if (regex.hasMatch(element)) {
         textspans.add(
           TextSpan(
             text: '$element ',
@@ -34,7 +35,9 @@ class HashtagText extends StatelessWidget {
               },
           ),
         );
-      } else if (element.startsWith('www.') || element.startsWith('https://')) {
+      } else if (element.startsWith('www.') ||
+          element.startsWith('https://') ||
+          element.startsWith('http://')) {
         textspans.add(
           TextSpan(
             text: '$element ',
