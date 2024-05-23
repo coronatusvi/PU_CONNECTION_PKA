@@ -47,47 +47,20 @@ class TweetList extends ConsumerWidget {
                       tweets.insert(tweetIndex, tweet);
                     }
 
-                    return Column(
-                      children: [
-                        // Phần tử con tĩnh 2
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              // horizontal: 10.0,
-                              ),
-                          width: size.width,
-                          height: size.height * 0.8,
-                          decoration: BoxDecoration(
-                            gradient: Pallete.cardColor,
-                            borderRadius: BorderRadius.circular(24.0),
-                          ),
-                        ),
-                        // Phần tử con tĩnh 3
-                        Positioned.fill(
-                          top: size.height * 0.068,
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Text('Search'),
-                          ),
-                        ),
-                        // ListView.builder
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: tweets.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final tweet = tweets[index];
-                              return TweetCard(
-                                tweet: tweet,
-                                changeOnTap: () {
-                                  Navigator.push(
-                                    context,
-                                    TwitterReplyScreen.route(tweet),
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                      ],
+                    return ListView.builder(
+                      itemCount: tweets.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final tweet = tweets[index];
+                        return TweetCard(
+                          tweet: tweet,
+                          changeOnTap: () {
+                            Navigator.push(
+                              context,
+                              TwitterReplyScreen.route(tweet),
+                            );
+                          },
+                        );
+                      },
                     );
                   },
                   error: (error, stackTrace) => ErrorText(

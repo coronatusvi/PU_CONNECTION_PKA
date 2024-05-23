@@ -75,6 +75,8 @@ class _CarouselImageState extends State<CarouselImage> {
                       ),
                       margin: const EdgeInsets.all(10),
                       child: Image.network(
+                        width: 500,
+                        height: 800,
                         link,
                         fit: BoxFit.contain,
                       ),

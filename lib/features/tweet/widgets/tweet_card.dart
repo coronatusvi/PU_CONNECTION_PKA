@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:like_button/like_button.dart';
+import 'package:phenikaa_campus/features/user_profile/view/user_profile_view.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../common/error_page.dart';
@@ -46,7 +47,12 @@ class TweetCard extends ConsumerWidget {
                           Container(
                             margin: const EdgeInsets.all(10),
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  UserProfileView.route(user),
+                                );
+                              },
                               child: CircleAvatar(
                                 backgroundImage: NetworkImage(user.profilePic),
                                 radius: 15,
@@ -154,10 +160,18 @@ class TweetCard extends ConsumerWidget {
                                   CarouselImage(imageLinks: tweet.imageLinks),
                                 if (tweet.link.isNotEmpty) ...[
                                   const SizedBox(height: 4),
-                                  AnyLinkPreview(
-                                    displayDirection:
-                                        UIDirection.uiDirectionHorizontal,
-                                    link: 'https://${tweet.link[0]}',
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      child: AnyLinkPreview(
+                                        displayDirection:
+                                            UIDirection.uiDirectionHorizontal,
+                                        link: '${tweet.link[0]}',
+                                      ),
+                                    ),
                                   ),
                                 ],
                                 Container(

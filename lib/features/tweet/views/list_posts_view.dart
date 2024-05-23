@@ -8,11 +8,16 @@ import 'package:phenikaa_campus/features/tweet/widgets/tweet_list.dart';
 import 'package:phenikaa_campus/theme/pallete.dart';
 
 class NewPostsList extends ConsumerStatefulWidget {
+  static route() => MaterialPageRoute(
+        builder: (context) => const NewPostsList(),
+      );
   const NewPostsList({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _NewPostsListState();
 }
+
+
 
 class _NewPostsListState extends ConsumerState<NewPostsList> {
   void onCreateTweet() {
@@ -42,7 +47,7 @@ class _NewPostsListState extends ConsumerState<NewPostsList> {
               ),
             ),
             Positioned(
-              top: 130,
+              top: 100,
               child: Container(
                 width: size.width,
                 height: size.height,
@@ -58,10 +63,10 @@ class _NewPostsListState extends ConsumerState<NewPostsList> {
                   onTap: onCreateTweet,
                   child: Container(
                     margin: EdgeInsets.symmetric(
-                        vertical: size.height * 0.05, horizontal: 40),
+                        vertical: size.height * 0.035, horizontal: 60),
                     padding: EdgeInsets.symmetric(vertical: 10),
                     decoration: BoxDecoration(
-                      color: Pallete.rhinoDark700,
+                      color: Pallete.subTextColor,
                       borderRadius: BorderRadius.circular(24.0),
                     ),
                     child: Row(
@@ -76,7 +81,14 @@ class _NewPostsListState extends ConsumerState<NewPostsList> {
               ],
             ),
             Container(
-              margin: EdgeInsets.only(top: 180),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              margin: EdgeInsets.only(
+                top: size.height * 0.13,
+                left: 10,
+                right: 10,
+              ),
               child: TweetList(),
             )
           ],

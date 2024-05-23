@@ -10,6 +10,7 @@ import 'package:phenikaa_campus/core/utils.dart';
 import 'package:phenikaa_campus/features/auth/controller/auth_controller.dart';
 import 'package:phenikaa_campus/models/tweet_model.dart';
 
+import '../../../apis/notification_api.dart';
 import '../../../models/user_models.dart';
 
 final tweetControllerProvider = StateNotifierProvider<TweetController, bool>(
@@ -50,14 +51,17 @@ final getTweetsByHashtagProvider = FutureProvider.family((ref, String hashtag) {
 class TweetController extends StateNotifier<bool> {
   final TweetAPI _tweetAPI;
   final StorageAPI _storageAPI;
+  final NotificationAPI _notificationAPI;
   final Ref _ref;
   TweetController(
       {required StorageAPI storageAPI,
       required Ref ref,
-      required TweetAPI tweetAPI})
+      required TweetAPI tweetAPI,
+      required NotificationAPI notificationAPI})
       : _ref = ref,
         _tweetAPI = tweetAPI,
         _storageAPI = storageAPI,
+        _notificationAPI = notificationAPI,
         super(false);
 
   Future<List<Tweet>> getTweets() async {
