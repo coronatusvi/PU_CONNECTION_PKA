@@ -2,14 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../theme/theme.dart';
-
 class TextFormFieldCustom extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final Color fillColor;
   final SvgPicture prefixIcon;
-  final Function(String) onChanged;
+  final Function(String)? onChanged;
 
   const TextFormFieldCustom({
     Key? key,
@@ -17,7 +15,7 @@ class TextFormFieldCustom extends StatelessWidget {
     required this.fillColor,
     required this.prefixIcon,
     required this.controller,
-    required this.onChanged,
+    this.onChanged,
   }) : super(key: key);
 
   @override

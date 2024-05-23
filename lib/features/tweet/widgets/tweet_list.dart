@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phenikaa_campus/features/explore/widget/text_form_field_custom.dart';
+import 'package:phenikaa_campus/features/tweet/views/twitter_reply_view.dart';
+import 'package:phenikaa_campus/theme/pallete.dart';
 
 import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
@@ -13,6 +16,8 @@ class TweetList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    Size size = MediaQuery.of(context).size;
+
     return ref.watch(getTweetsProvider).when(
           data: (tweets) {
             return ref.watch(getLatestTweetProvider).when(
@@ -42,12 +47,47 @@ class TweetList extends ConsumerWidget {
                       tweets.insert(tweetIndex, tweet);
                     }
 
-                    return ListView.builder(
-                      itemCount: tweets.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final tweet = tweets[index];
-                        return TweetCard(tweet: tweet);
-                      },
+                    return Column(
+                      children: [
+                        // Phần tử con tĩnh 2
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                              // horizontal: 10.0,
+                              ),
+                          width: size.width,
+                          height: size.height * 0.8,
+                          decoration: BoxDecoration(
+                            gradient: Pallete.cardColor,
+                            borderRadius: BorderRadius.circular(24.0),
+                          ),
+                        ),
+                        // Phần tử con tĩnh 3
+                        Positioned.fill(
+                          top: size.height * 0.068,
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Text('Search'),
+                          ),
+                        ),
+                        // ListView.builder
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: tweets.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final tweet = tweets[index];
+                              return TweetCard(
+                                tweet: tweet,
+                                changeOnTap: () {
+                                  Navigator.push(
+                                    context,
+                                    TwitterReplyScreen.route(tweet),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     );
                   },
                   error: (error, stackTrace) => ErrorText(
@@ -58,7 +98,15 @@ class TweetList extends ConsumerWidget {
                       itemCount: tweets.length,
                       itemBuilder: (BuildContext context, int index) {
                         final tweet = tweets[index];
-                        return TweetCard(tweet: tweet);
+                        return TweetCard(
+                          tweet: tweet,
+                          changeOnTap: () {
+                            Navigator.push(
+                              context,
+                              TwitterReplyScreen.route(tweet),
+                            );
+                          },
+                        );
                       },
                     );
                   },

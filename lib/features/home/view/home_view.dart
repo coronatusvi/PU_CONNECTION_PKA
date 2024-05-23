@@ -35,46 +35,37 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: _page == 0 ? appBar : null,
       body: IndexedStack(index: _page, children: UIConstants.bottomTabBarPages),
-      floatingActionButton: _page == 0
-          ? FloatingActionButton(
-              onPressed: onCreateTweet,
-              child: const Icon(
-                Icons.add,
-                color: Pallete.whiteColor,
-                size: 30,
-              ),
-            )
-          : null,
       bottomNavigationBar: CupertinoTabBar(
-          currentIndex: _page,
-          onTap: onPageChange,
-          backgroundColor: Pallete.rhinoDark800,
-          items: [
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-              _page == 0
-                  ? AssetsConstants.homeFilledIcon
-                  : AssetsConstants.homeOutlinedIcon,
+        currentIndex: _page,
+        onTap: onPageChange,
+        backgroundColor: Pallete.rhinoDark800,
+        items: [
+          BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+            _page == 0
+                ? AssetsConstants.homeFilledIcon
+                : AssetsConstants.homeOutlinedIcon,
+            colorFilter:
+                const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
+          )),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              AssetsConstants.searchIcon,
               colorFilter:
                   const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
-            )),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                AssetsConstants.searchIcon,
-                colorFilter:
-                    const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
-              ),
             ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                _page == 2
-                    ? AssetsConstants.notifFilledIcon
-                    : AssetsConstants.notifOutlinedIcon,
-                colorFilter:
-                    const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
-              ),
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              _page == 2
+                  ? AssetsConstants.notifFilledIcon
+                  : AssetsConstants.notifOutlinedIcon,
+              colorFilter:
+                  const ColorFilter.mode(Pallete.whiteColor, BlendMode.srcIn),
             ),
-          ]),
+          ),
+        ],
+      ),
     );
   }
 }

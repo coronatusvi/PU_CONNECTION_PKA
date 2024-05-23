@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:zoom_widget/zoom_widget.dart';
 
 class CarouselImage extends StatefulWidget {
   final List<String> imageLinks;
@@ -7,14 +8,12 @@ class CarouselImage extends StatefulWidget {
     super.key,
     required this.imageLinks,
   });
-
   @override
   State<CarouselImage> createState() => _CarouselImageState();
 }
 
 class _CarouselImageState extends State<CarouselImage> {
   int _current = 0;
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -25,14 +24,60 @@ class _CarouselImageState extends State<CarouselImage> {
             CarouselSlider(
               items: widget.imageLinks.map(
                 (link) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    margin: const EdgeInsets.all(10),
-                    child: Image.network(
-                      link,
-                      fit: BoxFit.contain,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return Scaffold(
+                              backgroundColor: Colors.black,
+                              body: Center(
+                                  child: Stack(
+                                children: [
+                                  Zoom(
+                                    maxZoomWidth: 700,
+                                    maxZoomHeight: 700,
+                                    canvasColor: Colors.grey,
+                                    opacityScrollBars: 0.9,
+                                    scrollWeight: 10.0,
+                                    centerOnScale: true,
+                                    enableScroll: true,
+                                    doubleTapZoom: true,
+                                    zoomSensibility: 0.05,
+                                    child: GestureDetector(
+                                      onTap: () {},
+                                      child: Image.network(
+                                        link,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 10,
+                                    top: 30,
+                                    child: IconButton(
+                                      icon: Icon(Icons.close),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              )),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      margin: const EdgeInsets.all(10),
+                      child: Image.network(
+                        link,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   );
                 },

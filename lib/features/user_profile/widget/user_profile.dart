@@ -7,7 +7,7 @@ import 'package:phenikaa_campus/common/loading_page.dart';
 import 'package:phenikaa_campus/features/auth/controller/auth_controller.dart';
 import 'package:phenikaa_campus/features/user_profile/widget/follow_count.dart';
 import 'package:phenikaa_campus/theme/pallete.dart';
-import '../controller/color_controller.dart';
+import '../ controller/color_controller.dart';
 import '../../../models/user_models.dart';
 
 class UserProfile extends ConsumerWidget {
