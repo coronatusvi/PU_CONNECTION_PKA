@@ -18,6 +18,7 @@ String getNameFromEmail(String email) {
 }
 
 Future<List<File>> pickImages() async {
+  // Update the image //Quang Vi Dang
   List<File> images = [];
   final ImagePicker picker = ImagePicker();
   final imageFiles = await picker.pickMultiImage();
@@ -30,6 +31,7 @@ Future<List<File>> pickImages() async {
 }
 
 Future<List<File>> pickImageOrImages() async {
+  // Update the image //Quang Vi Dang
   List<File> images = [];
   final ImagePickerPlatform picker = ImagePickerAndroid();
   // ignore: deprecated_member_use

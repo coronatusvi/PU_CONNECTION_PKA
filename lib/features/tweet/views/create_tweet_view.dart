@@ -25,7 +25,7 @@ class CreateTweetScreen extends ConsumerStatefulWidget {
 
 class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   final tweetTextController = TextEditingController();
-  List<File> images = [];
+  List<File> images = []; // Update the image //Quang Vi Dang
 
   @override
   void dispose() {
@@ -35,7 +35,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
 
   void shareTweet() {
     ref.watch(tweetControllerProvider.notifier).shareTweet(
-          images: images,
+          images: images, // Update the image //Quang Vi Dang
           text: tweetTextController.text,
           context: context,
           repliedTo: '',
@@ -45,6 +45,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   }
 
   void onPickImages() async {
+    // Update the image //Quang Vi Dang
 // Kiểm tra nền tảng và thực hiện hành động tương ứng
     if (Platform.isAndroid) {
       images = await pickImageOrImages();
@@ -149,7 +150,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
                 right: 15,
               ),
               child: GestureDetector(
-                onTap: onPickImages,
+                onTap: onPickImages, // Update the image //Quang Vi Dang
                 child: SvgPicture.asset(AssetsConstants.galleryIcon),
               ),
             ),

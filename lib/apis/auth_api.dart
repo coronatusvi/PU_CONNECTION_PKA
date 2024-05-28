@@ -26,7 +26,7 @@ abstract class IAuthAPI {
     required String password,
   });
   Future<User?> currentUserAccount();
-  // FutureEitherVoid logout();
+  FutureEitherVoid logout();
 }
 
 class AuthAPI implements IAuthAPI {
@@ -74,7 +74,7 @@ class AuthAPI implements IAuthAPI {
     required String password,
   }) async {
     try {
-      final session = await _account.createEmailSession(
+      var session = await _account.createEmailSession(
         email: email,
         password: password,
       );
@@ -90,22 +90,35 @@ class AuthAPI implements IAuthAPI {
     }
   }
 
-  // @override
-  // FutureEitherVoid logout() async {
-  //   try {
-  //     await _account.deleteSession(
-  //       sessionId: "current",
-  //     );
-  //     return right(null);
-  //   } on AppwriteException catch (e, stackTrace) {
-  //     Failure(
-  //         e.message ??
-  //             "Some unexpected error occurred. - Một số lỗi không mong muốn!",
-  //         stackTrace);
-  //   } catch (e, stackTrace) {
-  //     return left(
-  //       Failure(e.toString(), stackTrace),
-  //     );
-  //   }
-  // }
+  @override
+  FutureEitherVoid logout() async {
+    try {
+      print("Logout ...");
+      // Lấy danh sách các sessions
+      final sessions = await _account.listSessions();
+
+      // Lặp qua danh sách sessions
+      for (final session in sessions.sessions) {
+        // Kiểm tra nếu là session hiện tại của người dùng
+        if (session.current) {
+          // Xóa session
+          await _account.deleteSession(sessionId: session.$id);
+          print(session.$id);
+          print("Logged out");
+          return right(null);
+        }
+      }
+
+      // Nếu không tìm thấy session hiện tại
+      return left(Failure('Current session not found', Null as StackTrace));
+    } on AppwriteException catch (e, stackTrace) {
+      return left(
+        Failure(e.message ?? 'Some unexpected error occurred', stackTrace),
+      );
+    } catch (e, stackTrace) {
+      return left(
+        Failure(e.toString(), stackTrace),
+      );
+    }
+  }
 }

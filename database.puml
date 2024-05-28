@@ -1,0 +1,82 @@
+' @startuml ERD
+
+' class Users {
+'     +email: String(255)
+'     +name: String(255)
+'     +followers: List<String>(255)
+'     +following: List<String>(255)
+'     +bio: String(255)
+'     +isTweeterBlue: Boolean
+'     -uid: String(255)
+'     +profilePic: String(255)
+'     +bannerPic: String(255)
+' }
+
+' class Tweets {
+'     +text: String(255)
+'     +tweetType: String(255)
+'     +tweetedAt: Int
+'     +hashtags: String(255)
+'     +imageLink: String(255)
+'     +uid: String(255) 
+'     +like: List<String>(255)
+'     +commentids: String(255)
+'     resharecount: Int
+'     +retweetedBy: Int
+'     +replyTo: String(255)
+'     -id: String(255)
+'     +link: List<String>(255)
+' }
+
+
+' Users }o-- Tweets
+
+' @enduml
+@startuml ER
+
+!define PK <<PK>>
+!define FK <<FK>>
+!define notnull <<notnull>>
+
+entity "Users" as users {
+  + uid : String PK notnull
+  --
+  email : String notnull
+  name : String notnull
+  followers : List<String>
+  following : List<String>
+  bio : String
+  isTweeterBlue : boolean notnull
+  profilePic : String notnull
+  bannerPic : String notnull
+}
+
+entity "Tweets" as tweets {
+  + id : String PK notnull
+  --
+  text : String notnull
+  tweetType : String notnull
+  tweetedAt : int notnull
+  hashtags : String
+  imageLink : String
+  uid : String notnull
+  like : List<String>
+  commentids : String
+  resharecount : int notnull
+  retweetedBy : int notnull
+  replyTo : String notnull
+}
+
+entity "Comments" as comments <<weak>> {
+  + commentId : String PK notnull
+  --
+  text : String notnull
+  commentedAt : int notnull
+  uid : String notnull
+  replyTo : String notnull
+}
+
+users --|{ tweets : uid
+tweets --|{ comments : commentids
+
+@enduml

@@ -1,0 +1,481 @@
+@startuml phenikaa_campus
+set namespaceSeparator ::
+
+abstract class "phenikaa_campus::apis::auth_api.dart::IAuthAPI" {
+  +dynamic signUp()
+  +dynamic login()
+  +dynamic currentUserAccount()
+}
+
+class "phenikaa_campus::apis::auth_api.dart::AuthAPI" {
+  -Account _account
+  +dynamic currentUserAccount()
+  +dynamic signUp()
+  +dynamic login()
+}
+
+"phenikaa_campus::apis::auth_api.dart::AuthAPI" o-- "appwrite::appwrite.dart::Account"
+"phenikaa_campus::apis::auth_api.dart::IAuthAPI" <|-- "phenikaa_campus::apis::auth_api.dart::AuthAPI"
+
+abstract class "phenikaa_campus::apis::user_api.dart::IUserAPI" {
+  +dynamic saveUserData()
+  +dynamic getUserData()
+  +dynamic searchUserByName()
+}
+
+class "phenikaa_campus::apis::user_api.dart::UserAPI" {
+  -Databases _db
+  +dynamic saveUserData()
+  +dynamic getUserData()
+  +dynamic searchUserByName()
+}
+
+"phenikaa_campus::apis::user_api.dart::UserAPI" o-- "appwrite::appwrite.dart::Databases"
+"phenikaa_campus::apis::user_api.dart::IUserAPI" <|-- "phenikaa_campus::apis::user_api.dart::UserAPI"
+
+abstract class "phenikaa_campus::apis::tweet_api.dart::ITweetAPI" {
+  +dynamic shareTweet()
+  +dynamic getTweets()
+  +Stream<RealtimeMessage> getLatestTweet()
+  +dynamic likeTweet()
+  +dynamic updateReshareCount()
+  +dynamic getRepliesToTweet()
+  +dynamic getTweetById()
+  +dynamic getUserTweets()
+  +dynamic getTweetsByHashtag()
+}
+
+class "phenikaa_campus::apis::tweet_api.dart::TweetAPI" {
+  -Databases _db
+  -Realtime _realtime
+  +dynamic shareTweet()
+  +dynamic getTweets()
+  +Stream<RealtimeMessage> getLatestTweet()
+  +dynamic likeTweet()
+  +dynamic updateReshareCount()
+  +dynamic getRepliesToTweet()
+  +dynamic getTweetById()
+  +dynamic getUserTweets()
+  +dynamic getTweetsByHashtag()
+}
+
+"phenikaa_campus::apis::tweet_api.dart::TweetAPI" o-- "appwrite::appwrite.dart::Databases"
+"phenikaa_campus::apis::tweet_api.dart::TweetAPI" o-- "appwrite::src::realtime.dart::Realtime"
+"phenikaa_campus::apis::tweet_api.dart::ITweetAPI" <|-- "phenikaa_campus::apis::tweet_api.dart::TweetAPI"
+
+class "phenikaa_campus::apis::storage_api.dart::StorageAPI" {
+  -Storage _storage
+  +dynamic uploadImage()
+}
+
+"phenikaa_campus::apis::storage_api.dart::StorageAPI" o-- "appwrite::appwrite.dart::Storage"
+
+class "phenikaa_campus::core::failure.dart::Failure" {
+  +String message
+  +StackTrace stackTrace
+}
+
+class "phenikaa_campus::core::enums::tweet_type_enum.dart::TweetType" {
+  +int index
+  {static} +List<TweetType> values
+  {static} +TweetType text
+}
+
+"phenikaa_campus::core::enums::tweet_type_enum.dart::TweetType" o-- "phenikaa_campus::core::enums::tweet_type_enum.dart::TweetType"
+"dart::core::Enum" <|-- "phenikaa_campus::core::enums::tweet_type_enum.dart::TweetType"
+
+class "phenikaa_campus::constants::appwrite_constant.dart::AppwriteConstants" {
+  {static} +String databaseId
+  {static} +String projectId
+  {static} +String endPoint
+  {static} +String usersCollection
+  {static} +String tweetsCollection
+  {static} +String imagesBucket
+  {static} +String imageUrl()
+}
+
+class "phenikaa_campus::constants::ui_constant.dart::UIConstants" {
+  {static} +List<Widget> bottomTabBarPages
+  {static} +AppBar appBar()
+}
+
+class "phenikaa_campus::features::tweet::controller::tweet_controller.dart::TweetController" {
+  -TweetAPI _tweetAPI
+  -StorageAPI _storageAPI
+  -Ref<Object?> _ref
+  +dynamic getTweets()
+  +void shareTweet()
+  +void likeTweet()
+  +void reshareTweet()
+  -void _shareImageTweet()
+  -void _shareTextTweet()
+  +dynamic getTweetsByHashtag()
+  +dynamic getRepliesToTweet()
+  +dynamic getTweetById()
+  -List<String> _getLinksFromText()
+  -List<String> _getHashtagsFromText()
+}
+
+"phenikaa_campus::features::tweet::controller::tweet_controller.dart::TweetController" o-- "phenikaa_campus::apis::tweet_api.dart::TweetAPI"
+"phenikaa_campus::features::tweet::controller::tweet_controller.dart::TweetController" o-- "phenikaa_campus::apis::storage_api.dart::StorageAPI"
+"phenikaa_campus::features::tweet::controller::tweet_controller.dart::TweetController" o-- "riverpod::src::framework.dart::Ref<Object>"
+"state_notifier::state_notifier.dart::StateNotifier" <|-- "phenikaa_campus::features::tweet::controller::tweet_controller.dart::TweetController"
+
+class "phenikaa_campus::features::tweet::views::create_tweet_view.dart::CreateTweetScreen" {
+  {static} +dynamic route()
+  +ConsumerState<ConsumerStatefulWidget> createState()
+}
+
+"flutter_riverpod::src::consumer.dart::ConsumerStatefulWidget" <|-- "phenikaa_campus::features::tweet::views::create_tweet_view.dart::CreateTweetScreen"
+
+class "phenikaa_campus::features::tweet::views::create_tweet_view.dart::_CreateTweetScreenState" {
+  +TextEditingController tweetTextController
+  +List<File> images
+  +void dispose()
+  +void shareTweet()
+  +void onPickImages()
+  +Widget build()
+}
+
+"phenikaa_campus::features::tweet::views::create_tweet_view.dart::_CreateTweetScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter_riverpod::src::consumer.dart::ConsumerState" <|-- "phenikaa_campus::features::tweet::views::create_tweet_view.dart::_CreateTweetScreenState"
+
+class "phenikaa_campus::features::tweet::views::twitter_reply_view.dart::TwitterReplyScreen" {
+  +Tweet tweet
+  {static} +dynamic route()
+  +Widget build()
+}
+
+"phenikaa_campus::features::tweet::views::twitter_reply_view.dart::TwitterReplyScreen" o-- "phenikaa_campus::models::tweet_model.dart::Tweet"
+"flutter_riverpod::src::consumer.dart::ConsumerWidget" <|-- "phenikaa_campus::features::tweet::views::twitter_reply_view.dart::TwitterReplyScreen"
+
+class "phenikaa_campus::features::tweet::views::hashtag_view.dart::HashtagView" {
+  +String hashtag
+  {static} +dynamic route()
+  +Widget build()
+}
+
+"flutter_riverpod::src::consumer.dart::ConsumerWidget" <|-- "phenikaa_campus::features::tweet::views::hashtag_view.dart::HashtagView"
+
+class "phenikaa_campus::features::tweet::widgets::tweet_icon_button.dart::TweetIconButton" {
+  +String pathName
+  +String text
+  +void Function() onTap
+  +Widget build()
+}
+
+"phenikaa_campus::features::tweet::widgets::tweet_icon_button.dart::TweetIconButton" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "phenikaa_campus::features::tweet::widgets::tweet_icon_button.dart::TweetIconButton"
+
+class "phenikaa_campus::features::tweet::widgets::tweet_card.dart::TweetCard" {
+  +Tweet tweet
+  +Widget build()
+}
+
+"phenikaa_campus::features::tweet::widgets::tweet_card.dart::TweetCard" o-- "phenikaa_campus::models::tweet_model.dart::Tweet"
+"flutter_riverpod::src::consumer.dart::ConsumerWidget" <|-- "phenikaa_campus::features::tweet::widgets::tweet_card.dart::TweetCard"
+
+class "phenikaa_campus::features::tweet::widgets::tweet_list.dart::TweetList" {
+  +Widget build()
+}
+
+"flutter_riverpod::src::consumer.dart::ConsumerWidget" <|-- "phenikaa_campus::features::tweet::widgets::tweet_list.dart::TweetList"
+
+class "phenikaa_campus::features::tweet::widgets::hashtag_text.dart::HashtagText" {
+  +String text
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "phenikaa_campus::features::tweet::widgets::hashtag_text.dart::HashtagText"
+
+class "phenikaa_campus::features::tweet::widgets::carousel_image.dart::CarouselImage" {
+  +List<String> imageLinks
+  +State<CarouselImage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "phenikaa_campus::features::tweet::widgets::carousel_image.dart::CarouselImage"
+
+class "phenikaa_campus::features::tweet::widgets::carousel_image.dart::_CarouselImageState" {
+  -int _current
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "phenikaa_campus::features::tweet::widgets::carousel_image.dart::_CarouselImageState"
+
+class "phenikaa_campus::features::home::view::home_view.dart::HomeView" {
+  {static} +dynamic route()
+  +State<HomeView> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "phenikaa_campus::features::home::view::home_view.dart::HomeView"
+
+class "phenikaa_campus::features::home::view::home_view.dart::_HomeViewState" {
+  -int _page
+  +AppBar appBar
+  +void onPageChange()
+  +dynamic onCreateTweet()
+  +Widget build()
+}
+
+"phenikaa_campus::features::home::view::home_view.dart::_HomeViewState" o-- "flutter::src::material::app_bar.dart::AppBar"
+"flutter::src::widgets::framework.dart::State" <|-- "phenikaa_campus::features::home::view::home_view.dart::_HomeViewState"
+
+class "phenikaa_campus::features::auth::controller::auth_controller.dart::AuthController" {
+  -AuthAPI _authAPI
+  -UserAPI _userAPI
+  +dynamic currentUser()
+  +void signUp()
+  +void login()
+  +dynamic getUserData()
+}
+
+"phenikaa_campus::features::auth::controller::auth_controller.dart::AuthController" o-- "phenikaa_campus::apis::auth_api.dart::AuthAPI"
+"phenikaa_campus::features::auth::controller::auth_controller.dart::AuthController" o-- "phenikaa_campus::apis::user_api.dart::UserAPI"
+"state_notifier::state_notifier.dart::StateNotifier" <|-- "phenikaa_campus::features::auth::controller::auth_controller.dart::AuthController"
+
+class "phenikaa_campus::features::auth::view::login_view.dart::LoginView" {
+  {static} +dynamic route()
+  +ConsumerState<LoginView> createState()
+}
+
+"flutter_riverpod::src::consumer.dart::ConsumerStatefulWidget" <|-- "phenikaa_campus::features::auth::view::login_view.dart::LoginView"
+
+class "phenikaa_campus::features::auth::view::login_view.dart::_LoginViewState" {
+  +AppBar appbar
+  +TextEditingController emailController
+  +TextEditingController passwordController
+  +void dispose()
+  +void onLogin()
+  +Widget build()
+}
+
+"phenikaa_campus::features::auth::view::login_view.dart::_LoginViewState" o-- "flutter::src::material::app_bar.dart::AppBar"
+"phenikaa_campus::features::auth::view::login_view.dart::_LoginViewState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter_riverpod::src::consumer.dart::ConsumerState" <|-- "phenikaa_campus::features::auth::view::login_view.dart::_LoginViewState"
+
+class "phenikaa_campus::features::auth::view::signup_view.dart::SignUpView" {
+  {static} +dynamic route()
+  +ConsumerState<SignUpView> createState()
+}
+
+"flutter_riverpod::src::consumer.dart::ConsumerStatefulWidget" <|-- "phenikaa_campus::features::auth::view::signup_view.dart::SignUpView"
+
+class "phenikaa_campus::features::auth::view::signup_view.dart::_SignUpViewState" {
+  +AppBar appbar
+  +TextEditingController emailController
+  +TextEditingController passwordController
+  +void dispose()
+  +void onSignUp()
+  +Widget build()
+}
+
+"phenikaa_campus::features::auth::view::signup_view.dart::_SignUpViewState" o-- "flutter::src::material::app_bar.dart::AppBar"
+"phenikaa_campus::features::auth::view::signup_view.dart::_SignUpViewState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter_riverpod::src::consumer.dart::ConsumerState" <|-- "phenikaa_campus::features::auth::view::signup_view.dart::_SignUpViewState"
+
+class "phenikaa_campus::features::auth::widgets::auth_field.dart::AuthField" {
+  +TextEditingController controller
+  +String hintText
+  +Widget build()
+}
+
+"phenikaa_campus::features::auth::widgets::auth_field.dart::AuthField" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "phenikaa_campus::features::auth::widgets::auth_field.dart::AuthField"
+
+class "phenikaa_campus::features::explore::widget::text_form_field_custom.dart::TextFormFieldCustom" {
+  +TextEditingController controller
+  +String hintText
+  +Color fillColor
+  +SvgPicture prefixIcon
+  +dynamic Function(String) onChanged
+  +Widget build()
+}
+
+"phenikaa_campus::features::explore::widget::text_form_field_custom.dart::TextFormFieldCustom" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"phenikaa_campus::features::explore::widget::text_form_field_custom.dart::TextFormFieldCustom" o-- "dart::ui::Color"
+"phenikaa_campus::features::explore::widget::text_form_field_custom.dart::TextFormFieldCustom" o-- "flutter_svg::svg.dart::SvgPicture"
+"phenikaa_campus::features::explore::widget::text_form_field_custom.dart::TextFormFieldCustom" o-- "null::dynamic Function(String)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "phenikaa_campus::features::explore::widget::text_form_field_custom.dart::TextFormFieldCustom"
+
+class "phenikaa_campus::features::explore::widget::search_tile.dart::SearchTile" {
+  +UserModel userModel
+  +Widget build()
+}
+
+"phenikaa_campus::features::explore::widget::search_tile.dart::SearchTile" o-- "phenikaa_campus::models::user_models.dart::UserModel"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "phenikaa_campus::features::explore::widget::search_tile.dart::SearchTile"
+
+class "phenikaa_campus::features::explore::controller::explore_controller.dart::ExploreControllerNotifier" {
+  -UserAPI _userAPI
+  +dynamic searchUser()
+}
+
+"phenikaa_campus::features::explore::controller::explore_controller.dart::ExploreControllerNotifier" o-- "phenikaa_campus::apis::user_api.dart::UserAPI"
+"state_notifier::state_notifier.dart::StateNotifier" <|-- "phenikaa_campus::features::explore::controller::explore_controller.dart::ExploreControllerNotifier"
+
+class "phenikaa_campus::features::explore::view::explore_view.dart::ExploreView" {
+  +ConsumerState<ConsumerStatefulWidget> createState()
+}
+
+"flutter_riverpod::src::consumer.dart::ConsumerStatefulWidget" <|-- "phenikaa_campus::features::explore::view::explore_view.dart::ExploreView"
+
+class "phenikaa_campus::features::explore::view::explore_view.dart::_ExploreViewState" {
+  +TextEditingController searchController
+  +bool isShowUsers
+  +bool isImageVisible
+  +int searchResultsCount
+  +Widget build()
+}
+
+"phenikaa_campus::features::explore::view::explore_view.dart::_ExploreViewState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter_riverpod::src::consumer.dart::ConsumerState" <|-- "phenikaa_campus::features::explore::view::explore_view.dart::_ExploreViewState"
+
+class "phenikaa_campus::features::user_profile::widget::follow_count.dart::FollowCount" {
+  +int count
+  +String text
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "phenikaa_campus::features::user_profile::widget::follow_count.dart::FollowCount"
+
+class "phenikaa_campus::features::user_profile::widget::user_profile.dart::UserProfile" {
+  +UserModel user
+  +Widget build()
+}
+
+"phenikaa_campus::features::user_profile::widget::user_profile.dart::UserProfile" o-- "phenikaa_campus::models::user_models.dart::UserModel"
+"flutter_riverpod::src::consumer.dart::ConsumerWidget" <|-- "phenikaa_campus::features::user_profile::widget::user_profile.dart::UserProfile"
+
+class "phenikaa_campus::features::user_profile::widget::new.dart::UserProfile" {
+  +UserModel user
+  +Widget build()
+}
+
+"phenikaa_campus::features::user_profile::widget::new.dart::UserProfile" o-- "phenikaa_campus::models::user_models.dart::UserModel"
+"flutter_riverpod::src::consumer.dart::ConsumerWidget" <|-- "phenikaa_campus::features::user_profile::widget::new.dart::UserProfile"
+
+class "phenikaa_campus::features::user_profile::%20controller::color_controller.dart::ColorNotifier" {
+  +void changeColor()
+}
+
+"state_notifier::state_notifier.dart::StateNotifier" <|-- "phenikaa_campus::features::user_profile::%20controller::color_controller.dart::ColorNotifier"
+
+class "phenikaa_campus::features::user_profile::view::user_profile_view.dart::UserProfileView" {
+  +UserModel userModel
+  {static} +dynamic route()
+  +Widget build()
+}
+
+"phenikaa_campus::features::user_profile::view::user_profile_view.dart::UserProfileView" o-- "phenikaa_campus::models::user_models.dart::UserModel"
+"flutter_riverpod::src::consumer.dart::ConsumerWidget" <|-- "phenikaa_campus::features::user_profile::view::user_profile_view.dart::UserProfileView"
+
+class "phenikaa_campus::models::user_models.dart::UserModel" {
+  +String email
+  +String name
+  +List<String> followers
+  +List<String> following
+  +String profilePic
+  +String bannerPic
+  +String uid
+  +String bio
+  +bool isTwitterBlue
+  +int hashCode
+  +UserModel copyWith()
+  +Map<String, dynamic> toMap()
+  +String toString()
+  +bool ==()
+}
+
+class "phenikaa_campus::models::tweet_model.dart::Tweet" {
+  +String text
+  +List<String> hashtags
+  +List<String> link
+  +List<String> imageLinks
+  +String uid
+  +TweetType tweetType
+  +DateTime tweetedAt
+  +List<String> likes
+  +List<String> commentIds
+  +String id
+  +int reshareCount
+  +String retweetedBy
+  +String repliedTo
+  +int hashCode
+  +Tweet copyWith()
+  +Map<String, dynamic> toMap()
+  +String toString()
+  +bool ==()
+}
+
+"phenikaa_campus::models::tweet_model.dart::Tweet" o-- "phenikaa_campus::core::enums::tweet_type_enum.dart::TweetType"
+
+class "phenikaa_campus::main.dart::MyApp" {
+  +Widget build()
+}
+
+"flutter_riverpod::src::consumer.dart::ConsumerWidget" <|-- "phenikaa_campus::main.dart::MyApp"
+
+class "phenikaa_campus::common::loading_page.dart::Loader" {
+  +_LoaderState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "phenikaa_campus::common::loading_page.dart::Loader"
+
+class "phenikaa_campus::common::loading_page.dart::_LoaderState" {
+  +int dotCount
+  +Timer timer
+  +void initState()
+  +void dispose()
+  +void startTimer()
+  +void stopTimer()
+  +Widget build()
+}
+
+"phenikaa_campus::common::loading_page.dart::_LoaderState" o-- "dart::async::Timer"
+"flutter::src::widgets::framework.dart::State" <|-- "phenikaa_campus::common::loading_page.dart::_LoaderState"
+
+class "phenikaa_campus::common::loading_page.dart::LoadingPage" {
+  +Color backgroundColor
+  +Widget build()
+}
+
+"phenikaa_campus::common::loading_page.dart::LoadingPage" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "phenikaa_campus::common::loading_page.dart::LoadingPage"
+
+class "phenikaa_campus::common::error_page.dart::ErrorText" {
+  +String error
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "phenikaa_campus::common::error_page.dart::ErrorText"
+
+class "phenikaa_campus::common::error_page.dart::ErrorPage" {
+  +String error
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "phenikaa_campus::common::error_page.dart::ErrorPage"
+
+class "phenikaa_campus::common::rounded_small_button.dart::RoundedSmallButton" {
+  +String text
+  +void Function() onTap
+  +Color backgroundColor
+  +Color textColor
+  +Widget build()
+}
+
+"phenikaa_campus::common::rounded_small_button.dart::RoundedSmallButton" o-- "dart::ui::void Function()"
+"phenikaa_campus::common::rounded_small_button.dart::RoundedSmallButton" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "phenikaa_campus::common::rounded_small_button.dart::RoundedSmallButton"
+
+class "phenikaa_campus::theme::app_theme.dart::AppTheme" {
+  {static} +ThemeData theme
+}
+
+"phenikaa_campus::theme::app_theme.dart::AppTheme" o-- "flutter::src::material::theme_data.dart::ThemeData"
+"phenikaa_campus::theme::pallete.dart::Pallete" o-- "dart::ui::Color"
+"phenikaa_campus::theme::pallete.dart::Pallete" o-- "riverpod::src::state_provider.dart::StateProvider<Color>"
+"phenikaa_campus::theme::pallete.dart::Pallete" o-- "flutter::src::painting::gradient.dart::LinearGradient"
+
+
+@enduml

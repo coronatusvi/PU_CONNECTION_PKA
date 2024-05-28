@@ -2,13 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phenikaa_campus/common/common.dart';
-import 'package:phenikaa_campus/common/loading_page.dart';
-import 'package:phenikaa_campus/features/auth/controller/auth_controller.dart';
-import 'package:phenikaa_campus/features/user_profile/widget/follow_count.dart';
-import 'package:phenikaa_campus/theme/pallete.dart';
-import '../ controller/color_controller.dart';
+import 'package:gap/gap.dart';
+
+import '../../../common/common.dart';
 import '../../../models/user_models.dart';
+import '../../../theme/theme.dart';
+import '../../auth/controller/auth_controller.dart';
+import '../../tweet/widgets/tweet_card.dart';
+import '../controller/color_controller.dart';
+import '../controller/user_profile_controller.dart';
+import 'follow_count.dart';
 
 class UserProfile extends ConsumerWidget {
   final UserModel user;
@@ -23,7 +26,7 @@ class UserProfile extends ConsumerWidget {
     var heightStatusBar = MediaQuery.of(context).viewPadding.top;
     var size = MediaQuery.of(context).size;
     final expandedHeight = 300.0;
-    final collapsedHeight = 60.0;
+    final collapsedHeight = 70.0;
     double containerHeight;
 
     if (Platform.isAndroid) {
@@ -31,7 +34,13 @@ class UserProfile extends ConsumerWidget {
     } else {
       containerHeight = expandedHeight - collapsedHeight;
     }
-
+    final tweetLengthProvider = Provider<int>((ref) {
+      final tweets = ref.watch(getUserTweetsProvider(user.uid));
+      return tweets.maybeWhen(
+        data: (tweets) => tweets.length,
+        orElse: () => 0, // Default to 0 if data is not available yet
+      );
+    });
     ScrollController _scrollController = ScrollController();
 
     // Define a Provider for ColorNotifier
@@ -53,7 +62,6 @@ class UserProfile extends ConsumerWidget {
             .changeColor(Pallete.rhinoDark800);
       }
     });
-
     return currentUser == null
         ? const Loader()
         : CustomScrollView(
@@ -66,7 +74,7 @@ class UserProfile extends ConsumerWidget {
                     return IconButton(
                       icon: Icon(
                         Icons.arrow_back_ios,
-                        color: titleColor,
+                        color: Pallete.whiteColor,
                       ),
                       onPressed: () {
                         Navigator.pop(context);
@@ -78,21 +86,12 @@ class UserProfile extends ConsumerWidget {
                 collapsedHeight: collapsedHeight,
                 floating: true,
                 pinned: true,
-                snap: true,
-                title: Consumer(
-                  builder: (context, ref, _) {
-                    final titleColor = ref.watch(colorNotifierProvider);
-                    return Text(
-                      user.name,
-                      style: TextStyle(fontSize: 20, color: titleColor),
-                    );
-                  },
-                ),
+                snap: false,
                 backgroundColor: Pallete.rhinoDark700,
                 flexibleSpace: FlexibleSpaceBar(
                   titlePadding: EdgeInsets.only(left: size.width * 0.08),
-                  centerTitle: true,
-                  collapseMode: CollapseMode.pin,
+                  // centerTitle: true,
+                  collapseMode: CollapseMode.parallax,
                   background: Stack(
                     children: [
                       Align(
@@ -126,12 +125,12 @@ class UserProfile extends ConsumerWidget {
                         ),
                       ),
                       Positioned(
-                        bottom: collapsedHeight + 52,
+                        bottom: collapsedHeight + 40,
                         left: size.width * 0.39,
                         child: Text(
                           user.name,
                           style: TextStyle(
-                            color: Pallete.rhinoDark600,
+                            color: Pallete.whiteColor,
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
                           ),
@@ -153,26 +152,27 @@ class UserProfile extends ConsumerWidget {
                         ),
                       ),
                       Positioned(
-                        left: size.width * 0.08,
+                        // left: size.width * 0.08,
                         bottom: collapsedHeight - 60,
                         child: Row(
                           children: [
+                            Gap(size.width * 0.1),
                             RoundedSmallButton(
                                 text: 'Message',
                                 backgroundColor: Pallete.rhinoDark600,
                                 onTap: () {}),
-                            const SizedBox(width: 18),
+                            Gap(size.width * 0.06),
                             RoundedSmallButton(
                                 text: currentUser.uid == user.uid
                                     ? 'Edit Profile'
                                     : 'Follow',
                                 backgroundColor: Pallete.rhinoDark600,
                                 onTap: () {}),
-                            SizedBox(width: 18),
-                            RoundedSmallButton(
-                                text: '...',
-                                backgroundColor: Pallete.rhinoDark600,
-                                onTap: () {})
+                            // SizedBox(width: 18),
+                            // RoundedSmallButton(
+                            //     text: '...',
+                            //     backgroundColor: Pallete.rhinoDark600,
+                            //     onTap: () {})
                           ],
                         ),
                       )
@@ -180,15 +180,67 @@ class UserProfile extends ConsumerWidget {
                   ),
                 ),
               ),
-              for (int i = 0; i < 10; i++)
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 200,
-                    color: i % 2 == 0
-                        ? Pallete.rhinoDark700
-                        : Pallete.rhinoDark700,
-                  ),
-                )
+              // SliverToBoxAdapter(
+              //   child: ref.watch(getUserTweetsProvider(user.uid)).when(
+              //         data: (tweets) {
+              //           return SizedBox(
+              //             height: size.height,
+              //             child: ListView.builder(
+              //               // physics:
+              //               // NeverScrollableScrollPhysics(), // Disable scrolling
+              //               itemCount: tweets.length,
+              //               itemBuilder: (BuildContext context, int index) {
+              //                 final tweet = tweets[index];
+              //                 return TweetCard(tweet: tweet);
+              //               },
+              //             ),
+              //           );
+              //         },
+              //         error: (error, st) => ErrorText(
+              //           error: error.toString(),
+              //         ),
+              //         loading: () => const Loader(),
+              //       ),
+              // ),
+
+// In your SliverList widget
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    // Calculate the reversed index
+                    int reversedIndex =
+                        ref.watch(tweetLengthProvider) - 1 - index;
+                    return ref.watch(getUserTweetsProvider(user.uid)).when(
+                      data: (tweets) {
+                        final tweet = tweets[reversedIndex];
+                        return TweetCard(tweet: tweet);
+                      },
+                      error: (error, st) {
+                        return ErrorText(error: error.toString());
+                      },
+                      loading: () {
+                        return const Loader();
+                      },
+                    );
+                  },
+                  childCount: ref
+                      .watch(tweetLengthProvider), // Use the calculated length
+                ),
+              ),
+              // switch (ref.watch(getUserTweetsProvider(user.uid))) {
+              //   AsyncData(value: final tweets) => SliverList.builder(
+              //       itemCount: tweets.length,
+              //       itemBuilder: (BuildContext context, int index) {
+              //         final tweet = tweets[index];
+              //         return TweetCard(tweet: tweet);
+              //       },
+              //     ),
+              //   AsyncError(:final error) => ErrorText(
+              //       error: error.toString(),
+              //     ),
+              //   AsyncLoading() => Loader(),
+              //   _ => Container(),
+              // }
             ],
           );
   }

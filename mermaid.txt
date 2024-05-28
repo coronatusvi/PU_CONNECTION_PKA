@@ -1,0 +1,443 @@
+classDiagram
+class IAuthAPI
+<<abstract>> IAuthAPI
+IAuthAPI : +signUp()* dynamic
+IAuthAPI : +login()* dynamic
+IAuthAPI : +currentUserAccount()* dynamic
+
+class AuthAPI
+AuthAPI : -_account Account
+AuthAPI o-- Account
+AuthAPI : +currentUserAccount() dynamic
+AuthAPI : +signUp() dynamic
+AuthAPI : +login() dynamic
+IAuthAPI <|.. AuthAPI
+
+class IUserAPI
+<<abstract>> IUserAPI
+IUserAPI : +saveUserData()* dynamic
+IUserAPI : +getUserData()* dynamic
+IUserAPI : +searchUserByName()* dynamic
+
+class UserAPI
+UserAPI : -_db Databases
+UserAPI o-- Databases
+UserAPI : +saveUserData() dynamic
+UserAPI : +getUserData() dynamic
+UserAPI : +searchUserByName() dynamic
+IUserAPI <|.. UserAPI
+
+class ITweetAPI
+<<abstract>> ITweetAPI
+ITweetAPI : +shareTweet()* dynamic
+ITweetAPI : +getTweets()* dynamic
+ITweetAPI : +getLatestTweet()* Stream<RealtimeMessage>
+ITweetAPI : +likeTweet()* dynamic
+ITweetAPI : +updateReshareCount()* dynamic
+ITweetAPI : +getRepliesToTweet()* dynamic
+ITweetAPI : +getTweetById()* dynamic
+ITweetAPI : +getUserTweets()* dynamic
+ITweetAPI : +getTweetsByHashtag()* dynamic
+
+class TweetAPI
+TweetAPI : -_db Databases
+TweetAPI o-- Databases
+TweetAPI : -_realtime Realtime
+TweetAPI o-- Realtime
+TweetAPI : +shareTweet() dynamic
+TweetAPI : +getTweets() dynamic
+TweetAPI : +getLatestTweet() Stream<RealtimeMessage>
+TweetAPI : +likeTweet() dynamic
+TweetAPI : +updateReshareCount() dynamic
+TweetAPI : +getRepliesToTweet() dynamic
+TweetAPI : +getTweetById() dynamic
+TweetAPI : +getUserTweets() dynamic
+TweetAPI : +getTweetsByHashtag() dynamic
+ITweetAPI <|.. TweetAPI
+
+class StorageAPI
+StorageAPI : -_storage Storage
+StorageAPI o-- Storage
+StorageAPI : +uploadImage() dynamic
+
+class Failure
+Failure : +message String
+Failure : +stackTrace StackTrace
+
+class TweetType
+<<enumeration>> TweetType
+TweetType : +index int
+TweetType : +values$ List~TweetType~
+TweetType : +text$ TweetType
+TweetType o-- TweetType
+Enum <|.. TweetType
+
+class AssetsConstants
+AssetsConstants : -_svgsPath$ String
+AssetsConstants : -_pngPath$ String
+AssetsConstants : +twitterLogo$ String
+AssetsConstants : +homeFilledIcon$ String
+AssetsConstants : +homeOutlinedIcon$ String
+AssetsConstants : +notifFilledIcon$ String
+AssetsConstants : +notifOutlinedIcon$ String
+AssetsConstants : +searchIcon$ String
+AssetsConstants : +gifIcon$ String
+AssetsConstants : +emojiIcon$ String
+AssetsConstants : +galleryIcon$ String
+AssetsConstants : +commentIcon$ String
+AssetsConstants : +retweetIcon$ String
+AssetsConstants : +likeOutlinedIcon$ String
+AssetsConstants : +likeFilledIcon$ String
+AssetsConstants : +viewsIcon$ String
+AssetsConstants : +verifiedIcon$ String
+AssetsConstants : +phenikaaLogo$ String
+AssetsConstants : +profileIcon$ String
+AssetsConstants : +darkBlur$ String
+AssetsConstants : +darkNoContent$ String
+AssetsConstants : +lightNoSearch$ String
+
+class AppwriteConstants
+AppwriteConstants : +databaseId$ String
+AppwriteConstants : +projectId$ String
+AppwriteConstants : +endPoint$ String
+AppwriteConstants : +usersCollection$ String
+AppwriteConstants : +tweetsCollection$ String
+AppwriteConstants : +imagesBucket$ String
+AppwriteConstants : +imageUrl()$ String
+
+class UIConstants
+UIConstants : +bottomTabBarPages$ List~Widget~
+UIConstants : +appBar()$ AppBar
+
+class TweetController
+TweetController : -_tweetAPI TweetAPI
+TweetController o-- TweetAPI
+TweetController : -_storageAPI StorageAPI
+TweetController o-- StorageAPI
+TweetController : -_ref Ref~Object?~
+TweetController o-- Ref~Object~
+TweetController : +getTweets() dynamic
+TweetController : +shareTweet() void
+TweetController : +likeTweet() void
+TweetController : +reshareTweet() void
+TweetController : -_shareImageTweet() void
+TweetController : -_shareTextTweet() void
+TweetController : +getTweetsByHashtag() dynamic
+TweetController : +getRepliesToTweet() dynamic
+TweetController : +getTweetById() dynamic
+TweetController : -_getLinksFromText() List<String>
+TweetController : -_getHashtagsFromText() List<String>
+StateNotifier <|-- TweetController
+
+class CreateTweetScreen
+CreateTweetScreen : +route()$ dynamic
+CreateTweetScreen : +createState() ConsumerState<ConsumerStatefulWidget>
+ConsumerStatefulWidget <|-- CreateTweetScreen
+
+class _CreateTweetScreenState
+_CreateTweetScreenState : +tweetTextController TextEditingController
+_CreateTweetScreenState o-- TextEditingController
+_CreateTweetScreenState : +images List~File~
+_CreateTweetScreenState : +dispose() void
+_CreateTweetScreenState : +shareTweet() void
+_CreateTweetScreenState : +onPickImages() void
+_CreateTweetScreenState : +build() Widget
+ConsumerState <|-- _CreateTweetScreenState
+
+class TwitterReplyScreen
+TwitterReplyScreen : +tweet Tweet
+TwitterReplyScreen o-- Tweet
+TwitterReplyScreen : +route()$ dynamic
+TwitterReplyScreen : +build() Widget
+ConsumerWidget <|-- TwitterReplyScreen
+
+class HashtagView
+HashtagView : +hashtag String
+HashtagView : +route()$ dynamic
+HashtagView : +build() Widget
+ConsumerWidget <|-- HashtagView
+
+class TweetIconButton
+TweetIconButton : +pathName String
+TweetIconButton : +text String
+TweetIconButton : +onTap void Function
+TweetIconButton o-- void Function
+TweetIconButton : +build() Widget
+StatelessWidget <|-- TweetIconButton
+
+class TweetCard
+TweetCard : +tweet Tweet
+TweetCard o-- Tweet
+TweetCard : +build() Widget
+ConsumerWidget <|-- TweetCard
+
+class TweetList
+TweetList : +build() Widget
+ConsumerWidget <|-- TweetList
+
+class HashtagText
+HashtagText : +text String
+HashtagText : +build() Widget
+StatelessWidget <|-- HashtagText
+
+class CarouselImage
+CarouselImage : +imageLinks List~String~
+CarouselImage : +createState() State<CarouselImage>
+StatefulWidget <|-- CarouselImage
+
+class _CarouselImageState
+_CarouselImageState : -_current int
+_CarouselImageState : +build() Widget
+State <|-- _CarouselImageState
+
+class HomeView
+HomeView : +route()$ dynamic
+HomeView : +createState() State<HomeView>
+StatefulWidget <|-- HomeView
+
+class _HomeViewState
+_HomeViewState : -_page int
+_HomeViewState : +appBar AppBar
+_HomeViewState o-- AppBar
+_HomeViewState : +onPageChange() void
+_HomeViewState : +onCreateTweet() dynamic
+_HomeViewState : +build() Widget
+State <|-- _HomeViewState
+
+class AuthController
+AuthController : -_authAPI AuthAPI
+AuthController o-- AuthAPI
+AuthController : -_userAPI UserAPI
+AuthController o-- UserAPI
+AuthController : +currentUser() dynamic
+AuthController : +signUp() void
+AuthController : +login() void
+AuthController : +getUserData() dynamic
+StateNotifier <|-- AuthController
+
+class LoginView
+LoginView : +route()$ dynamic
+LoginView : +createState() ConsumerState<LoginView>
+ConsumerStatefulWidget <|-- LoginView
+
+class _LoginViewState
+_LoginViewState : +appbar AppBar
+_LoginViewState o-- AppBar
+_LoginViewState : +emailController TextEditingController
+_LoginViewState o-- TextEditingController
+_LoginViewState : +passwordController TextEditingController
+_LoginViewState o-- TextEditingController
+_LoginViewState : +dispose() void
+_LoginViewState : +onLogin() void
+_LoginViewState : +build() Widget
+ConsumerState <|-- _LoginViewState
+
+class SignUpView
+SignUpView : +route()$ dynamic
+SignUpView : +createState() ConsumerState<SignUpView>
+ConsumerStatefulWidget <|-- SignUpView
+
+class _SignUpViewState
+_SignUpViewState : +appbar AppBar
+_SignUpViewState o-- AppBar
+_SignUpViewState : +emailController TextEditingController
+_SignUpViewState o-- TextEditingController
+_SignUpViewState : +passwordController TextEditingController
+_SignUpViewState o-- TextEditingController
+_SignUpViewState : +dispose() void
+_SignUpViewState : +onSignUp() void
+_SignUpViewState : +build() Widget
+ConsumerState <|-- _SignUpViewState
+
+class AuthField
+AuthField : +controller TextEditingController
+AuthField o-- TextEditingController
+AuthField : +hintText String
+AuthField : +build() Widget
+StatelessWidget <|-- AuthField
+
+class TextFormFieldCustom
+TextFormFieldCustom : +controller TextEditingController
+TextFormFieldCustom o-- TextEditingController
+TextFormFieldCustom : +hintText String
+TextFormFieldCustom : +fillColor Color
+TextFormFieldCustom o-- Color
+TextFormFieldCustom : +prefixIcon SvgPicture
+TextFormFieldCustom o-- SvgPicture
+TextFormFieldCustom : +onChanged dynamic FunctionString
+TextFormFieldCustom o-- dynamic FunctionString
+TextFormFieldCustom : +build() Widget
+StatelessWidget <|-- TextFormFieldCustom
+
+class SearchTile
+SearchTile : +userModel UserModel
+SearchTile o-- UserModel
+SearchTile : +build() Widget
+StatelessWidget <|-- SearchTile
+
+class ExploreControllerNotifier
+ExploreControllerNotifier : -_userAPI UserAPI
+ExploreControllerNotifier o-- UserAPI
+ExploreControllerNotifier : +searchUser() dynamic
+StateNotifier <|-- ExploreControllerNotifier
+
+class ExploreView
+ExploreView : +createState() ConsumerState<ConsumerStatefulWidget>
+ConsumerStatefulWidget <|-- ExploreView
+
+class _ExploreViewState
+_ExploreViewState : +searchController TextEditingController
+_ExploreViewState o-- TextEditingController
+_ExploreViewState : +isShowUsers bool
+_ExploreViewState : +isImageVisible bool
+_ExploreViewState : +searchResultsCount int
+_ExploreViewState : +build() Widget
+ConsumerState <|-- _ExploreViewState
+
+class FollowCount
+FollowCount : +count int
+FollowCount : +text String
+FollowCount : +build() Widget
+StatelessWidget <|-- FollowCount
+
+class UserProfile
+UserProfile : +user UserModel
+UserProfile o-- UserModel
+UserProfile : +build() Widget
+ConsumerWidget <|-- UserProfile
+
+class UserProfile
+UserProfile : +user UserModel
+UserProfile o-- UserModel
+UserProfile : +build() Widget
+ConsumerWidget <|-- UserProfile
+
+class ColorNotifier
+ColorNotifier : +changeColor() void
+StateNotifier <|-- ColorNotifier
+
+class UserProfileView
+UserProfileView : +userModel UserModel
+UserProfileView o-- UserModel
+UserProfileView : +route()$ dynamic
+UserProfileView : +build() Widget
+ConsumerWidget <|-- UserProfileView
+
+class UserModel
+UserModel : +email String
+UserModel : +name String
+UserModel : +followers List~String~
+UserModel : +following List~String~
+UserModel : +profilePic String
+UserModel : +bannerPic String
+UserModel : +uid String
+UserModel : +bio String
+UserModel : +isTwitterBlue bool
+UserModel : +hashCode int
+UserModel : +copyWith() UserModel
+UserModel : +toMap() Map<String, dynamic>
+UserModel : +toString() String
+UserModel : +==() bool
+
+class Tweet
+Tweet : +text String
+Tweet : +hashtags List~String~
+Tweet : +link List~String~
+Tweet : +imageLinks List~String~
+Tweet : +uid String
+Tweet : +tweetType TweetType
+Tweet o-- TweetType
+Tweet : +tweetedAt DateTime
+Tweet : +likes List~String~
+Tweet : +commentIds List~String~
+Tweet : +id String
+Tweet : +reshareCount int
+Tweet : +retweetedBy String
+Tweet : +repliedTo String
+Tweet : +hashCode int
+Tweet : +copyWith() Tweet
+Tweet : +toMap() Map<String, dynamic>
+Tweet : +toString() String
+Tweet : +==() bool
+
+class MyApp
+MyApp : +build() Widget
+ConsumerWidget <|-- MyApp
+
+class Loader
+Loader : +createState() _LoaderState
+StatefulWidget <|-- Loader
+
+class _LoaderState
+_LoaderState : +dotCount int
+_LoaderState : +timer Timer
+_LoaderState o-- Timer
+_LoaderState : +initState() void
+_LoaderState : +dispose() void
+_LoaderState : +startTimer() void
+_LoaderState : +stopTimer() void
+_LoaderState : +build() Widget
+State <|-- _LoaderState
+
+class LoadingPage
+LoadingPage : +backgroundColor Color
+LoadingPage o-- Color
+LoadingPage : +build() Widget
+StatelessWidget <|-- LoadingPage
+
+class ErrorText
+ErrorText : +error String
+ErrorText : +build() Widget
+StatelessWidget <|-- ErrorText
+
+class ErrorPage
+ErrorPage : +error String
+ErrorPage : +build() Widget
+StatelessWidget <|-- ErrorPage
+
+class RoundedSmallButton
+RoundedSmallButton : +text String
+RoundedSmallButton : +onTap void Function
+RoundedSmallButton o-- void Function
+RoundedSmallButton : +backgroundColor Color
+RoundedSmallButton o-- Color
+RoundedSmallButton : +textColor Color
+RoundedSmallButton o-- Color
+RoundedSmallButton : +build() Widget
+StatelessWidget <|-- RoundedSmallButton
+
+class AppTheme
+AppTheme : +theme$ ThemeData
+AppTheme o-- ThemeData
+
+class Pallete
+Pallete : +secondaryColor$ Color
+Pallete o-- Color
+Pallete : +searchBarColor$ Color
+Pallete o-- Color
+Pallete : +blueColor$ Color
+Pallete o-- Color
+Pallete : +whiteColor$ Color
+Pallete o-- Color
+Pallete : +greyColor$ Color
+Pallete o-- Color
+Pallete : +redColor$ Color
+Pallete o-- Color
+Pallete : +textformfieldColor$ Color
+Pallete o-- Color
+Pallete : +subTextColor$ Color
+Pallete o-- Color
+Pallete : +rhinoDark500$ Color
+Pallete o-- Color
+Pallete : +rhinoDark700$ Color
+Pallete o-- Color
+Pallete : +rhinoDark800$ Color
+Pallete o-- Color
+Pallete : +rhinoDark600$ Color
+Pallete o-- Color
+Pallete : +titleColorProvider StateProvider~Color~
+Pallete o-- StateProvider~Color~
+Pallete : +cardColor$ LinearGradient
+Pallete o-- LinearGradient
+Pallete : +yellow500$ Color
+Pallete o-- Color

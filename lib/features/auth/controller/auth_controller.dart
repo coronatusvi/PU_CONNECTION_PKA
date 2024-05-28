@@ -17,8 +17,10 @@ final authControllerProvider =
   );
 });
 
-final currentUserDetailsProvider = FutureProvider((ref) {
-  final currentUserId = ref.watch(currentUserAccountProvider).value!.$id;
+final currentUserDetailsProvider = FutureProvider((ref) async {
+  final currentUserAccount = await ref.watch(currentUserAccountProvider.future);
+  final currentUserId = currentUserAccount?.$id;
+  if (currentUserId == null) return null;
   final userDetails = ref.watch(userDetailsProvider(currentUserId));
   return userDetails.value;
 }); //currentUserDetailsProvider
@@ -34,6 +36,10 @@ final currentUserAccountProvider = FutureProvider((ref) {
 }); //currentUserAccountProvider
 
 class AuthController extends StateNotifier<bool> {
+  void resetState() {
+    state = false;
+  }
+
   final AuthAPI _authAPI;
   final UserAPI _userAPI;
   AuthController({
@@ -80,12 +86,13 @@ class AuthController extends StateNotifier<bool> {
     );
   }
 
-  void login({
+  Future<void> login({
     required String email,
     required String password,
     required BuildContext context,
   }) async {
     state = true;
+    print("object $email $password");
     final res = await _authAPI.login(
       email: email,
       password: password,
@@ -103,5 +110,17 @@ class AuthController extends StateNotifier<bool> {
     final document = await _userAPI.getUserData(uid);
     final updateUser = UserModel.fromMap(document.data);
     return updateUser;
+  }
+
+  void logout(BuildContext context) async {
+    final res = await _authAPI.logout();
+    res.fold((l) => null, (r) {
+      resetState(); // Gọi phương thức resetState
+      Navigator.pushAndRemoveUntil(
+        context,
+        LoginView.route(),
+        (route) => false,
+      );
+    });
   }
 }

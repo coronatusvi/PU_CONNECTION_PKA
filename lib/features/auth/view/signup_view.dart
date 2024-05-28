@@ -2,11 +2,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phenikaa_campus/common/common.dart';
-import 'package:phenikaa_campus/constants/constants.dart';
-import 'package:phenikaa_campus/features/auth/controller/auth_controller.dart';
+import 'package:phenikaa_campus/constants/assets_constants.dart';
 import 'package:phenikaa_campus/features/auth/view/login_view.dart';
 import 'package:phenikaa_campus/features/auth/widgets/auth_field.dart';
 import 'package:phenikaa_campus/theme/theme.dart';
+
+import '../controller/auth_controller.dart';
 
 class SignUpView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(
@@ -19,7 +20,6 @@ class SignUpView extends ConsumerStatefulWidget {
 }
 
 class _SignUpViewState extends ConsumerState<SignUpView> {
-  final appbar = UIConstants.appBar();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -40,63 +40,133 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     final isLoading = ref.watch(authControllerProvider);
-
     return Scaffold(
-      appBar: appbar,
       body: isLoading
-          ? const Loader()
-          : Center(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      // textfield 1
-                      AuthField(
-                        controller: emailController,
-                        hintText: 'Email',
-                      ),
-                      const SizedBox(height: 25),
-                      AuthField(
-                        controller: passwordController,
-                        hintText: 'Password',
-                      ),
-                      const SizedBox(height: 40),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: RoundedSmallButton(
-                          onTap: onSignUp,
-                          text: 'Done',
-                        ),
-                      ),
-                      const SizedBox(height: 40),
-                      RichText(
-                        text: TextSpan(
-                          text: "Already have an account?",
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
+          ? Loader()
+          : SingleChildScrollView(
+              child: SizedBox(
+                width: size.width,
+                height: size.height,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Image.asset(AssetsConstants.darkBlur),
+                    ),
+                    Positioned.fill(
+                      top: size.height * 0.068,
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Column(
                           children: [
-                            TextSpan(
-                              text: ' Login',
+                            Text(
+                              'Hello,',
                               style: const TextStyle(
-                                color: Pallete.blueColor,
-                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 40,
                               ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.push(
-                                    context,
-                                    LoginView.route(),
-                                  );
-                                },
                             ),
+                            Text(
+                              'Sign Up!\n',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 32,
+                              ),
+                            ),
+                            Text(
+                              'Please enter your email and password ',
+                            )
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Positioned(
+                      top: size.height * 0.3,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            // horizontal: 10.0,
+                            ),
+                        width: size.width,
+                        height: size.height * 0.8,
+                        decoration: BoxDecoration(
+                          color: Pallete.rhinoDark800,
+                          borderRadius: BorderRadius.circular(24.0),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: size.height * 0.1,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            // horizontal: 10.0,
+                            ),
+                        width: size.width,
+                        height: size.height * 0.8,
+                        child: Center(
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                children: [
+                                  AuthField(
+                                    prefixIcon: Icons.email_outlined,
+                                    prefixIconColor: Pallete.whiteColor,
+                                    controller: emailController,
+                                    hintText: 'Email Address',
+                                  ),
+                                  const SizedBox(height: 25),
+                                  AuthField(
+                                    obscureText: true,
+                                    prefixIcon: Icons.lock_outlined,
+                                    controller: passwordController,
+                                    hintText: 'Password',
+                                  ),
+                                  const SizedBox(height: 40),
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: RoundedSmallButton(
+                                      backgroundColor: Pallete.rhinoDark600,
+                                      onTap: onSignUp,
+                                      text: 'Sign Up',
+                                    ),
+                                  ),
+                                  const SizedBox(height: 40),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: "Already have an account?",
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: ' Log In',
+                                          style: const TextStyle(
+                                            color: Pallete.blueColor,
+                                            fontSize: 16,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              Navigator.push(
+                                                context,
+                                                LoginView.route(),
+                                              );
+                                            },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

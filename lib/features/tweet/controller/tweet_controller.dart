@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phenikaa_campus/apis/storage_api.dart';
 import 'package:phenikaa_campus/apis/tweet_api.dart';
+import 'package:phenikaa_campus/core/enums/notification_type_num.dart';
 import 'package:phenikaa_campus/core/enums/tweet_type_enum.dart';
 import 'package:phenikaa_campus/core/utils.dart';
 import 'package:phenikaa_campus/features/auth/controller/auth_controller.dart';
+import 'package:phenikaa_campus/features/notification/controller/notification_controller.dart';
 import 'package:phenikaa_campus/models/tweet_model.dart';
 
-import '../../../apis/notification_api.dart';
 import '../../../models/user_models.dart';
 
 final tweetControllerProvider = StateNotifierProvider<TweetController, bool>(
@@ -19,6 +20,8 @@ final tweetControllerProvider = StateNotifierProvider<TweetController, bool>(
       ref: ref,
       tweetAPI: ref.watch(tweetAPIProvider),
       storageAPI: ref.watch(storaegAPIProvider),
+      notificationController:
+          ref.watch(notificationControllerProvider.notifier),
     );
   },
 );
@@ -51,17 +54,17 @@ final getTweetsByHashtagProvider = FutureProvider.family((ref, String hashtag) {
 class TweetController extends StateNotifier<bool> {
   final TweetAPI _tweetAPI;
   final StorageAPI _storageAPI;
-  final NotificationAPI _notificationAPI;
+  final NotificationController _notificationController;
   final Ref _ref;
-  TweetController(
-      {required StorageAPI storageAPI,
-      required Ref ref,
-      required TweetAPI tweetAPI,
-      required NotificationAPI notificationAPI})
-      : _ref = ref,
+  TweetController({
+    required StorageAPI storageAPI,
+    required Ref ref,
+    required TweetAPI tweetAPI,
+    required NotificationController notificationController,
+  })  : _ref = ref,
         _tweetAPI = tweetAPI,
         _storageAPI = storageAPI,
-        _notificationAPI = notificationAPI,
+        _notificationController = notificationController,
         super(false);
 
   Future<List<Tweet>> getTweets() async {
@@ -70,7 +73,7 @@ class TweetController extends StateNotifier<bool> {
   }
 
   void shareTweet({
-    required List<File> images,
+    required List<File> images, // Update the image //Quang Vi Dang
     required String text,
     required BuildContext context,
     required String repliedTo,
@@ -111,7 +114,13 @@ class TweetController extends StateNotifier<bool> {
 
     tweet = tweet.copyWith(likes: likes);
     final res = await _tweetAPI.likeTweet(tweet);
-    res.fold((l) => null, (r) => null);
+    res.fold(
+        (l) => null,
+        (r) => _notificationController.createNotification(
+            text: tweet.text,
+            postId: tweet.id,
+            notificationType: NotificationType.like,
+            uid: tweet.uid));
   }
 
   void reshareTweet(
@@ -146,7 +155,8 @@ class TweetController extends StateNotifier<bool> {
     final hashtags = _getHashtagsFromText(text);
     final link = _getLinksFromText(text);
     final user = _ref.read(currentUserDetailsProvider).value;
-    final imageLinks = await _storageAPI.uploadImage(images);
+    final imageLinks = await _storageAPI
+        .uploadImage(images); // Update the image //Quang Vi Dang
     Tweet tweet = Tweet(
         text: text,
         hashtags: hashtags,

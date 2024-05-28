@@ -55,9 +55,12 @@ class _ExploreViewState extends ConsumerState<ExploreView> {
               ),
             ),
             Positioned.fill(
-                top: size.height * 0.068,
-                child: const Align(
-                    alignment: Alignment.topCenter, child: Text('Search'))),
+              top: size.height * 0.068,
+              child: const Align(
+                alignment: Alignment.topCenter,
+                child: Text('Search'),
+              ),
+            ),
             // Layer 2: Column with TextFormFieldCustom
             Column(
               children: [
@@ -179,7 +182,8 @@ class _ExploreViewState extends ConsumerState<ExploreView> {
                 : SizedBox(),
             !isShowUsers
                 ? Container(
-                    margin: EdgeInsets.only(top: 300, left: 28, right: 28),
+                    margin:
+                        const EdgeInsets.only(top: 300, left: 28, right: 28),
                     child: Column(
                       children: [
                         Image.asset(AssetsConstants.darkNoContent),

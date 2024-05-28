@@ -1,0 +1,9 @@
+<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g id="icon/profile">
+        <path id="Vector 67"
+            d="M3.25 21.3571L3.48898 21.1182C6.01146 18.5957 9.43267 17.1786 13 17.1786V17.1786C16.5673 17.1786 19.9885 18.5957 22.511 21.1182L22.75 21.3571"
+            stroke="#ADB4C0" stroke-width="2" stroke-linecap="round" stroke-linejoin="bevel" />
+        <ellipse id="Ellipse 25" cx="13" cy="8.35714" rx="4.64286" ry="4.64286" stroke="#ADB4C0" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="bevel" />
+    </g>
+</svg>
