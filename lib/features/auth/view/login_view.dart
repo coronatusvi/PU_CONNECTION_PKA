@@ -1,14 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phenikaa_campus/common/common.dart';
-import 'package:phenikaa_campus/constants/assets_constants.dart';
-import 'package:phenikaa_campus/constants/ui_constant.dart';
-import 'package:phenikaa_campus/features/auth/view/signup_view.dart';
-import 'package:phenikaa_campus/features/auth/widgets/auth_field.dart';
-import 'package:phenikaa_campus/theme/theme.dart';
 
+import '../../../common/loading_page.dart';
+import '../../../common/rounded_small_button.dart';
+import '../../../constants/assets_constants.dart';
+import '../../../constants/ui_constant.dart';
+import '../../../theme/pallete.dart';
 import '../controller/auth_controller.dart';
+import '../widgets/auth_field.dart';
+import 'signup_view.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(

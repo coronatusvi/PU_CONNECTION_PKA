@@ -1,10 +1,11 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:phenikaa_campus/core/providers.dart';
 // import 'package:appwrite/models.dart';
 import '../core/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../core/providers.dart';
 
 // to signup, to get user account -> Account
 // to access user related data -> User

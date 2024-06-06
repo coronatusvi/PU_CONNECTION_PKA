@@ -1,6 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phenikaa_campus/constants/constants.dart';
+
+import '../constants/appwrite_constant.dart';
 
 final appwriteClientProvider = Provider((ref) {
   Client client = Client();

@@ -2,12 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:phenikaa_campus/features/user_profile/widget/follow_count.dart';
-import 'package:phenikaa_campus/theme/pallete.dart';
-
-import '../../../constants/assets_constants.dart';
 import '../../../models/user_models.dart';
+import '../../../theme/pallete.dart';
 
 class UserProfile extends ConsumerWidget {
   final UserModel user;

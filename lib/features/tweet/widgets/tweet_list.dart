@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phenikaa_campus/features/tweet/views/twitter_reply_view.dart';
 
 import '../../../models/tweet_model.dart';
+import '../views/twitter_reply_view.dart';
 import 'tweet_card.dart';
 
 class TweetList extends ConsumerWidget {

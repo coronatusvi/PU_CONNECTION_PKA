@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phenikaa_campus/constants/appwrite_constant.dart';
-import 'package:phenikaa_campus/core/providers.dart';
+
+import '../constants/appwrite_constant.dart';
+import '../core/providers.dart';
 
 // Update the image //Quang Vi Dang
 final storaegAPIProvider = Provider((ref) {

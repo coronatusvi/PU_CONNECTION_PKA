@@ -3,14 +3,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:phenikaa_campus/core/utils.dart';
-import 'package:phenikaa_campus/features/home/view/home_view.dart';
-import 'package:phenikaa_campus/features/tweet/controller/tweet_controller.dart';
 import '../../../common/loading_page.dart';
 import '../../../common/rounded_small_button.dart';
 import '../../../constants/assets_constants.dart';
+import '../../../core/utils.dart';
 import '../../../theme/pallete.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../home/view/home_view.dart';
+import '../controller/tweet_controller.dart';
 
 class CreateTweetScreen extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(

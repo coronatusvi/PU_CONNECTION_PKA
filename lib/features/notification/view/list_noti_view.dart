@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:phenikaa_campus/constants/constants.dart';
-import 'package:phenikaa_campus/features/explore/widget/text_form_field_custom.dart';
-import 'package:phenikaa_campus/features/notification/view/notification_view.dart';
-import 'package:phenikaa_campus/features/tweet/views/create_tweet_view.dart';
-import 'package:phenikaa_campus/features/tweet/widgets/tweet_list.dart';
-import 'package:phenikaa_campus/theme/pallete.dart';
+
+import '../../../theme/pallete.dart';
+import '../../tweet/views/create_tweet_view.dart';
+import 'notification_view.dart';
 
 class NotificationsList extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(

@@ -3,16 +3,16 @@ import 'dart:io';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phenikaa_campus/apis/storage_api.dart';
-import 'package:phenikaa_campus/apis/tweet_api.dart';
-import 'package:phenikaa_campus/core/enums/notification_type_num.dart';
-import 'package:phenikaa_campus/core/enums/tweet_type_enum.dart';
-import 'package:phenikaa_campus/core/utils.dart';
-import 'package:phenikaa_campus/features/auth/controller/auth_controller.dart';
-import 'package:phenikaa_campus/features/notification/controller/notification_controller.dart';
-import 'package:phenikaa_campus/models/tweet_model.dart';
 
+import '../../../apis/storage_api.dart';
+import '../../../apis/tweet_api.dart';
+import '../../../core/enums/notification_type_num.dart';
+import '../../../core/enums/tweet_type_enum.dart';
+import '../../../core/utils.dart';
+import '../../../models/tweet_model.dart';
 import '../../../models/user_models.dart';
+import '../../auth/controller/auth_controller.dart';
+import '../../notification/controller/notification_controller.dart';
 
 final tweetControllerProvider = StateNotifierProvider<TweetController, bool>(
   (ref) {

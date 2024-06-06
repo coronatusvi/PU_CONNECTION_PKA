@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:phenikaa_campus/constants/assets_constants.dart';
-import 'package:phenikaa_campus/theme/theme.dart';
 
 class BottomAppBarIcon extends StatelessWidget {
   final int page;

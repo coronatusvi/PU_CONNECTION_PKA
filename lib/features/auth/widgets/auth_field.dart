@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:phenikaa_campus/theme/pallete.dart';
+
+import '../../../theme/pallete.dart';
 
 class AuthField extends StatefulWidget {
   final TextEditingController controller;

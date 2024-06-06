@@ -3,10 +3,12 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:phenikaa_campus/constants/appwrite_constant.dart';
-import 'package:phenikaa_campus/core/core.dart';
-import 'package:phenikaa_campus/core/providers.dart';
-import 'package:phenikaa_campus/models/user_models.dart';
+
+import '../constants/appwrite_constant.dart';
+import '../core/core.dart';
+import '../core/providers.dart';
+import '../core/type_defs.dart';
+import '../models/user_models.dart';
 
 final userAPIProvider = Provider((ref) {
   return UserAPI(db: ref.watch(appwriteDatabaseProvider));

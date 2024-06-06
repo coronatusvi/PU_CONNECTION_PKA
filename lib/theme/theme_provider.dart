@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:phenikaa_campus/theme/theme_controller.dart';
+
+import 'theme_controller.dart';
 
 class ThemeProvider extends InheritedWidget {
   final ThemeManager manager;

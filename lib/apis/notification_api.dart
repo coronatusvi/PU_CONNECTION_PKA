@@ -2,11 +2,11 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:phenikaa_campus/models/notification_model.dart';
 
 import '../constants/appwrite_constant.dart';
 import '../core/core.dart';
 import '../core/providers.dart';
+import '../models/notification_model.dart';
 
 final notificationAPIProvider = Provider((ref) {
   return NotificationAPI(

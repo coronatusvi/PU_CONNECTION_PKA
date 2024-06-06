@@ -2,12 +2,13 @@
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phenikaa_campus/apis/auth_api.dart';
-import 'package:phenikaa_campus/apis/user_api.dart';
-import 'package:phenikaa_campus/core/utils.dart';
-import 'package:phenikaa_campus/features/auth/view/login_view.dart';
-import 'package:phenikaa_campus/features/home/view/home_view.dart';
-import 'package:phenikaa_campus/models/user_models.dart';
+
+import '../../../apis/auth_api.dart';
+import '../../../apis/user_api.dart';
+import '../../../core/utils.dart';
+import '../../../models/user_models.dart';
+import '../../home/view/home_view.dart';
+import '../view/login_view.dart';
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) {

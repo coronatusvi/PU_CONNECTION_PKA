@@ -2,11 +2,11 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:phenikaa_campus/constants/appwrite_constant.dart';
-import 'package:phenikaa_campus/core/failure.dart';
-import 'package:phenikaa_campus/core/providers.dart';
-import 'package:phenikaa_campus/core/type_defs.dart';
-import 'package:phenikaa_campus/models/tweet_model.dart';
+
+import '../constants/constants.dart';
+import '../core/core.dart';
+import '../core/providers.dart';
+import '../models/tweet_model.dart';
 
 final tweetAPIProvider = Provider((ref) {
   return TweetAPI(

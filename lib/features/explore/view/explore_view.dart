@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:phenikaa_campus/common/common.dart';
-import 'package:phenikaa_campus/constants/constants.dart';
-import 'package:phenikaa_campus/features/explore/widget/search_tile.dart';
-import 'package:phenikaa_campus/theme/pallete.dart';
 
+import '../../../common/error_page.dart';
+import '../../../common/loading_page.dart';
+import '../../../constants/assets_constants.dart';
 import '../../../constants/text.dart';
 import '../../../models/user_models.dart';
+import '../../../theme/pallete.dart';
 import '../controller/explore_controller.dart';
+import '../widget/search_tile.dart';
 import '../widget/text_form_field_custom.dart';
 
 class ExploreView extends ConsumerStatefulWidget {

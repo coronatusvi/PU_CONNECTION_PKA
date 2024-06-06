@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:like_button/like_button.dart';
-import 'package:phenikaa_campus/features/user_profile/view/user_profile_view.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../common/error_page.dart';
@@ -13,6 +12,7 @@ import '../../../core/enums/tweet_type_enum.dart';
 import '../../../models/tweet_model.dart';
 import '../../../theme/pallete.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../user_profile/view/user_profile_view.dart';
 import '../controller/tweet_controller.dart';
 import 'carousel_image.dart';
 import 'hashtag_text.dart';

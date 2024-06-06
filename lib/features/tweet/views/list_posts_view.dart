@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phenikaa_campus/common/error_page.dart';
-import 'package:phenikaa_campus/common/loading_page.dart';
-import 'package:phenikaa_campus/features/tweet/controller/tweet_controller.dart';
-import 'package:phenikaa_campus/features/tweet/views/create_tweet_view.dart';
-import 'package:phenikaa_campus/features/tweet/widgets/tweet_list.dart';
-import 'package:phenikaa_campus/theme/pallete.dart';
+
+import '../../../common/error_page.dart';
+import '../../../common/loading_page.dart';
+import '../../../theme/pallete.dart';
+import '../controller/tweet_controller.dart';
+import '../widgets/tweet_list.dart';
+import 'create_tweet_view.dart';
 
 class NewPostsList extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(
@@ -61,7 +62,8 @@ class _NewPostsListState extends ConsumerState<NewPostsList> {
                 GestureDetector(
                   onTap: onCreateTweet,
                   child: Container(
-                    margin: EdgeInsets.symmetric(vertical: size.height * 0.035, horizontal: 60),
+                    margin: EdgeInsets.symmetric(
+                        vertical: size.height * 0.035, horizontal: 60),
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     decoration: BoxDecoration(
                       color: Pallete.rhinoDark700,
@@ -102,9 +104,10 @@ class _NewPostsListState extends ConsumerState<NewPostsList> {
 
                   return switch (tweets) {
                     AsyncData(:final value) => RefreshIndicator(
-                      onRefresh: () async => ref.invalidate(getTweetsProvider),
-                      child: TweetList(tweets: value),
-                    ),
+                        onRefresh: () async =>
+                            ref.invalidate(getTweetsProvider),
+                        child: TweetList(tweets: value),
+                      ),
                     AsyncError(:final error) => ErrorText(
                         error: error.toString(),
                       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:phenikaa_campus/core/enums/tweet_type_enum.dart';
+
+import '../core/enums/tweet_type_enum.dart';
 
 @immutable
 class Tweet {

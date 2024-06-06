@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:phenikaa_campus/theme/theme.dart';
+
+import '../theme/theme.dart';
 
 class RoundedSmallButton extends StatelessWidget {
   final String text;

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:phenikaa_campus/common/loading_page.dart';
-import 'package:phenikaa_campus/constants/assets_constants.dart';
-import 'package:phenikaa_campus/features/auth/controller/auth_controller.dart';
-import 'package:phenikaa_campus/features/education/view/edu_view.dart';
-import 'package:phenikaa_campus/features/user_profile/view/user_profile_view.dart';
-import 'package:phenikaa_campus/theme/pallete.dart';
+
+import '../../../common/loading_page.dart';
+import '../../../constants/assets_constants.dart';
+import '../../../theme/pallete.dart';
+import '../../auth/controller/auth_controller.dart';
+import '../../user_profile/view/user_profile_view.dart';
 
 class SettingProfileView extends ConsumerStatefulWidget {
   const SettingProfileView({super.key});

@@ -1,8 +1,9 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phenikaa_campus/apis/tweet_api.dart';
-import 'package:phenikaa_campus/models/tweet_model.dart';
-import 'package:phenikaa_campus/models/user_models.dart';
+
+import '../../../apis/tweet_api.dart';
+import '../../../models/tweet_model.dart';
+import '../../../models/user_models.dart';
 
 final UserProfileControllerProvider = StateNotifierProvider(
   (ref) {
