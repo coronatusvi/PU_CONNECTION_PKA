@@ -152,7 +152,7 @@ class _SettingProfileViewState extends ConsumerState<SettingProfileView> {
                                             ),
                                           ),
                                           title: Text(
-                                            'Edit Profile',
+                                            'Trang cá nhân',
                                           ),
                                         ),
                                       ),
@@ -185,7 +185,9 @@ class _SettingProfileViewState extends ConsumerState<SettingProfileView> {
                                             ),
                                           ),
                                           title: Text(
-                                            'Education',
+                                            currentUser.educationId != 'no'
+                                                ? 'Lịch học'
+                                                : 'Liên kết tài khoản QLDT',
                                           ),
                                         ),
                                       ),
@@ -220,7 +222,7 @@ class _SettingProfileViewState extends ConsumerState<SettingProfileView> {
                                             ),
                                           ),
                                           title: Text(
-                                            'Log Out',
+                                            'Đăng xuất',
                                           ),
                                         ),
                                       ),

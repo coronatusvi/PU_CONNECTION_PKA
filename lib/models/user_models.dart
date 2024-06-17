@@ -14,6 +14,7 @@ class UserModel {
   final String uid;
   final String bio;
   final bool isTwitterBlue;
+  final String educationId;
   UserModel({
     required this.email,
     required this.name,
@@ -24,6 +25,7 @@ class UserModel {
     required this.uid,
     required this.bio,
     required this.isTwitterBlue,
+    required this.educationId,
   });
 
   UserModel copyWith({
@@ -36,6 +38,7 @@ class UserModel {
     String? uid,
     String? bio,
     bool? isTwitterBlue,
+    String? educationId,
   }) {
     return UserModel(
       email: email ?? this.email,
@@ -47,6 +50,7 @@ class UserModel {
       uid: uid ?? this.uid,
       bio: bio ?? this.bio,
       isTwitterBlue: isTwitterBlue ?? this.isTwitterBlue,
+      educationId: educationId ?? this.educationId,
     );
   }
 
@@ -61,6 +65,7 @@ class UserModel {
       'uid': uid,
       'bio': bio,
       'isTwitterBlue': isTwitterBlue,
+      'educationId': educationId,
     };
   }
 
@@ -75,12 +80,13 @@ class UserModel {
       uid: map['\$id'] ?? '',
       bio: map['bio'] ?? '',
       isTwitterBlue: map['isTwitterBlue'] ?? false,
+      educationId: map['educationId'] ?? '',
     );
   }
 
   @override
   String toString() {
-    return 'UserModel(email: $email, name: $name, followers: $followers, following: $following, profilePic: $profilePic, bannerPic: $bannerPic, uid: $uid, bio: $bio, isTwitterBlue: $isTwitterBlue,)';
+    return 'UserModel(email: $email, name: $name, followers: $followers, following: $following, profilePic: $profilePic, bannerPic: $bannerPic, uid: $uid, bio: $bio, isTwitterBlue: $isTwitterBlue, educationId: $educationId,)';
   }
 
   @override
@@ -96,7 +102,8 @@ class UserModel {
         other.bannerPic == bannerPic &&
         other.uid == uid &&
         other.bio == bio &&
-        other.isTwitterBlue == isTwitterBlue;
+        other.isTwitterBlue == isTwitterBlue &&
+        other.educationId == educationId;
   }
 
   @override
@@ -109,8 +116,7 @@ class UserModel {
         bannerPic.hashCode ^
         uid.hashCode ^
         bio.hashCode ^
-        isTwitterBlue.hashCode;
+        isTwitterBlue.hashCode ^
+        educationId.hashCode;
   }
 }
- // UserModel user = UserModel (name: 'Hung',,,);
-  // User.copyWith

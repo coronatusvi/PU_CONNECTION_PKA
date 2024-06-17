@@ -6,6 +6,7 @@ import '../../../constants/ui_constant.dart';
 import '../../../theme/pallete.dart';
 import '../../tweet/views/create_tweet_view.dart';
 import '../widgets/slide_.dart';
+import 'widget/bottom_appbar_icon.dart';
 
 class HomeView extends StatefulWidget {
   static route() => MaterialPageRoute(
@@ -61,38 +62,38 @@ class _HomeViewState extends State<HomeView> {
               ),
               label: 'Home',
             ),
-            // BottomNavigationBarItem(
-            //   activeIcon: SvgPicture.asset(
-            //     AssetsConstants.searchIcon,
-            //     color: Pallete.yellow800,
-            //   ),
-            //   icon: BottomAppBarIcon(
-            //     icon: SvgPicture.asset(
-            //       AssetsConstants.searchIcon,
-            //       color: Pallete.whiteColor,
-            //     ),
-            //     page: _page,
-            //     right: 40,
-            //     left: 0,
-            //   ),
-            //   label: 'Search',
-            // ),
-            // BottomNavigationBarItem(
-            //   activeIcon: SvgPicture.asset(
-            //     AssetsConstants.notifOutlinedIcon,
-            //     color: Pallete.yellow800,
-            //   ),
-            //   icon: BottomAppBarIcon(
-            //     icon: SvgPicture.asset(
-            //       AssetsConstants.notifOutlinedIcon,
-            //       color: Pallete.whiteColor,
-            //     ),
-            //     page: _page,
-            //     right: 0,
-            //     left: 40,
-            //   ),
-            //   label: 'Notifications',
-            // ),
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset(
+                AssetsConstants.searchIcon,
+                color: Pallete.yellow800,
+              ),
+              icon: BottomAppBarIcon(
+                icon: SvgPicture.asset(
+                  AssetsConstants.searchIcon,
+                  color: Pallete.whiteColor,
+                ),
+                page: _page,
+                right: 40,
+                left: 0,
+              ),
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
+              activeIcon: SvgPicture.asset(
+                AssetsConstants.notifOutlinedIcon,
+                color: Pallete.yellow800,
+              ),
+              icon: BottomAppBarIcon(
+                icon: SvgPicture.asset(
+                  AssetsConstants.notifOutlinedIcon,
+                  color: Pallete.whiteColor,
+                ),
+                page: _page,
+                right: 0,
+                left: 40,
+              ),
+              label: 'Notifications',
+            ),
             BottomNavigationBarItem(
               activeIcon: SvgPicture.asset(
                 AssetsConstants.profileIcon,
