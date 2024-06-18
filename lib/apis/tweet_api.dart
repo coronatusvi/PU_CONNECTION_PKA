@@ -58,14 +58,27 @@ class TweetAPI implements ITweetAPI {
 
   @override
   Future<List<Document>> getTweets() async {
-    final documents = await _db.listDocuments(
-      databaseId: AppwriteConstants.databaseId,
-      collectionId: AppwriteConstants.tweetsCollection,
-      queries: [
-        Query.orderDesc('tweetedAt'),
-      ],
-    );
-    return documents.documents;
+    // final documents = await _db.listDocuments(
+    //   databaseId: AppwriteConstants.databaseId,
+    //   collectionId: AppwriteConstants.tweetsCollection,
+    //   queries: [
+    //     Query.equal('tweetedAt', 'likes'),
+    //   ],
+    // );
+    // return documents.documents;
+    try {
+      final documents = await _db.listDocuments(
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.tweetsCollection,
+        queries: [
+          Query.equal('tweetedAt', 'likes'),
+        ],
+      );
+      return documents.documents;
+    } on AppwriteException catch (e) {
+      print(e);
+      return [];
+    }
   }
 
   @override

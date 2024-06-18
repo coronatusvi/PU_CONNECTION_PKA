@@ -37,7 +37,9 @@ class AuthAPI implements IAuthAPI {
   @override
   Future<User?> currentUserAccount() async {
     try {
-      return await _account.get();
+      final user = await _account.get();
+      
+      return user;
     } on AppwriteException catch (e, st) {
       print(st);
       return null;
@@ -75,10 +77,19 @@ class AuthAPI implements IAuthAPI {
     required String password,
   }) async {
     try {
-      var session = await _account.createEmailSession(
+      var session = await _account.createEmailPasswordSession(
         email: email,
         password: password,
       );
+
+      try {
+        final user = await _account.get();
+        print("user ==> " + user.toString());
+        // Logged in
+      } catch (err) {
+        print("user Error ==> " + err.toString());
+        // Not logged in
+      }
       return right(session);
     } on AppwriteException catch (e, stackTrace) {
       return left(
