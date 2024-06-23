@@ -38,7 +38,7 @@ class AuthAPI implements IAuthAPI {
   Future<User?> currentUserAccount() async {
     try {
       final user = await _account.get();
-      
+
       return user;
     } on AppwriteException catch (e, st) {
       print(st);
@@ -87,7 +87,6 @@ class AuthAPI implements IAuthAPI {
         print("user ==> " + user.toString());
         // Logged in
       } catch (err) {
-        print("user Error ==> " + err.toString());
         // Not logged in
       }
       return right(session);
@@ -96,6 +95,7 @@ class AuthAPI implements IAuthAPI {
         Failure(e.message ?? 'Some unexpected error occured', stackTrace),
       );
     } catch (e, stackTrace) {
+      print("user Error ==> " + e.toString());
       return left(
         Failure(e.toString(), stackTrace),
       );

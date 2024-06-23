@@ -1,6 +1,6 @@
 {
-    "name": "phenikaa_campus",
-    "short_name": "phenikaa_campus",
+    "name": "pu_connection",
+    "short_name": "pu_connection",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

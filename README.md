@@ -1,4 +1,4 @@
-# phenikaa_campus
+# pu_connection
 
 A new Flutter project.
 

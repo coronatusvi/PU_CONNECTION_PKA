@@ -94,7 +94,6 @@ class AuthController extends StateNotifier<bool> {
     required BuildContext context,
   }) async {
     state = true;
-    print("object $email $password");
     final res = await _authAPI.login(
       email: email,
       password: password,
