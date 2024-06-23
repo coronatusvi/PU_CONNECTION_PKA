@@ -1,70 +1,70 @@
 # Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
+pu_connection/*.class
+pu_connection/*.log
+pu_connection/*.pyc
+pu_connection/*.swp
+pu_connection/.DS_Store
+pu_connection/.atom/
+pu_connection/.buildlog/
+pu_connection/.history
+pu_connection/.svn/
 
 # IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
+pu_connection/*.iml
+pu_connection/*.ipr
+pu_connection/*.iws
+pu_connection/.idea/
 # db 
-lib/constants/appwrite_constant.dart
-appwrite_constant.dart
+pu_connection/lib/constants/appwrite_constant.dart
+pu_connection/appwrite_constant.dart
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
-#.vscode/
+#pu_connection/.vscode/
 
 # Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.packages
-pubspec.lock
-.pub-cache/
-.pub/
-/build/
-**/coverage
+pu_connection/**/doc/api/
+pu_connection/**/ios/Flutter/.last_build_id
+pu_connection/.dart_tool/
+pu_connection/.flutter-plugins
+pu_connection/.flutter-plugins-dependencies
+pu_connection/.packages
+pu_connection/pubspec.lock
+pu_connection/.pub-cache/
+pu_connection/.pub/
+pu_connection/**/build/
+pu_connection/**/coverage
 
 # Web related
-lib/generated_plugin_registrant.dart
+pu_connection/lib/generated_plugin_registrant.dart
 
 # Symbolication related
-app.*.symbols
+pu_connection/app.*.symbols
 
 # Obfuscation related
-app.*.map.json
+pu_connection/app.*.map.json
 
 # Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+pu_connection/android/app/debug
+pu_connection/android/app/profile
+pu_connection/android/app/release
 
 # generated file
-*.g.dart
-*.graphql.dart
-*.gr.dart
-*.freezed.dart
-*.config.dart
-*.gen.dart
-*.mocks.dart
-resources/lib/src/generated
-app/lib/ui/res/generated
-data/lib/src/repository/model/generated
+pu_connection/*.g.dart
+pu_connection/*.graphql.dart
+pu_connection/*.gr.dart
+pu_connection/*.freezed.dart
+pu_connection/*.config.dart
+pu_connection/*.gen.dart
+pu_connection/*.mocks.dart
+pu_connection/resources/lib/src/generated
+pu_connection/app/lib/ui/res/generated
+pu_connection/data/lib/src/repository/model/generated
 
-tools/*/*.jar
-tools/gen_text_styles/output/
-.vscode/settings.json
-env/
-.fvm/
-*.mdb
-pubspec_overrides.yaml
+pu_connection/tools/*/*.jar
+pu_connection/tools/gen_text_styles/output/
+pu_connection/.vscode/settings.json
+pu_connection/env/
+pu_connection/.fvm/
+pu_connection/*.mdb
+pu_connection/pubspec_overrides.yaml
