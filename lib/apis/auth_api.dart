@@ -1,7 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:fpdart/fpdart.dart';
-// import 'package:appwrite/models.dart';
 import '../core/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,9 +11,7 @@ import '../core/providers.dart';
 
 final authAPIProvider = Provider((ref) {
   final account = ref.watch(appwriteAccountProvider);
-  return AuthAPI(
-    account: account,
-  );
+  return AuthAPI(account: account);
 });
 
 abstract class IAuthAPI {
@@ -38,12 +35,13 @@ class AuthAPI implements IAuthAPI {
   Future<User?> currentUserAccount() async {
     try {
       final user = await _account.get();
-
+      print("User Account Success ==> ${user.toMap()}");
       return user;
     } on AppwriteException catch (e, st) {
-      print(st);
+      print("User Account Error ==> ${e.message}, StackTrace: $st");
       return null;
     } catch (e) {
+      print("User Account Unknown Error ==> $e");
       return null;
     }
   }
@@ -59,15 +57,15 @@ class AuthAPI implements IAuthAPI {
         email: email,
         password: password,
       );
+      print("Sign Up Success ==> ${account.toMap()}");
       return right(account);
     } on AppwriteException catch (e, stackTrace) {
+      print("Sign Up Error ==> ${e.message}, StackTrace: $stackTrace");
       return left(
-        Failure(e.message ?? 'Some unexpected error occured', stackTrace),
-      );
+          Failure(e.message ?? 'Some unexpected error occurred', stackTrace));
     } catch (e, stackTrace) {
-      return left(
-        Failure(e.toString(), stackTrace),
-      );
+      print("Sign Up Unknown Error ==> $e, StackTrace: $stackTrace");
+      return left(Failure(e.toString(), stackTrace));
     }
   }
 
@@ -84,21 +82,19 @@ class AuthAPI implements IAuthAPI {
 
       try {
         final user = await _account.get();
-        print("user ==> " + user.toString());
-        // Logged in
+        print("Login Success - User ==> ${user.toMap()}");
       } catch (err) {
-        // Not logged in
+        print("Login Error - Not logged in ==> $err");
       }
+      print("Login Session Success ==> ${session.toMap()}");
       return right(session);
     } on AppwriteException catch (e, stackTrace) {
+      print("Login Error ==> ${e.message}, StackTrace: $stackTrace");
       return left(
-        Failure(e.message ?? 'Some unexpected error occured', stackTrace),
-      );
+          Failure(e.message ?? 'Some unexpected error occurred', stackTrace));
     } catch (e, stackTrace) {
-      print("user Error ==> " + e.toString());
-      return left(
-        Failure(e.toString(), stackTrace),
-      );
+      print("Login Unknown Error ==> $e, StackTrace: $stackTrace");
+      return left(Failure(e.toString(), stackTrace));
     }
   }
 
@@ -106,31 +102,25 @@ class AuthAPI implements IAuthAPI {
   FutureEitherVoid logout() async {
     try {
       print("Logout ...");
-      // Lấy danh sách các sessions
       final sessions = await _account.listSessions();
 
-      // Lặp qua danh sách sessions
       for (final session in sessions.sessions) {
-        // Kiểm tra nếu là session hiện tại của người dùng
         if (session.current) {
-          // Xóa session
           await _account.deleteSession(sessionId: session.$id);
-          print(session.$id);
-          print("Logged out");
+          print("Logged out Session ==> ${session.$id}");
           return right(null);
         }
       }
 
-      // Nếu không tìm thấy session hiện tại
-      return left(Failure('Current session not found', Null as StackTrace));
+      print("Logout Error ==> Current session not found");
+      return left(Failure('Current session not found', StackTrace.current));
     } on AppwriteException catch (e, stackTrace) {
+      print("Logout Error ==> ${e.message}, StackTrace: $stackTrace");
       return left(
-        Failure(e.message ?? 'Some unexpected error occurred', stackTrace),
-      );
+          Failure(e.message ?? 'Some unexpected error occurred', stackTrace));
     } catch (e, stackTrace) {
-      return left(
-        Failure(e.toString(), stackTrace),
-      );
+      print("Logout Unknown Error ==> $e, StackTrace: $stackTrace");
+      return left(Failure(e.toString(), stackTrace));
     }
   }
 }

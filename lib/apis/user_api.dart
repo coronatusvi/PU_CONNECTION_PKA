@@ -29,19 +29,23 @@ class UserAPI implements IUserAPI {
   @override
   FutureEitherVoid saveUserData(UserModel userModel) async {
     try {
+      print("Saving user data: ${userModel.toMap()}");
       await _db.createDocument(
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.usersCollection,
         documentId: userModel.uid,
         data: userModel.toMap(),
       );
+      print("User data saved successfully");
       return right(null);
     } on AppwriteException catch (e, st) {
+      print("AppwriteException: ${e.message}");
       return left(Failure(
         e.message ?? "Unknown error",
         st,
       ));
     } catch (e, st) {
+      print("Exception: $e");
       return left(
         Failure(
           e.toString(),
@@ -52,24 +56,45 @@ class UserAPI implements IUserAPI {
   }
 
   @override
-  Future<Document> getUserData(String uid) {
-    return _db.getDocument(
-      databaseId: AppwriteConstants.databaseId,
-      collectionId: AppwriteConstants.usersCollection,
-      documentId: uid,
-    );
+  Future<Document> getUserData(String uid) async {
+    try {
+      print("Getting user data for uid: $uid");
+      final document = await _db.getDocument(
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.usersCollection,
+        documentId: uid,
+      );
+      print("User data retrieved: ${document.data}");
+      return document;
+    } on AppwriteException catch (e, st) {
+      print("AppwriteException: ${e.message}");
+      rethrow;
+    } catch (e) {
+      print("Exception: $e");
+      rethrow;
+    }
   }
 
   @override
   Future<List<Document>> searchUserByName(String name) async {
-    final documents = await _db.listDocuments(
-      databaseId: AppwriteConstants.databaseId,
-      collectionId: AppwriteConstants.usersCollection,
-      queries: [
-        Query.search('name', name),
-      ],
-    );
-
-    return documents.documents;
+    try {
+      print("Searching user by name: $name");
+      final documents = await _db.listDocuments(
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.usersCollection,
+        queries: [
+          Query.contains('name', name),
+        ],
+      );
+      print(
+          "Search results: ${documents.documents.map((doc) => doc.data).toList()}");
+      return documents.documents;
+    } on AppwriteException catch (e, st) {
+      print("AppwriteException: ${e.message}");
+      rethrow;
+    } catch (e) {
+      print("Exception: $e");
+      rethrow;
+    }
   }
 }

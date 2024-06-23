@@ -31,41 +31,56 @@ class NotificationAPI implements INotificationAPI {
   @override
   FutureEitherVoid createNotification(Notification notification) async {
     try {
-      await _db.createDocument(
+      final result = await _db.createDocument(
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.notificationsCollection,
         documentId: ID.unique(),
         data: notification.toMap(),
       );
+      print("Create Notification Success ==> ${result.toMap()}");
       return right(null);
     } on AppwriteException catch (e, st) {
-      return left(
-        Failure(
-          e.message ?? 'Some unexpected error occurred',
-          st,
-        ),
-      );
+      print(
+          "Create Notification AppwriteException ==> ${e.message}, StackTrace: $st");
+      return left(Failure(e.message ?? 'Some unexpected error occurred', st));
     } catch (e, st) {
+      print("Create Notification Error ==> $e, StackTrace: $st");
       return left(Failure(e.toString(), st));
     }
   }
 
   @override
   Future<List<Document>> getNotifications(String uid) async {
-    final documents = await _db.listDocuments(
-      databaseId: AppwriteConstants.databaseId,
-      collectionId: AppwriteConstants.notificationsCollection,
-      queries: [
-        Query.equal('uid', uid),
-      ],
-    );
-    return documents.documents;
+    try {
+      final documents = await _db.listDocuments(
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.notificationsCollection,
+        queries: [Query.equal('uid', uid)],
+      );
+      print("Get Notifications Success ==> ${documents.documents}");
+      return documents.documents;
+    } on AppwriteException catch (e, st) {
+      print(
+          "Get Notifications AppwriteException ==> ${e.message}, StackTrace: $st");
+      return [];
+    } catch (e, st) {
+      print("Get Notifications Error ==> $e, StackTrace: $st");
+      return [];
+    }
   }
 
   @override
   Stream<RealtimeMessage> getLatestNotification() {
-    return _realtime.subscribe([
-      'databases.${AppwriteConstants.databaseId}.collections.${AppwriteConstants.notificationsCollection}.documents'
-    ]).stream;
+    try {
+      final stream = _realtime.subscribe([
+        'databases.${AppwriteConstants.databaseId}.collections.${AppwriteConstants.notificationsCollection}.documents'
+      ]).stream;
+      print("Subscribed to Realtime Notifications");
+      return stream;
+    } catch (e) {
+      print("Subscribe to Realtime Notifications Error ==> $e");
+      // Handle error appropriately here, possibly returning an empty stream
+      return Stream.error(e);
+    }
   }
 }

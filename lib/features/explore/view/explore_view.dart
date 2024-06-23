@@ -59,7 +59,7 @@ class _ExploreViewState extends ConsumerState<ExploreView> {
               top: size.height * 0.068,
               child: const Align(
                 alignment: Alignment.topCenter,
-                child: Text('Search'),
+                child: Text('Tìm kiếm người dùng, bài viết'),
               ),
             ),
             // Layer 2: Column with TextFormFieldCustom
