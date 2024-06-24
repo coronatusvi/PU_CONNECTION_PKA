@@ -22,7 +22,7 @@ abstract class "phenikaa_campus::apis::user_api.dart::IUserAPI" {
   +dynamic getUserData()
   +dynamic searchUserByName()
 }
-
+  
 class "phenikaa_campus::apis::user_api.dart::UserAPI" {
   -Databases _db
   +dynamic saveUserData()
