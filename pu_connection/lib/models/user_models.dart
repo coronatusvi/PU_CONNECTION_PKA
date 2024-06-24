@@ -54,8 +54,8 @@ class UserModel {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+  Map<dynamic, dynamic> toMap() {
+    return <dynamic, dynamic>{
       'email': email,
       'name': name,
       'followers': followers,

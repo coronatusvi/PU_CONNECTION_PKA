@@ -77,7 +77,7 @@ class AuthAPI implements IAuthAPI {
     required String password,
   }) async {
     try {
-      var session = await _account.createEmailPasswordSession(
+      var session = await _account.createEmailSession(
         email: email,
         password: password,
       );
@@ -92,6 +92,7 @@ class AuthAPI implements IAuthAPI {
       }
       return right(session);
     } on AppwriteException catch (e, stackTrace) {
+      print("object $e");
       return left(
         Failure(e.message ?? 'Some unexpected error occured', stackTrace),
       );
