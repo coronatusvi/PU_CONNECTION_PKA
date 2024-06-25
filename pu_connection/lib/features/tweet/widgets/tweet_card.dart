@@ -97,25 +97,29 @@ class TweetCard extends ConsumerWidget {
                                     ),
                                     if (user.isTwitterBlue)
                                       Padding(
-                                        padding: const EdgeInsets.only(right: 5.0),
+                                        padding:
+                                            const EdgeInsets.only(right: 5.0),
                                         child: SvgPicture.asset(
                                           AssetsConstants.verifiedIcon,
                                         ),
                                       ),
                                     Text(
-                                      '@${user.name} ${timeago.format(
+                                      '${timeago.format(
                                         tweet.tweetedAt,
                                         locale: "en_short",
                                       )}',
                                       style: const TextStyle(
                                         color: Pallete.greyColor,
-                                        fontSize: 17,
+                                        fontSize: 14,
                                       ),
                                     ),
                                   ],
                                 ),
                                 if (tweet.repliedTo.isNotEmpty)
-                                  ref.watch(getTweetByIdProvider(tweet.repliedTo)).when(
+                                  ref
+                                      .watch(
+                                          getTweetByIdProvider(tweet.repliedTo))
+                                      .when(
                                         data: (repliedToTweet) {
                                           final replyingToUser = ref
                                               .watch(
@@ -133,7 +137,8 @@ class TweetCard extends ConsumerWidget {
                                               ),
                                               children: [
                                                 TextSpan(
-                                                  text: ' @${replyingToUser?.name}',
+                                                  text:
+                                                      ' @${replyingToUser?.name}',
                                                   style: const TextStyle(
                                                     color: Pallete.blueColor,
                                                     fontSize: 16,
@@ -149,7 +154,8 @@ class TweetCard extends ConsumerWidget {
                                         loading: () => const SizedBox(),
                                       ),
                                 HashtagText(text: tweet.text),
-                                if (tweet.tweetType == TweetType.image) CarouselImage(imageLinks: tweet.imageLinks),
+                                if (tweet.tweetType == TweetType.image)
+                                  CarouselImage(imageLinks: tweet.imageLinks),
                                 if (tweet.link.isNotEmpty) ...[
                                   const SizedBox(height: 4),
                                   Container(
@@ -159,7 +165,8 @@ class TweetCard extends ConsumerWidget {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: AnyLinkPreview(
-                                        displayDirection: UIDirection.uiDirectionHorizontal,
+                                        displayDirection:
+                                            UIDirection.uiDirectionHorizontal,
                                         link: tweet.link[0],
                                       ),
                                     ),
@@ -171,24 +178,31 @@ class TweetCard extends ConsumerWidget {
                                     right: 20,
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       TweetIconButton(
                                         pathName: AssetsConstants.viewsIcon,
-                                        text: (tweet.commentIds.length + tweet.reshareCount + tweet.likes.length)
+                                        text: (tweet.commentIds.length +
+                                                tweet.reshareCount +
+                                                tweet.likes.length)
                                             .toString(),
                                         onTap: () {},
                                       ),
                                       TweetIconButton(
                                         pathName: AssetsConstants.commentIcon,
-                                        text: tweet.commentIds.length.toString(),
+                                        text:
+                                            tweet.commentIds.length.toString(),
                                         onTap: () {},
                                       ),
                                       TweetIconButton(
                                         pathName: AssetsConstants.retweetIcon,
                                         text: tweet.reshareCount.toString(),
                                         onTap: () {
-                                          ref.read(tweetControllerProvider.notifier).reshareTweet(
+                                          ref
+                                              .read(tweetControllerProvider
+                                                  .notifier)
+                                              .reshareTweet(
                                                 tweet,
                                                 currentUser,
                                                 context,
@@ -198,32 +212,42 @@ class TweetCard extends ConsumerWidget {
                                       LikeButton(
                                         size: 25,
                                         onTap: (isLiked) async {
-                                          ref.read(tweetControllerProvider.notifier).likeTweet(
+                                          ref
+                                              .read(tweetControllerProvider
+                                                  .notifier)
+                                              .likeTweet(
                                                 tweet,
                                                 currentUser,
                                               );
                                           return !isLiked;
                                         },
-                                        isLiked: tweet.likes.contains(currentUser.uid),
+                                        isLiked: tweet.likes
+                                            .contains(currentUser.uid),
                                         likeBuilder: (isLiked) {
                                           return isLiked
                                               ? SvgPicture.asset(
-                                                  AssetsConstants.likeFilledIcon,
+                                                  AssetsConstants
+                                                      .likeFilledIcon,
                                                   color: Pallete.redColor,
                                                 )
                                               : SvgPicture.asset(
-                                                  AssetsConstants.likeOutlinedIcon,
+                                                  AssetsConstants
+                                                      .likeOutlinedIcon,
                                                   color: Pallete.greyColor,
                                                 );
                                         },
                                         likeCount: tweet.likes.length,
-                                        countBuilder: (likeCount, isLiked, text) {
+                                        countBuilder:
+                                            (likeCount, isLiked, text) {
                                           return Padding(
-                                            padding: const EdgeInsets.only(left: 2.0),
+                                            padding: const EdgeInsets.only(
+                                                left: 2.0),
                                             child: Text(
                                               text,
                                               style: TextStyle(
-                                                color: isLiked ? Pallete.redColor : Pallete.whiteColor,
+                                                color: isLiked
+                                                    ? Pallete.redColor
+                                                    : Pallete.whiteColor,
                                                 fontSize: 16,
                                               ),
                                             ),

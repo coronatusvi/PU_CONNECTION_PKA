@@ -70,9 +70,7 @@ class TweetAPI implements ITweetAPI {
       final documents = await _db.listDocuments(
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.tweetsCollection,
-        queries: [
-          Query.equal('tweetedAt', 'likes'),
-        ],
+        // queries: [Query.equal('tweetedAt', 'likes')]
       );
       return documents.documents;
     } on AppwriteException catch (e) {
