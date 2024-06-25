@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../features/explore/view/explore_view.dart';
-import '../features/notification/view/list_noti_view.dart';
+import '../features/messenger/views/list_messages_view.dart';
 import '../features/setting_profile/view/setting_profile_view.dart';
 import '../features/tweet/views/list_posts_view.dart';
 import '../theme/pallete.dart';
@@ -26,7 +26,7 @@ class UIConstants {
     // const Text("Feed Screen"),
     const NewPostsList(),
     const ExploreView(),
-    const NotificationsList(),
+    const ListMessagesView(),
     const SettingProfileView(),
   ];
 }

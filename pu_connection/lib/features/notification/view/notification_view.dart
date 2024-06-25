@@ -13,6 +13,13 @@ import '../widget/notification_tile.dart';
 class NotificationView extends ConsumerWidget {
   const NotificationView({super.key});
 
+  // Phương thức tĩnh tạo MaterialPageRoute
+  static MaterialPageRoute route() {
+    return MaterialPageRoute(
+      builder: (context) => const NotificationView(),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserDetailsProvider).value;

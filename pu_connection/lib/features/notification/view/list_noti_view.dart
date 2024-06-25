@@ -26,6 +26,15 @@ class _NotificationsListState extends ConsumerState<NotificationsList> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.close, size: 30),
+        ),
+        title: const Text('Notifications'),
+      ),
       backgroundColor: Pallete.blackColor,
       body: SizedBox(
         width: size.width,
@@ -46,7 +55,7 @@ class _NotificationsListState extends ConsumerState<NotificationsList> {
               ),
             ),
             Positioned(
-              top: 100,
+              top: 10,
               child: Container(
                 width: size.width,
                 height: size.height,
@@ -56,20 +65,13 @@ class _NotificationsListState extends ConsumerState<NotificationsList> {
                 ),
               ),
             ),
-            Positioned.fill(
-              top: size.height * 0.068,
-              child: const Align(
-                alignment: Alignment.topCenter,
-                child: Text('Notifications'),
-              ),
-            ),
 
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
               ),
               margin: EdgeInsets.only(
-                top: size.height * 0.13,
+                top: size.height * 0.02,
                 left: 10,
                 right: 10,
               ),

@@ -4,6 +4,7 @@ class AssetsConstants {
   static const String twitterLogo = '$_svgsPath/twitter_logo.svg';
   static const String homeFilledIcon = '$_svgsPath/home-yellow.svg';
   static const String homeOutlinedIcon = '$_svgsPath/home-white.svg';
+  static const String messengerOutlinedIcon = '$_svgsPath/messenger.svg';
   static const String notifFilledIcon = '$_svgsPath/notification-white.svg';
   static const String notifOutlinedIcon = '$_svgsPath/notification-yellow.svg';
   static const String searchIcon = '$_svgsPath/search.svg';

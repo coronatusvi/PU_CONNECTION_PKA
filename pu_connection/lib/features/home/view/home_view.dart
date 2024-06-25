@@ -80,12 +80,12 @@ class _HomeViewState extends State<HomeView> {
             ),
             BottomNavigationBarItem(
               activeIcon: SvgPicture.asset(
-                AssetsConstants.notifOutlinedIcon,
+                AssetsConstants.messengerOutlinedIcon,
                 color: Pallete.yellow800,
               ),
               icon: BottomAppBarIcon(
                 icon: SvgPicture.asset(
-                  AssetsConstants.notifOutlinedIcon,
+                  AssetsConstants.messengerOutlinedIcon,
                   color: Pallete.whiteColor,
                 ),
                 page: _page,

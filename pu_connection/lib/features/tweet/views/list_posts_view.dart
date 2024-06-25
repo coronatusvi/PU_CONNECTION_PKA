@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
+import '../../../constants/assets_constants.dart';
 import '../../../theme/pallete.dart';
+import '../../notification/view/list_noti_view.dart';
 import '../controller/tweet_controller.dart';
 import '../widgets/tweet_list.dart';
 import 'create_tweet_view.dart';
@@ -21,6 +24,17 @@ class NewPostsList extends ConsumerStatefulWidget {
 class _NewPostsListState extends ConsumerState<NewPostsList> {
   void onCreateTweet() {
     Navigator.push(context, CreateTweetScreen.route());
+  }
+
+  void onNotificationScreen() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return NotificationsList(); // Đảm bảo NotificationsList phù hợp để hiển thị như một bottom sheet
+      },
+      isScrollControlled:
+          true, // Cho phép bottom sheet chiếm toàn bộ màn hình nếu cần
+    );
   }
 
   @override
@@ -57,24 +71,57 @@ class _NewPostsListState extends ConsumerState<NewPostsList> {
                 ),
               ),
             ),
-            Column(
+            Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Adjust alignment if necessary
               children: [
+                Expanded(
+                  // Wrap with Expanded if space allows
+                  child: GestureDetector(
+                    onTap: onCreateTweet,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(
+                          vertical: size.height * 0.035,
+                          horizontal: 20), // Adjusted horizontal margin
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 15), // Adjusted horizontal padding
+                      decoration: BoxDecoration(
+                        color: Pallete.rhinoDark700,
+                        borderRadius: BorderRadius.circular(24.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.create),
+                          SizedBox(width: 10),
+                          Text("How are you today?"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 GestureDetector(
-                  onTap: onCreateTweet,
+                  onTap: onNotificationScreen,
                   child: Container(
                     margin: EdgeInsets.symmetric(
-                        vertical: size.height * 0.035, horizontal: 60),
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                        vertical: size.height * 0.035,
+                        horizontal: 20), // Adjusted horizontal margin
                     decoration: BoxDecoration(
                       color: Pallete.rhinoDark700,
-                      borderRadius: BorderRadius.circular(24.0),
+                      shape: BoxShape.circle,
                     ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.create),
-                        Text("How are you today?"),
-                      ],
+                    // The container size is implicitly defined by the padding and the icon size.
+                    child: Padding(
+                      padding: const EdgeInsets.all(
+                          7), // Increase padding to make the icon appear smaller.
+                      child: SvgPicture.asset(
+                        AssetsConstants.notifOutlinedIcon,
+                        color: Pallete.yellow500,
+                        // The icon size is reduced, but the overall widget size remains the same due to increased padding.
+                        width: 27, // Reduced icon width
+                        height: 27, // Reduced icon height
+                      ),
                     ),
                   ),
                 ),

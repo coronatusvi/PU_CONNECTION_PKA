@@ -255,7 +255,16 @@ class TweetCard extends ConsumerWidget {
                                         },
                                       ),
                                       IconButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          ref
+                                              .read(tweetControllerProvider
+                                                  .notifier)
+                                              .reshareTweet(
+                                                tweet,
+                                                currentUser,
+                                                context,
+                                              );
+                                        },
                                         icon: const Icon(
                                           Icons.share_outlined,
                                           size: 25,
