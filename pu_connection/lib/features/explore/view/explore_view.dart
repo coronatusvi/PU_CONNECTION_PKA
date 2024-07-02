@@ -197,19 +197,19 @@ class _ExploreViewState extends ConsumerState<ExploreView> {
                             ),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 12),
-                          child: Center(
-                            child: Text(
-                              searchOtherWords,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Pallete.whiteColor,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Container(
+                        //   margin: EdgeInsets.only(top: 12),
+                        //   child: Center(
+                        //     child: Text(
+                        //       searchOtherWords,
+                        //       textAlign: TextAlign.center,
+                        //       style: TextStyle(
+                        //         color: Pallete.whiteColor,
+                        //         fontSize: 14,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   )

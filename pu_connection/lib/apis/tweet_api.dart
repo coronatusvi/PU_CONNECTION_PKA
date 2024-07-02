@@ -68,10 +68,9 @@ class TweetAPI implements ITweetAPI {
     // return documents.documents;
     try {
       final documents = await _db.listDocuments(
-        databaseId: AppwriteConstants.databaseId,
-        collectionId: AppwriteConstants.tweetsCollection,
-        // queries: [Query.equal('tweetedAt', 'likes')]
-      );
+          databaseId: AppwriteConstants.databaseId,
+          collectionId: AppwriteConstants.tweetsCollection,
+          queries: [Query.orderDesc('tweetedAt')]);
       return documents.documents;
     } on AppwriteException catch (e) {
       print(e);

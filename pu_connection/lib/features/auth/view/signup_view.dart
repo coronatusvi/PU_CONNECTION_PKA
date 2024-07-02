@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../common/loading_page.dart';
 import '../../../common/rounded_small_button.dart';
@@ -26,7 +26,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
-  String profilePicController = "";
+  File? profilePic;
 
   @override
   void dispose() {
@@ -34,7 +34,16 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
     emailController.dispose();
     passwordController.dispose();
     usernameController.dispose();
-    profilePicController = "";
+  }
+
+  Future<void> pickImage() async {
+    final pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        profilePic = File(pickedImage.path);
+      });
+    }
   }
 
   void onSignUp() {
@@ -42,7 +51,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
           email: emailController.text,
           password: passwordController.text,
           name: usernameController.text,
-          profilePic: profilePicController,
+          profilePic: profilePic?.path ?? '',
           context: context,
         );
   }
@@ -86,7 +95,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                               ),
                             ),
                             Text(
-                              'Please enter your email and password ',
+                              'Please enter your email and password!\n',
                             )
                           ],
                         ),
@@ -121,11 +130,53 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                                   const EdgeInsets.symmetric(horizontal: 20),
                               child: Column(
                                 children: [
-                                  AuthField(
-                                    prefixIcon: Icons.person_outline,
-                                    prefixIconColor: Pallete.whiteColor,
-                                    controller: usernameController,
-                                    hintText: 'User Name',
+                                  const SizedBox(height: 25),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Profile',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.grey, // Màu của viền
+                                            width: 4.0, // Độ rộng của viền
+                                          ),
+                                        ),
+                                        child: GestureDetector(
+                                          onTap: pickImage,
+                                          child: CircleAvatar(
+                                            radius: 40,
+                                            backgroundImage: profilePic != null
+                                                ? FileImage(profilePic!)
+                                                : AssetImage(
+                                                        'assets/default_profile_pic.png')
+                                                    as ImageProvider,
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Picture',
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                   const SizedBox(height: 25),
                                   AuthField(
@@ -143,12 +194,12 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                                   ),
                                   const SizedBox(height: 25),
                                   AuthField(
-                                    obscureText: true,
-                                    prefixIcon: Icons.image_outlined,
+                                    prefixIcon: Icons.person_outline,
+                                    prefixIconColor: Pallete.whiteColor,
                                     controller: usernameController,
-                                    hintText: 'Profile Picture',
+                                    hintText: 'User Name',
                                   ),
-                                  const SizedBox(height: 40),
+                                  const SizedBox(height: 25),
                                   Align(
                                     alignment: Alignment.topRight,
                                     child: RoundedSmallButton(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../apis/auth_api.dart';
+import '../../../apis/storage_api.dart';
 import '../../../apis/user_api.dart';
 import '../../../core/utils.dart';
 import '../../../models/user_models.dart';
@@ -15,6 +16,7 @@ final authControllerProvider =
   return AuthController(
     authAPI: ref.watch(authAPIProvider),
     userAPI: ref.watch(userAPIProvider),
+    storageAPI: ref.watch(storaegAPIProvider),
   );
 });
 
@@ -41,13 +43,16 @@ class AuthController extends StateNotifier<bool> {
     state = false;
   }
 
+  final StorageAPI _storageAPI;
   final AuthAPI _authAPI;
   final UserAPI _userAPI;
   AuthController({
+    required StorageAPI storageAPI,
     required AuthAPI authAPI,
     required UserAPI userAPI,
   })  : _authAPI = authAPI,
         _userAPI = userAPI,
+        _storageAPI = storageAPI,
         super(false);
   // state = isLoading
 
@@ -61,6 +66,7 @@ class AuthController extends StateNotifier<bool> {
     required BuildContext context,
   }) async {
     state = true;
+    final profileLink = await _storageAPI.uploadImageSingle(profilePic);
     final res = await _authAPI.signUp(
       email: email,
       password: password,
@@ -71,10 +77,10 @@ class AuthController extends StateNotifier<bool> {
       (r) async {
         UserModel userModel = UserModel(
           email: email,
-          name: name,
+          name: name == '' ? getNameFromEmail(email) : name,
           followers: const [],
           following: const [],
-          profilePic: profilePic,
+          profilePic: profileLink,
           bannerPic: '',
           uid: r.$id,
           bio: '',

@@ -27,4 +27,13 @@ class StorageAPI {
     }
     return imageLinks;
   }
+
+  Future<String> uploadImageSingle(File file) async {
+    final uploadImage = await _storage.createFile(
+      bucketId: AppwriteConstants.imagesBucket,
+      fileId: ID.unique(),
+      file: InputFile(path: file.path),
+    );
+    return AppwriteConstants.imageUrl(uploadImage.$id);
+  }
 }

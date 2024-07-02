@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-
 import '../../../models/user_models.dart';
 import '../../../theme/theme.dart';
-import '../../user_profile/view/user_profile_view.dart';
+import '../views/messages_detail_view.dart';
 
-class SearchTile extends StatelessWidget {
+class UserWidget extends StatelessWidget {
   final UserModel userModel;
-  const SearchTile({
+  const UserWidget({
     super.key,
     required this.userModel,
   });
@@ -17,7 +16,7 @@ class SearchTile extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          UserProfileView.route(userModel),
+          MessagesDetailView.route(),
         );
       },
       child: Container(
