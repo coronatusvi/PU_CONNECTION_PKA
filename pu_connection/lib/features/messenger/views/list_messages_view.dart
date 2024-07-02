@@ -23,7 +23,7 @@ class _ListMessagesViewState extends ConsumerState<ListMessagesView> {
         title: Text('Danh sách tin nhắn'),
       ),
       body: Center(
-        child: Text('Nội dung của tin mới'),
+        child: Text('Nội dung của tin nhắn mới sẽ được hiển thị ở đây.'),
       ),
     );
   }

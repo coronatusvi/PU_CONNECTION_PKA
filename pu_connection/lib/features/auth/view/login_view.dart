@@ -77,11 +77,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                   fontSize: 40, // Điều chỉnh kích thước chữ
                                 ),
                               ),
-                              Text(
-                                'Welcome Back!\n',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w800, // Để in đậm
-                                  fontSize: 32, // Điều chỉnh kích thước chữ
+                              Center(
+                                child: Text(
+                                  'Phenikaa Uni Connection!\n',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800, // Để in đậm
+                                    fontSize: 28, // Điều chỉnh kích thước chữ
+                                  ),
                                 ),
                               ),
                               Text(
@@ -141,7 +143,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                     Align(
                                       alignment: Alignment.topRight,
                                       child: RoundedSmallButton(
-                                        backgroundColor: Pallete.rhinoDark600,
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 0, 98, 255),
                                         onTap: onLogin,
                                         text: 'Sign In',
                                       ),

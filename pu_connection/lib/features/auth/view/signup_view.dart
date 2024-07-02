@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,20 +23,26 @@ class SignUpView extends ConsumerStatefulWidget {
 }
 
 class _SignUpViewState extends ConsumerState<SignUpView> {
-  final emailController = TextEditingController();
+  final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final emailController = TextEditingController();
+  String profilePicController = "";
 
   @override
   void dispose() {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
+    usernameController.dispose();
+    profilePicController = "";
   }
 
   void onSignUp() {
     ref.read(authControllerProvider.notifier).signUp(
           email: emailController.text,
           password: passwordController.text,
+          name: usernameController.text,
+          profilePic: profilePicController,
           context: context,
         );
   }
@@ -64,17 +72,17 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                         child: Column(
                           children: [
                             Text(
-                              'Hello,',
+                              'WELCOME TO',
                               style: const TextStyle(
                                 fontWeight: FontWeight.w800,
-                                fontSize: 40,
+                                fontSize: 32,
                               ),
                             ),
                             Text(
-                              'Sign Up!\n',
+                              'PKAUNI CONNECTION!\n',
                               style: TextStyle(
                                 fontWeight: FontWeight.w800,
-                                fontSize: 32,
+                                fontSize: 28,
                               ),
                             ),
                             Text(
@@ -114,6 +122,13 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                               child: Column(
                                 children: [
                                   AuthField(
+                                    prefixIcon: Icons.person_outline,
+                                    prefixIconColor: Pallete.whiteColor,
+                                    controller: usernameController,
+                                    hintText: 'User Name',
+                                  ),
+                                  const SizedBox(height: 25),
+                                  AuthField(
                                     prefixIcon: Icons.email_outlined,
                                     prefixIconColor: Pallete.whiteColor,
                                     controller: emailController,
@@ -126,11 +141,19 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                                     controller: passwordController,
                                     hintText: 'Password',
                                   ),
+                                  const SizedBox(height: 25),
+                                  AuthField(
+                                    obscureText: true,
+                                    prefixIcon: Icons.image_outlined,
+                                    controller: usernameController,
+                                    hintText: 'Profile Picture',
+                                  ),
                                   const SizedBox(height: 40),
                                   Align(
                                     alignment: Alignment.topRight,
                                     child: RoundedSmallButton(
-                                      backgroundColor: Pallete.rhinoDark600,
+                                      backgroundColor:
+                                          Color.fromARGB(255, 194, 165, 0),
                                       onTap: onSignUp,
                                       text: 'Sign Up',
                                     ),

@@ -56,6 +56,8 @@ class AuthController extends StateNotifier<bool> {
   void signUp({
     required String email,
     required String password,
+    required String name,
+    profilePic = '',
     required BuildContext context,
   }) async {
     state = true;
@@ -69,10 +71,10 @@ class AuthController extends StateNotifier<bool> {
       (r) async {
         UserModel userModel = UserModel(
           email: email,
-          name: getNameFromEmail(email),
+          name: name,
           followers: const [],
           following: const [],
-          profilePic: '',
+          profilePic: profilePic,
           bannerPic: '',
           uid: r.$id,
           bio: '',
