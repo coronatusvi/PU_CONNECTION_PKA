@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'apis/firebase_messaging_service.dart';
 import 'common/error_page.dart';
 import 'common/loading_page.dart';
 import 'features/auth/controller/auth_controller.dart';
@@ -10,11 +10,13 @@ import 'theme/app_theme.dart';
 import 'theme/pallete.dart';
 import 'theme/theme_controller.dart';
 import 'theme/theme_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
-  runApp(ProviderScope(
-    child: MyApp(),
-  ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessagingService().initialize();
+  runApp(MyApp());
 }
 
 class MyApp extends ConsumerWidget {
@@ -26,21 +28,23 @@ class MyApp extends ConsumerWidget {
     return ThemeProvider(
       manager: _themeManager,
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Phenikaa Campus',
-          theme: AppTheme.theme,
-          home: ref.watch(currentUserAccountProvider).when(
+        debugShowCheckedModeBanner: false,
+        title: 'Phenikaa Campus',
+        theme: AppTheme.theme,
+        home: ref.watch(currentUserAccountProvider).when(
               data: (user) {
                 return user != null ? HomeView() : LoginView();
               },
               loading: () => const LoadingPage(
-                    backgroundColor: Pallete.rhinoDark500,
-                  ),
+                backgroundColor: Pallete.rhinoDark500,
+              ),
               error: (error, s) {
                 return ErrorText(
                   error: error.toString(),
                 );
-              })),
+              },
+            ),
+      ),
     );
   }
 }
