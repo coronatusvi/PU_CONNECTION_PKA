@@ -114,7 +114,7 @@ class AuthController extends StateNotifier<bool> {
         print(r.userId);
         _userAPI.getUserData(r.userId);
         _authAPI.currentUserAccount();
-        Navigator.push(context, MyApp() as Route<Object?>);
+        Navigator.push(context, MyApp.route());
       },
     );
   }

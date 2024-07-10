@@ -12,7 +12,8 @@ import 'auth_provider.dart';
 class CourseDataNotifier extends StateNotifier<List<CourseModel>?> {
   CourseDataNotifier() : super(null);
 
-  Future<void> fetchData(Ref ref, String startDate, String endDate) async {
+  Future<void> fetchData(
+      WidgetRef ref, String startDate, String endDate) async {
     AuthModel? authProvider =
         ref.read(authDataProvider); // Access the auth data
 

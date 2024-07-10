@@ -21,6 +21,9 @@ void main() async {
 }
 
 class MyApp extends ConsumerWidget {
+  static route() => MaterialPageRoute(
+        builder: (context) => MyApp(),
+      );
   MyApp({super.key});
   final ThemeManager _themeManager = ThemeManager();
   // This widget is the root of your application.

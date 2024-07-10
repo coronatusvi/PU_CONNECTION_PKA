@@ -13,6 +13,9 @@ import '../../auth/controller/auth_controller.dart';
 import '../../user_profile/view/user_profile_view.dart';
 
 class SettingProfileView extends ConsumerStatefulWidget {
+  static route() => MaterialPageRoute(
+        builder: (context) => const SettingProfileView(),
+      );
   const SettingProfileView({super.key});
 
   @override
