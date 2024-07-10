@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:pu_connnection/features/education/view/calender_view.dart';
+import 'package:pu_connnection/features/education/view/edu_view.dart';
 
 import '../../../common/loading_page.dart';
 import '../../../constants/assets_constants.dart';
@@ -158,7 +160,15 @@ class _SettingProfileViewState extends ConsumerState<SettingProfileView> {
                                       ),
                                       SizedBox(height: 20),
                                       GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          currentUser.educationId != 'no'
+                                              ? Navigator.push(
+                                                  context, CalenderView.route())
+                                              : Navigator.push(
+                                                  context,
+                                                  LoginWithMicrosoft_View
+                                                      .route());
+                                        },
                                         child: ListTile(
                                           trailing: const Icon(
                                             Icons.arrow_forward_ios,

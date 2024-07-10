@@ -8,9 +8,9 @@ import '../../../constants/assets_constants.dart';
 import '../../../constants/text.dart';
 import '../../../models/user_models.dart';
 import '../../../theme/pallete.dart';
-import '../../explore/controller/explore_controller.dart';
 import '../../explore/widget/search_tile.dart';
 import '../../explore/widget/text_form_field_custom.dart';
+import '../controller/message_controller.dart';
 
 class ListMessagesView extends ConsumerStatefulWidget {
   const ListMessagesView({super.key});
@@ -131,30 +131,33 @@ class _ListMessagesViewState extends ConsumerState<ListMessagesView> {
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Center(
-                                  child: Container(
-                                    margin: EdgeInsets.only(bottom: 20),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Pallete.whiteColor.withOpacity(0.5),
-                                      borderRadius: BorderRadius.circular(24.0),
-                                    ),
-                                    child: Text(
-                                      searchResultsCount > 0
-                                          ? '$searchResultsCount results'
-                                          : '0 results',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Pallete.rhinoDark500,
-                                        // fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                searchMessageController.text.isNotEmpty
+                                    ? Center(
+                                        child: Container(
+                                          margin: EdgeInsets.only(bottom: 20),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16.0,
+                                            vertical: 6,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Pallete.whiteColor
+                                                .withOpacity(0.5),
+                                            borderRadius:
+                                                BorderRadius.circular(24.0),
+                                          ),
+                                          child: Text(
+                                            searchResultsCount > 0
+                                                ? '$searchResultsCount results'
+                                                : '0 results',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Pallete.rhinoDark500,
+                                              // fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(),
                                 Expanded(
                                   child: ListView.builder(
                                     itemCount: searchResultsCount,
@@ -191,7 +194,7 @@ class _ListMessagesViewState extends ConsumerState<ListMessagesView> {
                         Image.asset(AssetsConstants.darkNoContent),
                         Center(
                           child: Text(
-                            noSearchFound,
+                            noMessageFound,
                             style: TextStyle(
                               color: Pallete.whiteColor,
                               fontSize: 28,

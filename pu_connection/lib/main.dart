@@ -13,10 +13,11 @@ import 'theme/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  FirebaseMessagingService().initialize();
-  runApp(MyApp());
+  // await Firebase.initializeApp();
+  // FirebaseMessagingService().initialize();
+  runApp(ProviderScope(
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends ConsumerWidget {
@@ -29,11 +30,11 @@ class MyApp extends ConsumerWidget {
       manager: _themeManager,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Phenikaa Campus',
+        title: 'Phenikaa Connection',
         theme: AppTheme.theme,
         home: ref.watch(currentUserAccountProvider).when(
               data: (user) {
-                return user != null ? HomeView() : LoginView();
+                return user != null ? const HomeView() : const LoginView();
               },
               loading: () => const LoadingPage(
                 backgroundColor: Pallete.rhinoDark500,

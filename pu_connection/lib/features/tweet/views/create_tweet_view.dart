@@ -45,8 +45,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   }
 
   void onPickImages() async {
-    // Update the image //Quang Vi Dang
-// Kiểm tra nền tảng và thực hiện hành động tương ứng
+    // Kiểm tra nền tảng và thực hiện hành động tương ứng
     if (Platform.isAndroid) {
       images = await pickImageOrImages();
     } else if (Platform.isIOS) {

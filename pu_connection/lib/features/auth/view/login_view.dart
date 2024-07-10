@@ -25,11 +25,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
   final appbar = UIConstants.appBar();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final Map<int, Widget> _children = {
-    0: const Text('Login'),
-    1: const Text('Sign Up'),
-  };
-  final int _currentSelection = 0;
   @override
   void dispose() {
     super.dispose();

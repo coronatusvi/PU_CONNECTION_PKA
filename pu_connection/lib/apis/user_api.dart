@@ -65,9 +65,23 @@ class UserAPI implements IUserAPI {
     final documents = await _db.listDocuments(
       databaseId: AppwriteConstants.databaseId,
       collectionId: AppwriteConstants.usersCollection,
-      queries: [
-        Query.search('name', name),
-      ],
+      queries: [Query.search('name', name)],
+    );
+
+    return documents.documents;
+  }
+
+  @override
+  Future<List<Document>> searchUserInMessengerScreen(String name) async {
+    List<String> queries = [];
+    if (name.isNotEmpty) {
+      queries.add(Query.search('name', name));
+    }
+
+    final documents = await _db.listDocuments(
+      databaseId: AppwriteConstants.databaseId,
+      collectionId: AppwriteConstants.usersCollection,
+      queries: queries,
     );
 
     return documents.documents;

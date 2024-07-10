@@ -23,7 +23,7 @@ class ExploreControllerNotifier extends StateNotifier<bool> {
   })  : _userAPI = userAPI,
         super(false);
   Future<List<UserModel>> searchUser(String name) async {
-    final users = await _userAPI.searchUserByName(name);
+    final users = await _userAPI.searchUserInMessengerScreen(name);
     return users.map((e) => UserModel.fromMap(e.data)).toList();
   }
 }

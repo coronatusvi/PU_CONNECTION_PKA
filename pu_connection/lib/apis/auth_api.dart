@@ -81,15 +81,6 @@ class AuthAPI implements IAuthAPI {
         email: email,
         password: password,
       );
-
-      try {
-        final user = await _account.get();
-        print("user ==> " + user.toString());
-        // Logged in
-      } catch (err) {
-        print("user Error ==> " + err.toString());
-        // Not logged in
-      }
       return right(session);
     } on AppwriteException catch (e, stackTrace) {
       print("object $e");

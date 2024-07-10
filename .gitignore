@@ -64,7 +64,7 @@ pu_connection/data/lib/src/repository/model/generated
 pu_connection/tools/*/*.jar
 pu_connection/tools/gen_text_styles/output/
 pu_connection/.vscode/settings.json
-pu_connection/env/
+pu_connection/lib/constants/env.dart
 pu_connection/.fvm/
 pu_connection/*.mdb
 pu_connection/pubspec_overrides.yaml

@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../common/loading_page.dart';
 import '../../../common/rounded_small_button.dart';
 import '../../../constants/assets_constants.dart';
+import '../../../core/utils.dart';
 import '../../../theme/pallete.dart';
 import '../controller/auth_controller.dart';
 import '../widgets/auth_field.dart';
@@ -26,7 +26,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
-  File? profilePic;
+  late File profilePic; // Khởi tạo biến profilePic
 
   @override
   void dispose() {
@@ -37,13 +37,9 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   }
 
   Future<void> pickImage() async {
-    final pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      setState(() {
-        profilePic = File(pickedImage.path);
-      });
-    }
+    final profilePic = await pickSingleImage();
+    if (profilePic == null) return;
+    setState(() {});
   }
 
   void onSignUp() {
@@ -51,7 +47,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
           email: emailController.text,
           password: passwordController.text,
           name: usernameController.text,
-          profilePic: profilePic?.path ?? '',
+          // profilePic: new File(),
           context: context,
         );
   }
@@ -158,7 +154,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                                             backgroundImage: profilePic != null
                                                 ? FileImage(profilePic!)
                                                 : AssetImage(
-                                                        'assets/default_profile_pic.png')
+                                                        'assets/png/canvasLogo.png')
                                                     as ImageProvider,
                                           ),
                                         ),
