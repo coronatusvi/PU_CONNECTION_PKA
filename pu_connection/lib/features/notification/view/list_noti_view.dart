@@ -25,59 +25,62 @@ class _NotificationsListState extends ConsumerState<NotificationsList> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.close, size: 30),
+    return Padding(
+      padding: EdgeInsets.only(top: 30),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.close, size: 30),
+          ),
+          title: const Text('Notifications'),
         ),
-        title: const Text('Notifications'),
-      ),
-      backgroundColor: Pallete.blackColor,
-      body: SizedBox(
-        width: size.width,
-        height: size.height,
-        child: Stack(
-          children: [
-            // Layer 1: Background Image
-            Positioned(
-              top: 0,
-              child: Container(
-                margin: EdgeInsets.symmetric(),
-                width: size.width,
-                height: size.height * 0.8,
-                decoration: BoxDecoration(
-                  color: Pallete.rhinoDark700,
-                  borderRadius: BorderRadius.circular(24.0),
+        backgroundColor: Pallete.blackColor,
+        body: SizedBox(
+          width: size.width,
+          height: size.height,
+          child: Stack(
+            children: [
+              // Layer 1: Background Image
+              Positioned(
+                top: 0,
+                child: Container(
+                  margin: EdgeInsets.symmetric(),
+                  width: size.width,
+                  height: size.height * 0.8,
+                  decoration: BoxDecoration(
+                    color: Pallete.rhinoDark700,
+                    borderRadius: BorderRadius.circular(24.0),
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 10,
-              child: Container(
-                width: size.width,
-                height: size.height,
-                decoration: BoxDecoration(
-                  gradient: Pallete.cardColor,
-                  borderRadius: BorderRadius.circular(24.0),
+              Positioned(
+                top: 0,
+                child: Container(
+                  width: size.width,
+                  height: size.height,
+                  decoration: BoxDecoration(
+                    gradient: Pallete.cardColor,
+                    borderRadius: BorderRadius.circular(24.0),
+                  ),
                 ),
               ),
-            ),
 
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              margin: EdgeInsets.only(
-                top: size.height * 0.02,
-                left: 10,
-                right: 10,
-              ),
-              child: NotificationView(),
-            )
-          ],
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                margin: EdgeInsets.only(
+                  top: size.height * 0.02,
+                  left: 10,
+                  right: 10,
+                ),
+                child: NotificationView(),
+              )
+            ],
+          ),
         ),
       ),
     );

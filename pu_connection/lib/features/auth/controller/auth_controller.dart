@@ -2,7 +2,6 @@
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pu_connnection/main.dart';
 
 import '../../../apis/auth_api.dart';
 import '../../../apis/storage_api.dart';
@@ -114,7 +113,7 @@ class AuthController extends StateNotifier<bool> {
         print(r.userId);
         _userAPI.getUserData(r.userId);
         _authAPI.currentUserAccount();
-        Navigator.push(context, MyApp.route());
+        Navigator.push(context, HomeView.route());
       },
     );
   }

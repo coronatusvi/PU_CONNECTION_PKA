@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../constants/env.dart';
+import '../../setting_profile/view/setting_profile_view.dart';
 import '../../widgets/dialogCustom.dart';
 import '../controller/auth_provider.dart';
 import 'calender_view.dart';
@@ -28,12 +29,19 @@ class _LoginWithMicrosoft_ViewState
 
   void _handlePageFinished(String url) async {
     if (url == urlFinished) {
+      // Lấy giá trị của sessionStorage với key 'objUser'
+      String objUserData = await controller.runJavaScriptReturningResult(
+          "sessionStorage.getItem('objUser');") as String;
+
+      // print("Session Storage objUser Data: $objUserData");
+
       String response = await controller.runJavaScriptReturningResult(
           'document.documentElement.innerHTML') as String;
-      var authData = getDataHtml(response);
+      var authData = getDataHtml(response + objUserData);
 
       ref.read(authDataProvider.notifier).setAuth(authData);
       var authDataModel = ref.read(authDataProvider);
+      // Bạn có thể tiếp tục xử lý objUserData ở đây
 
       try {
         if (authDataModel?.accessToken != "") {
@@ -85,6 +93,12 @@ class _LoginWithMicrosoft_ViewState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(context, SettingProfileView.route());
+          },
+          icon: const Icon(Icons.close, size: 30),
+        ),
         automaticallyImplyLeading: false,
         title: Text("Education"),
         centerTitle: true,

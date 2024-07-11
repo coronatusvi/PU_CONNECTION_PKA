@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'apis/firebase_messaging_service.dart';
 import 'common/error_page.dart';
 import 'common/loading_page.dart';
 import 'features/auth/controller/auth_controller.dart';
@@ -10,7 +9,6 @@ import 'theme/app_theme.dart';
 import 'theme/pallete.dart';
 import 'theme/theme_controller.dart';
 import 'theme/theme_provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   // await Firebase.initializeApp();

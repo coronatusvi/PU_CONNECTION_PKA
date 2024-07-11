@@ -27,6 +27,8 @@ class _SettingProfileViewState extends ConsumerState<SettingProfileView> {
   Widget build(BuildContext context) {
     final currentUser = ref.watch(currentUserDetailsProvider);
     const posi1 = 100.0;
+
+    
     return switch (currentUser) {
       AsyncData(value: final currentUser?) ||
       AsyncLoading(value: final currentUser?) =>
