@@ -3,9 +3,9 @@ import '../../../models/user_models.dart';
 import '../../../theme/theme.dart';
 import '../views/messages_detail_view.dart';
 
-class UserWidget extends StatelessWidget {
+class SearchUserMessenger extends StatelessWidget {
   final UserModel userModel;
-  const UserWidget({
+  const SearchUserMessenger({
     super.key,
     required this.userModel,
   });
@@ -16,7 +16,7 @@ class UserWidget extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MessagesDetailView.route(),
+          MessagesDetailView.route(userModel),
         );
       },
       child: Container(

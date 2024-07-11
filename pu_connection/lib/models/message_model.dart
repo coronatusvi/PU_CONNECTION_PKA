@@ -1,38 +1,38 @@
 import 'package:flutter/foundation.dart';
 
 @immutable
-class Message {
+class MessageModel {
   final String messageId;
   final String senderId;
-  final String receiverId;
   final String messageText;
   final List<String> fileIds;
   final int timestamp;
+  final String groupId;
 
-  const Message({
+  const MessageModel({
     required this.messageId,
     required this.senderId,
-    required this.receiverId,
     required this.messageText,
     required this.fileIds,
     required this.timestamp,
+    required this.groupId,
   });
 
-  Message copyWith({
+  MessageModel copyWith({
     String? messageId,
     String? senderId,
-    String? receiverId,
     String? messageText,
     List<String>? fileIds,
     int? timestamp,
+    String? groupId,
   }) {
-    return Message(
+    return MessageModel(
       messageId: messageId ?? this.messageId,
       senderId: senderId ?? this.senderId,
-      receiverId: receiverId ?? this.receiverId,
       messageText: messageText ?? this.messageText,
       fileIds: fileIds ?? this.fileIds,
       timestamp: timestamp ?? this.timestamp,
+      groupId: groupId ?? this.groupId,
     );
   }
 
@@ -41,50 +41,50 @@ class Message {
 
     result.addAll({'messageId': messageId});
     result.addAll({'senderId': senderId});
-    result.addAll({'receiverId': receiverId});
     result.addAll({'messageText': messageText});
     result.addAll({'fileIds': fileIds});
     result.addAll({'timestamp': timestamp});
+    result.addAll({'groupId': groupId});
 
     return result;
   }
 
-  factory Message.fromMap(Map<String, dynamic> map) {
-    return Message(
+  factory MessageModel.fromMap(Map<String, dynamic> map) {
+    return MessageModel(
       messageId: map['messageId'] ?? '',
       senderId: map['senderId'] ?? '',
-      receiverId: map['receiverId'] ?? '',
       messageText: map['messageText'] ?? '',
       fileIds: List<String>.from(map['fileIds']),
       timestamp: map['timestamp']?.toInt() ?? 0,
+      groupId: map['groupId'] ?? '',
     );
   }
 
   @override
   String toString() {
-    return 'Message(messageId: $messageId, senderId: $senderId, receiverId: $receiverId, messageText: $messageText, fileIds: $fileIds, timestamp: $timestamp)';
+    return 'MessageModel(messageId: $messageId, senderId: $senderId, messageText: $messageText, fileIds: $fileIds, timestamp: $timestamp, groupId: $groupId)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Message &&
+    return other is MessageModel &&
         other.messageId == messageId &&
         other.senderId == senderId &&
-        other.receiverId == receiverId &&
         other.messageText == messageText &&
         listEquals(other.fileIds, fileIds) &&
-        other.timestamp == timestamp;
+        other.timestamp == timestamp &&
+        other.groupId == groupId;
   }
 
   @override
   int get hashCode {
     return messageId.hashCode ^
         senderId.hashCode ^
-        receiverId.hashCode ^
         messageText.hashCode ^
         fileIds.hashCode ^
-        timestamp.hashCode;
+        timestamp.hashCode ^
+        groupId.hashCode;
   }
 }
