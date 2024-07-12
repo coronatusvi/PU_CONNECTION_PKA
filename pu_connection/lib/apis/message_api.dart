@@ -2,11 +2,11 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:pu_connnection/models/message_group_model.dart';
 
 import '../constants/appwrite_constant.dart';
 import '../core/core.dart';
 import '../core/providers.dart';
+import '../models/message_group_model.dart';
 import '../models/message_model.dart';
 
 final messageAPIProvider = Provider((ref) {
@@ -19,9 +19,9 @@ final messageAPIProvider = Provider((ref) {
 abstract class IMessageAPI {
   FutureEitherVoid createMessage(MessageModel message);
   FutureEitherVoid createMessageGroup(MessageGroupModel messageGroup);
+  Future<List<Document>> searchMessageGroup(String currentUserId);
   Stream<RealtimeMessage> getLatestMessage();
-  Future<List<Document>> getMessageGroup(String currentUserId);
-  Future<List<Document>> getMessages(String groupId);
+  Future<List<Document>> searchMessages(List<String> Ids);
 }
 
 class MessageAPI implements IMessageAPI {
@@ -54,21 +54,18 @@ class MessageAPI implements IMessageAPI {
   }
 
   @override
-  Future<List<Document>> getMessageGroup(String currentUserId) async {
+  Future<List<Document>> searchMessageGroup(String currentUserId) async {
     try {
       final documents = await _db.listDocuments(
         databaseId: AppwriteConstants.databaseId,
-        collectionId: AppwriteConstants.notificationsCollection,
-        queries: [
-          Query.equal('members', currentUserId),
-        ],
+        collectionId: AppwriteConstants.usersCollection,
       );
 
-      for (var doc in documents.documents) {
-        List<String> members = List<String>.from(doc.data['members']);
-        members.remove(currentUserId);
-        print(members);
-      }
+      // for (var doc in documents.documents) {
+      //   List<String> members = List<String>.from(doc.data['members']);
+      //   members.remove(currentUserId);
+      //   print(members);
+      // }
 
       return documents.documents;
     } catch (e) {
@@ -100,16 +97,40 @@ class MessageAPI implements IMessageAPI {
   }
 
   @override
-  Future<List<Document>> getMessages(String uid) async {
+  Future<List<Document>> searchMessages(List<String> Ids) async {
     try {
       final documents = await _db.listDocuments(
         databaseId: AppwriteConstants.databaseId,
-        collectionId: AppwriteConstants.notificationsCollection,
+        collectionId: AppwriteConstants.messagesGroupCollection,
+      );
+
+      List<MessageGroupModel> messageGroups = documents.documents
+          .map((e) => MessageGroupModel.fromMap(e.data))
+          .toList();
+      print(messageGroups);
+
+      // Filter message groups that contain any of the ids in their members
+      List<String> filteredGroupIds = messageGroups
+          .where((group) => group.members.any((member) => Ids.contains(member)))
+          .map((group) => group.groupId)
+          .toList();
+
+      if (filteredGroupIds.isEmpty) {
+        return [];
+      }
+
+      List<MessageModel> messages = [];
+      // Get the first groupId from the filtered list
+      String firstGroupId = filteredGroupIds.first;
+      final documentsMessage = await _db.listDocuments(
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.messengersCollection,
         queries: [
-          Query.equal('uid', uid),
+          Query.orderDesc("timestamp"),
+          Query.equal('groupId', firstGroupId),
         ],
       );
-      return documents.documents;
+      return documentsMessage.documents;
     } catch (e) {
       print('Error fetching messages: $e');
       return [];
