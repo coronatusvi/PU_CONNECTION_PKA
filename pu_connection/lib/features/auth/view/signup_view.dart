@@ -26,7 +26,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
-  late File profilePic; // Khởi tạo biến profilePic
+  File? profilePic; // Khởi tạo biến profilePic
 
   @override
   void dispose() {

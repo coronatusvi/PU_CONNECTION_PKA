@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pu_connnection/features/setting_profile/view/setting_profile_view.dart';
 import '../../../models/course_model.dart';
+import '../../home/view/home_view.dart';
 import '../controller/course_provider.dart';
 
 String startDate = "01/01/2024";
@@ -23,7 +23,7 @@ class _CalenderViewState extends ConsumerState<CalenderView> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context, SettingProfileView.route());
+            Navigator.push(context, HomeView.route());
           },
           icon: const Icon(Icons.close, size: 30),
         ),
@@ -57,7 +57,9 @@ class _CalenderViewState extends ConsumerState<CalenderView> {
                   CourseModel course = courseData[index];
                   return ListTile(
                     title: Text(course.tenHocPhan ?? 'Unknown Course'),
-                    subtitle: Text(course.tenHocPhan ?? 'No description'),
+                    subtitle: Text(
+                        "Tiet ${course.tietBatDau} (${course.gioBatDau}${course.phutBatDau}) (${course.gioKetThuc}${course.phutKetThuc}) => tiet ${course.tietKetThuc} Thu ${course.thuHoc}" ??
+                            'No description'),
                   );
                 },
               );

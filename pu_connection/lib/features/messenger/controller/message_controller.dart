@@ -52,7 +52,7 @@ class ExploreControllerNotifier extends StateNotifier<bool> {
   }
 
   Future<List<MessageModel>> searchMessages(List<String> membersIds) async {
-    final users = await _messageAPI.searchMessages(membersIds);
-    return users.map((e) => MessageModel.fromMap(e.data)).toList();
+    final messages = await _messageAPI.searchMessages(membersIds);
+    return messages.map((e) => MessageModel.fromMap(e.data)).toList();
   }
 }
