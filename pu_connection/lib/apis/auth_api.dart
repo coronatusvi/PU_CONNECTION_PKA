@@ -4,7 +4,6 @@ import 'package:fpdart/fpdart.dart';
 // import 'package:appwrite/models.dart';
 import '../core/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../core/providers.dart';
 
 // to signup, to get user account -> Account
@@ -38,7 +37,7 @@ class AuthAPI implements IAuthAPI {
   Future<User?> currentUserAccount() async {
     try {
       final user = await _account.get();
-      
+
       return user;
     } on AppwriteException catch (e, st) {
       print(st);

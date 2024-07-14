@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "pu_connection",
+            "cwd": "pu_connection",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "pu_connection (profile mode)",
+            "cwd": "pu_connection",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "pu_connection (release mode)",
+            "cwd": "pu_connection",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "Flutter",
+            "program": "lib/main.dart",
+            "cwd": "pu_connection",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}

@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:pu_connnection/features/education/view/calender_view.dart';
-import 'package:pu_connnection/features/education/view/edu_view.dart';
 
 import '../../../common/loading_page.dart';
 import '../../../constants/assets_constants.dart';
 import '../../../theme/pallete.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../education/view/calender_view.dart';
+import '../../education/view/edu_view.dart';
 import '../../user_profile/view/user_profile_view.dart';
 
 class SettingProfileView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(
         builder: (context) => const SettingProfileView(),
       );
+
   const SettingProfileView({super.key});
 
   @override
@@ -23,241 +24,245 @@ class SettingProfileView extends ConsumerStatefulWidget {
 }
 
 class _SettingProfileViewState extends ConsumerState<SettingProfileView> {
+  bool loggingOut = false;
+
+  void onLogout() async {
+    setState(() {
+      loggingOut = true;
+    });
+    ref.read(authControllerProvider.notifier).logout(context);
+    setState(() {
+      loggingOut = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(currentUserDetailsProvider);
-    const posi1 = 100.0;
 
-    
-    return switch (currentUser) {
-      AsyncData(value: final currentUser?) ||
-      AsyncLoading(value: final currentUser?) =>
-        Scaffold(
-          body: Stack(
-            children: [
-              Positioned.fill(child: Image.asset(AssetsConstants.darkBlur)),
-              Positioned.fill(
-                child: SafeArea(
-                  top: false,
-                  minimum: EdgeInsets.only(bottom: 30),
-                  child: Column(
-                    children: [
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: Pallete.cardColor,
-                          borderRadius: BorderRadius.circular(24.0),
-                        ),
-                        child: const SizedBox(
-                            height: 300, width: double.maxFinite),
+    return currentUser.when(
+      data: (currentUser) => Scaffold(
+        body: Stack(
+          children: [
+            Positioned.fill(child: Image.asset(AssetsConstants.darkBlur)),
+            Positioned.fill(
+              child: SafeArea(
+                top: false,
+                minimum: EdgeInsets.only(bottom: 30),
+                child: Column(
+                  children: [
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: Pallete.cardColor,
+                        borderRadius: BorderRadius.circular(24.0),
                       ),
-                      Expanded(
-                        child: OverflowPadding(
-                          padding: const EdgeInsets.only(top: -30, bottom: -30),
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: Pallete.rhinoDark700,
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Center(
-                                  child: OverflowPadding(
-                                    padding: const EdgeInsets.only(
-                                      top: -posi1,
+                      child:
+                          const SizedBox(height: 300, width: double.maxFinite),
+                    ),
+                    Expanded(
+                      child: OverflowPadding(
+                        padding: const EdgeInsets.only(top: -30, bottom: -30),
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Pallete.rhinoDark700,
+                            borderRadius: BorderRadius.circular(24.0),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Center(
+                                child: OverflowPadding(
+                                  padding: const EdgeInsets.only(
+                                    top: -100.0,
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(5),
+                                    decoration: const ShapeDecoration(
+                                      color: Pallete.rhinoDark800,
+                                      shape: CircleBorder(),
                                     ),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(5),
-                                      decoration: const ShapeDecoration(
-                                        color: Pallete.rhinoDark800,
-                                        shape: CircleBorder(),
-                                      ),
-                                      constraints: BoxConstraints.tight(
-                                          const Size.square(160)),
-                                      child: Stack(
-                                        fit: StackFit.loose,
-                                        children: [
-                                          CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  currentUser.profilePic),
-                                              radius: 80),
-                                          Align(
-                                            alignment: Alignment.bottomRight,
-                                            child: Container(
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: const ShapeDecoration(
-                                                color: Pallete.rhinoDark800,
-                                                shape: CircleBorder(),
-                                              ),
-                                              child: CircleAvatar(
-                                                backgroundColor:
-                                                    Pallete.yellow800,
-                                                radius: 25,
-                                                child: IconButton(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                    Icons.camera_alt,
-                                                    color: Pallete.rhinoDark800,
-                                                  ),
-                                                ),
-                                              ),
+                                    constraints: BoxConstraints.tight(
+                                        const Size.square(160)),
+                                    child: Stack(
+                                      fit: StackFit.loose,
+                                      children: [
+                                        CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              currentUser!.profilePic),
+                                          radius: 80,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(5),
+                                            decoration: const ShapeDecoration(
+                                              color: Pallete.rhinoDark800,
+                                              shape: CircleBorder(),
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(top: 31),
-                                  child: Center(
-                                    child: Text(
-                                      ' ${currentUser.name}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 28),
-                                    ),
-                                  ),
-                                ),
-                                const Gap(24),
-                                Divider(
-                                  // color: Pallete.rhinoDark600,
-                                  thickness: 1,
-                                  indent: 24,
-                                  endIndent: 24,
-                                ),
-                                const Gap(5),
-                                Expanded(
-                                  child: ListView(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            UserProfileView.route(currentUser),
-                                          );
-                                        },
-                                        child: ListTile(
-                                          trailing: const Icon(
-                                            Icons.arrow_forward_ios,
-                                            color: Pallete.subTextColor,
-                                          ),
-                                          leading: CircleAvatar(
-                                            backgroundColor: Pallete.whiteColor,
-                                            radius: 26,
                                             child: CircleAvatar(
                                               backgroundColor:
-                                                  Pallete.rhinoDark700,
-                                              radius: 25,
-                                              child: SvgPicture.asset(
-                                                AssetsConstants.profileIcon,
-                                                colorFilter: ColorFilter.mode(
                                                   Pallete.yellow800,
-                                                  BlendMode.srcIn,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          title: Text(
-                                            'Trang cá nhân',
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 20),
-                                      GestureDetector(
-                                        onTap: () {
-                                          currentUser.educationId != 'no'
-                                              ? Navigator.push(
-                                                  context, CalenderView.route())
-                                              : Navigator.push(
-                                                  context,
-                                                  LoginWithMicrosoft_View
-                                                      .route());
-                                        },
-                                        child: ListTile(
-                                          trailing: const Icon(
-                                            Icons.arrow_forward_ios,
-                                            color: Pallete.subTextColor,
-                                          ),
-                                          leading: CircleAvatar(
-                                            backgroundColor: Pallete.whiteColor,
-                                            radius: 26,
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  Pallete.rhinoDark700,
                                               radius: 25,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  image: DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image: AssetImage(
-                                                        AssetsConstants
-                                                            .eduLogo),
-                                                  ),
+                                              child: IconButton(
+                                                onPressed: () {},
+                                                icon: const Icon(
+                                                  Icons.camera_alt,
+                                                  color: Pallete.rhinoDark800,
                                                 ),
                                               ),
                                             ),
                                           ),
-                                          title: Text(
-                                            currentUser.educationId != 'no'
-                                                ? 'Lịch học'
-                                                : 'Liên kết tài khoản QLDT',
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 20),
-                                      GestureDetector(
-                                        onTap: () => {
-                                          ref
-                                              .read(authControllerProvider
-                                                  .notifier)
-                                              .logout(context),
-                                        },
-                                        child: ListTile(
-                                          trailing: const Icon(
-                                            Icons.arrow_forward_ios,
-                                            color: Pallete.subTextColor,
-                                          ),
-                                          leading: CircleAvatar(
-                                            backgroundColor: Pallete.whiteColor,
-                                            radius: 26,
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  Pallete.rhinoDark700,
-                                              radius: 25,
-                                              child: SvgPicture.asset(
-                                                AssetsConstants.logoutIcon,
-                                                colorFilter: ColorFilter.mode(
-                                                  Color.fromARGB(
-                                                      255, 255, 0, 0),
-                                                  BlendMode.srcIn,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          title: Text(
-                                            'Đăng xuất',
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 20),
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(top: 31),
+                                child: Center(
+                                  child: Text(
+                                    ' ${currentUser?.name}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 28),
+                                  ),
+                                ),
+                              ),
+                              const Gap(24),
+                              Divider(
+                                // color: Pallete.rhinoDark600,
+                                thickness: 1,
+                                indent: 24,
+                                endIndent: 24,
+                              ),
+                              const Gap(5),
+                              Expanded(
+                                child: ListView(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          UserProfileView.route(currentUser!),
+                                        );
+                                      },
+                                      child: ListTile(
+                                        trailing: const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: Pallete.subTextColor,
+                                        ),
+                                        leading: CircleAvatar(
+                                          backgroundColor: Pallete.whiteColor,
+                                          radius: 26,
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                Pallete.rhinoDark700,
+                                            radius: 25,
+                                            child: SvgPicture.asset(
+                                              AssetsConstants.profileIcon,
+                                              colorFilter: ColorFilter.mode(
+                                                Pallete.yellow800,
+                                                BlendMode.srcIn,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        title: Text(
+                                          'Trang cá nhân',
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    GestureDetector(
+                                      onTap: () {
+                                        currentUser?.educationId != 'no'
+                                            ? Navigator.push(
+                                                context, CalenderView.route())
+                                            : Navigator.push(
+                                                context,
+                                                LoginWithMicrosoft_View
+                                                    .route());
+                                      },
+                                      child: ListTile(
+                                        trailing: const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: Pallete.subTextColor,
+                                        ),
+                                        leading: CircleAvatar(
+                                          backgroundColor: Pallete.whiteColor,
+                                          radius: 26,
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                Pallete.rhinoDark700,
+                                            radius: 25,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: AssetImage(
+                                                      AssetsConstants.eduLogo),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        title: Text(
+                                          currentUser?.educationId != 'no'
+                                              ? 'Lịch học'
+                                              : 'Liên kết tài khoản QLDT',
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    GestureDetector(
+                                      onTap: loggingOut ? null : onLogout,
+                                      child: ListTile(
+                                        trailing: const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: Pallete.subTextColor,
+                                        ),
+                                        leading: CircleAvatar(
+                                          backgroundColor: Pallete.whiteColor,
+                                          radius: 26,
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                Pallete.rhinoDark700,
+                                            radius: 25,
+                                            child: SvgPicture.asset(
+                                              AssetsConstants.logoutIcon,
+                                              colorFilter: ColorFilter.mode(
+                                                Color.fromARGB(255, 255, 0, 0),
+                                                BlendMode.srcIn,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        title: Text(
+                                          'Đăng xuất',
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      _ => const Loader()
-    };
+      ),
+      loading: () => const Loader(), // Hiển thị loading khi đang tải dữ liệu
+      error: (error, stack) =>
+          Center(child: Text('Error: $error')), // Xử lý khi có lỗi
+    );
   }
 }

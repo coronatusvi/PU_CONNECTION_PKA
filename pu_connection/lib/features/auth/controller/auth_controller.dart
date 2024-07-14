@@ -1,7 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:math';
+
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pu_connnection/main.dart';
 
 import '../../../apis/auth_api.dart';
 import '../../../apis/storage_api.dart';
@@ -39,10 +42,6 @@ final currentUserAccountProvider = FutureProvider((ref) {
 }); //currentUserAccountProvider
 
 class AuthController extends StateNotifier<bool> {
-  void resetState() {
-    state = false;
-  }
-
   final StorageAPI _storageAPI;
   final AuthAPI _authAPI;
   final UserAPI _userAPI;
@@ -110,9 +109,12 @@ class AuthController extends StateNotifier<bool> {
     res.fold(
       (l) => showSnackBar(context, l.message),
       (r) {
-        print(r.userId);
-        _userAPI.getUserData(r.userId);
-        _authAPI.currentUserAccount();
+        _authAPI
+            .currentUserAccount()
+            .then((value) {})
+            .catchError((e) {})
+            .whenComplete(() {})
+            .catchError((e) {});
         Navigator.push(context, HomeView.route());
       },
     );
@@ -127,7 +129,6 @@ class AuthController extends StateNotifier<bool> {
   void logout(BuildContext context) async {
     final res = await _authAPI.logout();
     res.fold((l) => null, (r) {
-      resetState(); // Gọi phương thức resetState
       Navigator.pushAndRemoveUntil(
         context,
         LoginView.route(),
