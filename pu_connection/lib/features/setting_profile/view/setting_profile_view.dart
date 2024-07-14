@@ -2,6 +2,7 @@ import 'package:boxy/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 
 import '../../../common/loading_page.dart';
@@ -30,10 +31,31 @@ class _SettingProfileViewState extends ConsumerState<SettingProfileView> {
     setState(() {
       loggingOut = true;
     });
-    ref.read(authControllerProvider.notifier).logout(context);
+
+    final result =
+        await ref.read(authControllerProvider.notifier).logout(context);
+
     setState(() {
       loggingOut = false;
     });
+
+    if (result) {
+      Fluttertoast.showToast(
+        msg: "Đăng xuất thành công",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black87,
+        textColor: Colors.white,
+      );
+    } else {
+      Fluttertoast.showToast(
+        msg: "Đã xảy ra lỗi khi đăng xuất",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
   }
 
   @override

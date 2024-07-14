@@ -16,7 +16,7 @@ final userAPIProvider = Provider((ref) {
 abstract class IUserAPI {
   FutureEitherVoid saveUserData(UserModel userModel);
   Future<Document> getUserData(String uid);
-  FutureEither<Document> updateEducationId(UserModel user);
+  FutureEither<Document> updateUser(UserModel user);
   Future<List<Document>> searchUserByName(String name);
   Future<List<Document>> searchUserInMessengerScreen(String name);
 }
@@ -89,15 +89,13 @@ class UserAPI implements IUserAPI {
   }
 
   @override
-  FutureEither<Document> updateEducationId(UserModel user) async {
+  FutureEither<Document> updateUser(UserModel user) async {
     try {
       final documents = await _db.updateDocument(
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.usersCollection,
         documentId: user.uid,
-        data: {
-          'likes': user.educationId,
-        },
+        data: user.toMap(),
       );
       return right(documents);
     } on AppwriteException catch (e, st) {

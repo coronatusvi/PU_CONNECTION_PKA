@@ -90,9 +90,6 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                                 fontSize: 28,
                               ),
                             ),
-                            Text(
-                              'Please enter your email and password!\n',
-                            )
                           ],
                         ),
                       ),

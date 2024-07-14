@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pu_connnection/features/home/view/home_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../constants/env.dart';
@@ -95,7 +96,7 @@ class _LoginWithMicrosoft_ViewState
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context, SettingProfileView.route());
+            Navigator.pop(context);
           },
           icon: const Icon(Icons.close, size: 30),
         ),

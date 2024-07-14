@@ -57,19 +57,16 @@ class UserProfileController extends StateNotifier<bool> {
       required bannerFile,
       required profileFile}) {}
 
-  void updateUserEducationId({
+  void updateUser({
     required UserModel user,
   }) async {
-    String educationId = user.educationId;
-
-    user = user.copyWith(educationId: educationId);
-    final res = await _userAPI.updateEducationId(user);
+    final res = await _userAPI.updateUser(user);
     res.fold(
         (l) => null,
         (r) => _notificationController.createNotification(
-            text: "Education successfully updated",
+            text: "Successfully updated",
             postId: "",
             notificationType: NotificationType.follow,
-            uid: "66793bfc573379814a77"));
+            uid: user.uid));
   }
 }

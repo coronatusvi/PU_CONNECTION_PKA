@@ -37,6 +37,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
           email: emailController.text,
           password: passwordController.text,
           context: context,
+          ref: ref,
         );
   }
 

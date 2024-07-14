@@ -1,10 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
-import 'dart:math';
-
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pu_connnection/main.dart';
+import 'package:pu_connnection/core/type_defs.dart';
 
 import '../../../apis/auth_api.dart';
 import '../../../apis/storage_api.dart';
@@ -56,6 +53,8 @@ class AuthController extends StateNotifier<bool> {
   // state = isLoading
 
   Future<User?> currentUser() => _authAPI.currentUserAccount();
+  FutureEither<Document> setUser({required UserModel user}) =>
+      _userAPI.updateUser(user);
 
   void signUp({
     required String email,
@@ -99,6 +98,7 @@ class AuthController extends StateNotifier<bool> {
     required String email,
     required String password,
     required BuildContext context,
+    ref,
   }) async {
     state = true;
     final res = await _authAPI.login(
@@ -108,14 +108,12 @@ class AuthController extends StateNotifier<bool> {
     state = false;
     res.fold(
       (l) => showSnackBar(context, l.message),
-      (r) {
-        _authAPI
-            .currentUserAccount()
-            .then((value) {})
-            .catchError((e) {})
-            .whenComplete(() {})
-            .catchError((e) {});
-        Navigator.push(context, HomeView.route());
+      (r) async {
+        final currentUserAccount = await _authAPI.currentUserAccount();
+        final currentUserId = currentUserAccount?.$id;
+
+        ref.watch(userDetailsProvider(currentUserId!));
+        Navigator.pushReplacement(context, HomeView.route());
       },
     );
   }
@@ -126,14 +124,15 @@ class AuthController extends StateNotifier<bool> {
     return updateUser;
   }
 
-  void logout(BuildContext context) async {
+  Future<bool> logout(BuildContext context) async {
     final res = await _authAPI.logout();
-    res.fold((l) => null, (r) {
+    return res.fold((l) => false, (r) {
       Navigator.pushAndRemoveUntil(
         context,
         LoginView.route(),
         (route) => false,
       );
+      return true;
     });
   }
 }
