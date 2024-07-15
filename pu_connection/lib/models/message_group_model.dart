@@ -2,26 +2,26 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class MessageGroupModel {
-  final String groupId;
+  final String id;
   final List<String> members;
   final String groupLeader;
   final int createdAt;
 
   const MessageGroupModel({
-    required this.groupId,
+    required this.id,
     required this.members,
     required this.groupLeader,
     required this.createdAt,
   });
 
   MessageGroupModel copyWith({
-    String? groupId,
+    String? id,
     List<String>? members,
     String? groupLeader,
     int? createdAt,
   }) {
     return MessageGroupModel(
-      groupId: groupId ?? this.groupId,
+      id: id ?? this.id,
       members: members ?? this.members,
       groupLeader: groupLeader ?? this.groupLeader,
       createdAt: createdAt ?? this.createdAt,
@@ -31,7 +31,7 @@ class MessageGroupModel {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
-    result.addAll({'groupId': groupId});
+    result.addAll({'id': id});
     result.addAll({'members': members});
     result.addAll({'groupLeader': groupLeader});
     result.addAll({'createdAt': createdAt});
@@ -41,16 +41,16 @@ class MessageGroupModel {
 
   factory MessageGroupModel.fromMap(Map<String, dynamic> map) {
     return MessageGroupModel(
-      groupId: map['groupId'] ?? '',
+      id: map['id'] ?? '',
       members: List<String>.from(map['members']),
       groupLeader: map['groupLeader'] ?? '',
-      createdAt: map['createdAt']?.toInt() ?? 0,
+      createdAt: map['created_at']?.toInt() ?? 0,
     );
   }
 
   @override
   String toString() {
-    return 'MessageGroupModel(groupId: $groupId, members: $members, groupLeader: $groupLeader, createdAt: $createdAt)';
+    return 'MessageGroupModel(id: $id, members: $members, groupLeader: $groupLeader, createdAt: $createdAt)';
   }
 
   @override
@@ -58,7 +58,7 @@ class MessageGroupModel {
     if (identical(this, other)) return true;
 
     return other is MessageGroupModel &&
-        other.groupId == groupId &&
+        other.id == id &&
         listEquals(other.members, members) &&
         other.groupLeader == groupLeader &&
         other.createdAt == createdAt;
@@ -66,7 +66,7 @@ class MessageGroupModel {
 
   @override
   int get hashCode {
-    return groupId.hashCode ^
+    return id.hashCode ^
         members.hashCode ^
         groupLeader.hashCode ^
         createdAt.hashCode;

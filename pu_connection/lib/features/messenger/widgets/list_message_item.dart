@@ -41,42 +41,32 @@ class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
                 left: 10,
                 right: 10,
               ),
-              child: Consumer(
-                builder: (context, ref, child) {
-                  final currentUserId =
-                      ref.watch(currentUserDetailsProvider).value?.uid;
+              // child: Consumer(
+              //   builder: (context, ref, child) {
+              //     final currentUserId =
+              //         ref.watch(currentUserDetailsProvider).value?.uid;
 
-                  if (currentUserId == null) {
-                    return const Loader();
-                  }
+              //     if (currentUserId == null) {
+              //       return const Loader();
+              //     }
 
-                  final messages = ref.watch(searchMessagesProvider(
-                      [widget.userModel.uid, currentUserId]));
+              //     final messages = ref.watch(searchMessagesProvider(
+              //         [widget.userModel.uid, currentUserId]));
 
-                  ref.listen(
-                    getLastMessageProvider,
-                    (previous, next) {
-                      return switch (next) {
-                        AsyncData() => ref.invalidate(getLastMessageProvider),
-                        _ => () {},
-                      };
-                    },
-                  );
-
-                  return switch (messages) {
-                    AsyncData(:final value) => RefreshIndicator(
-                        onRefresh: () async =>
-                            ref.invalidate(searchMessagesProvider),
-                        child: MessageList(messages: value),
-                      ),
-                    AsyncError(:final error) => ErrorText(
-                        error: error.toString(),
-                      ),
-                    AsyncLoading() => const Loader(),
-                    _ => const SizedBox(),
-                  };
-                },
-              ),
+              //     return messages.when(
+              //       data: (value) => RefreshIndicator(
+              //         onRefresh: () async {
+              //           ref.invalidate(searchMessagesProvider);
+              //         },
+              //         child: MessageList(messages: value),
+              //       ),
+              //       error: (error, _) => ErrorText(
+              //         error: error.toString(),
+              //       ),
+              //       loading: () => const Loader(),
+              //     );
+              //   },
+              // ),
             )
           ],
         ),

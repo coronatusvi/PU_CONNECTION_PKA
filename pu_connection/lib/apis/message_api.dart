@@ -121,23 +121,14 @@ class MessageAPI implements IMessageAPI {
       }
 
       // Get the first groupId from the filtered list
-      String firstGroupId = filteredGroups.first.groupId;
-
-      // Check if Ids contains members other than in the first group's members
-      bool containsOtherMembers =
-          filteredGroups.first.members.any((member) => !Ids.contains(member));
-
-      if (containsOtherMembers) {
-        // Return an empty list if there are members other than Ids
-        return messages;
-      }
+      String firstGroupId = filteredGroups.first.id;
 
       final documentsMessage = await _db.listDocuments(
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.messengersCollection,
         queries: [
           Query.orderDesc("timestamp"),
-          Query.equal('groupId', firstGroupId),
+          Query.equal('id', firstGroupId),
         ],
       );
 
