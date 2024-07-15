@@ -20,8 +20,8 @@ abstract class IMessageAPI {
   FutureEitherVoid createMessage(MessageModel message);
   FutureEitherVoid createMessageGroup(MessageGroupModel messageGroup);
   Future<List<Document>> searchMessageGroup(String currentUserId);
-  Stream<RealtimeMessage> getLatestMessage();
   Future<List<Document>> searchMessages(List<String> Ids);
+  Stream<RealtimeMessage> getLastMessage();
 }
 
 class MessageAPI implements IMessageAPI {
@@ -99,6 +99,7 @@ class MessageAPI implements IMessageAPI {
   @override
   Future<List<Document>> searchMessages(List<String> Ids) async {
     try {
+      List<Document> messages = [];
       final documents = await _db.listDocuments(
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.messagesGroupCollection,
@@ -110,18 +111,27 @@ class MessageAPI implements IMessageAPI {
       print(messageGroups);
 
       // Filter message groups that contain any of the ids in their members
-      List<String> filteredGroupIds = messageGroups
-          .where((group) => group.members.any((member) => Ids.contains(member)))
-          .map((group) => group.groupId)
+      List<MessageGroupModel> filteredGroups = messageGroups
+          .where(
+              (group) => group.members.every((member) => Ids.contains(member)))
           .toList();
 
-      if (filteredGroupIds.isEmpty) {
-        return [];
+      if (filteredGroups.isEmpty) {
+        return messages;
       }
 
-      List<MessageModel> messages = [];
       // Get the first groupId from the filtered list
-      String firstGroupId = filteredGroupIds.first;
+      String firstGroupId = filteredGroups.first.groupId;
+
+      // Check if Ids contains members other than in the first group's members
+      bool containsOtherMembers =
+          filteredGroups.first.members.any((member) => !Ids.contains(member));
+
+      if (containsOtherMembers) {
+        // Return an empty list if there are members other than Ids
+        return messages;
+      }
+
       final documentsMessage = await _db.listDocuments(
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.messengersCollection,
@@ -130,8 +140,7 @@ class MessageAPI implements IMessageAPI {
           Query.equal('groupId', firstGroupId),
         ],
       );
-      
-      
+
       return documentsMessage.documents;
     } catch (e) {
       print('Error fetching messages: $e');
@@ -140,9 +149,9 @@ class MessageAPI implements IMessageAPI {
   }
 
   @override
-  Stream<RealtimeMessage> getLatestMessage() {
+  Stream<RealtimeMessage> getLastMessage() {
     return _realtime.subscribe([
-      'databases.${AppwriteConstants.databaseId}.collections.${AppwriteConstants.notificationsCollection}.documents'
+      'databases.${AppwriteConstants.databaseId}.collections.${AppwriteConstants.messengersCollection}.documents'
     ]).stream;
   }
 }

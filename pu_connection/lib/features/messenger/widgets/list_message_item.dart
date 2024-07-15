@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
-import '../../../models/message_model.dart';
+import '../../../models/user_models.dart';
+import '../../../theme/pallete.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../controller/message_controller.dart';
-import 'message_card.dart';
+import 'tweet_list.dart';
 
 class ListMessagesItem extends ConsumerStatefulWidget {
-  const ListMessagesItem({super.key});
+  static route(UserModel userModel) => MaterialPageRoute(
+        builder: (context) => ListMessagesItem(userModel: userModel),
+      );
+
+  final UserModel userModel;
+
+  const ListMessagesItem({super.key, required this.userModel});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -16,80 +23,64 @@ class ListMessagesItem extends ConsumerStatefulWidget {
 }
 
 class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
-  final searchMessageController = TextEditingController();
-  bool isShowUsers = false;
-  bool isImageVisible = true;
-  int searchResultsCount = 0; // Initialize with 0 search results
-
-  // Create a variable to store search results
-  List<MessageModel> searchResults = [];
-  bool hasFetchedMessages = false;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final currentUser = ref.watch(currentUserDetailsProvider);
+    return Scaffold(
+      backgroundColor: Pallete.blackColor,
+      body: SizedBox(
+        width: size.width,
+        height: size.height,
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              margin: EdgeInsets.only(
+                left: 10,
+                right: 10,
+              ),
+              child: Consumer(
+                builder: (context, ref, child) {
+                  final currentUserId =
+                      ref.watch(currentUserDetailsProvider).value?.uid;
 
-    // Ensure the API call and listening to the provider happen only once
-    if (!hasFetchedMessages &&
-        currentUser is AsyncData &&
-        currentUser.value != null) {
-      ref.listen<AsyncValue<List<MessageModel>>>(
-        searchMessagesProvider(
-            ["6683c460753bb0154c54", "66794da14cc66d80947a"]),
-        (previous, next) {
-          next.when(
-            data: (messages) {
-              setState(() {
-                searchResults = messages;
-                searchResultsCount = messages.length;
-                hasFetchedMessages =
-                    true; // Set the flag to true after fetching
-              });
-            },
-            loading: () {},
-            error: (error, stackTrace) {
-              // Handle error if needed
-            },
-          );
-        },
-      );
-    }
+                  if (currentUserId == null) {
+                    return const Loader();
+                  }
 
-    return switch (currentUser) {
-      AsyncData(value: final currentUser?) ||
-      AsyncLoading(value: final currentUser?) =>
-        Scaffold(
-          body: SizedBox(
-            width: size.width,
-            height: size.height,
-            child: Stack(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 140),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: searchResultsCount,
-                          itemBuilder: (context, index) {
-                            final message = searchResults[index];
-                            return SearchUserMessengerItem(
-                              userModel: currentUser,
-                              messageUser: message,
-                            );
-                          },
-                        ),
+                  final messages = ref.watch(searchMessagesProvider(
+                      [widget.userModel.uid, currentUserId]));
+
+                  ref.listen(
+                    getLastMessageProvider,
+                    (previous, next) {
+                      return switch (next) {
+                        AsyncData() => ref.invalidate(getLastMessageProvider),
+                        _ => () {},
+                      };
+                    },
+                  );
+
+                  return switch (messages) {
+                    AsyncData(:final value) => RefreshIndicator(
+                        onRefresh: () async =>
+                            ref.invalidate(searchMessagesProvider),
+                        child: MessageList(messages: value),
                       ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+                    AsyncError(:final error) => ErrorText(
+                        error: error.toString(),
+                      ),
+                    AsyncLoading() => const Loader(),
+                    _ => const SizedBox(),
+                  };
+                },
+              ),
+            )
+          ],
         ),
-      _ => const Loader()
-    };
+      ),
+    );
   }
 }

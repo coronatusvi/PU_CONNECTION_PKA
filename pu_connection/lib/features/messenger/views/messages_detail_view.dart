@@ -22,6 +22,6 @@ class MessagesDetailView extends ConsumerWidget {
         appBar: AppBar(
           title: Text(userModel.name),
         ),
-        body: const ListMessagesItem());
+        body: ListMessagesItem(userModel: userModel));
   }
 }

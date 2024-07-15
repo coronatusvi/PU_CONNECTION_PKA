@@ -5,7 +5,7 @@ import '../../../apis/message_api.dart';
 import '../../../apis/user_api.dart';
 import '../../../models/user_models.dart';
 
-final exploreControllerProvider = StateNotifierProvider(
+final messageControllerProvider = StateNotifierProvider(
   (ref) {
     return ExploreControllerNotifier(
       userAPI: ref.watch(userAPIProvider),
@@ -15,20 +15,25 @@ final exploreControllerProvider = StateNotifierProvider(
 );
 
 final searchUserProvider = FutureProvider.family((ref, String name) async {
-  final exploreController = ref.watch(exploreControllerProvider.notifier);
+  final exploreController = ref.watch(messageControllerProvider.notifier);
   return exploreController.searchUser(name);
 });
 
 final searchMessageGroupProvider =
     FutureProvider.family((ref, String currentUserId) async {
-  final exploreController = ref.watch(exploreControllerProvider.notifier);
+  final exploreController = ref.watch(messageControllerProvider.notifier);
   return exploreController.searchMessageGroup(currentUserId);
 });
 
 final searchMessagesProvider =
     FutureProvider.family((ref, List<String> Ids) async {
-  final exploreController = ref.watch(exploreControllerProvider.notifier);
+  final exploreController = ref.watch(messageControllerProvider.notifier);
   return exploreController.searchMessages(Ids);
+});
+
+final getLastMessageProvider = StreamProvider((ref) {
+  final messageAPI = ref.watch(messageAPIProvider);
+  return messageAPI.getLastMessage();
 });
 
 class ExploreControllerNotifier extends StateNotifier<bool> {

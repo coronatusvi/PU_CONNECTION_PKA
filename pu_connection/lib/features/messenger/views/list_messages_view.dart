@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
 import '../../../constants/assets_constants.dart';
-import '../../../constants/text.dart';
 import '../../../models/user_models.dart';
 import '../../../theme/pallete.dart';
 import '../../auth/controller/auth_controller.dart';
-import '../../explore/widget/text_form_field_custom.dart';
 import '../controller/message_controller.dart';
 import '../widgets/search_user_messenger.dart';
 
@@ -62,44 +59,8 @@ class _ListMessagesViewState extends ConsumerState<ListMessagesView> {
                   ),
                 ),
 
-                // Layer 2: Column with TextFormFieldCustom
-                // Layer 2: Positioned Column with TextFormFieldCustom
-                // Positioned(
-                //   top: 0.0,
-                //   left: 0,
-                //   right: 0,
-                //   child: Column(
-                //     children: [
-                //       Container(
-                //         margin:
-                //             EdgeInsets.symmetric(vertical: size.height * 0.07),
-                //         child: TextFormFieldCustom(
-                //           onChanged: (value) {
-                //             setState(() {
-                //               isShowUsers = true;
-                //             });
-                //           },
-                //           controller: searchMessageController,
-                //           prefixIcon: SvgPicture.asset(
-                //             AssetsConstants.searchIcon,
-                //             height: 5,
-                //             width: 5,
-                //             fit: BoxFit.scaleDown,
-                //             colorFilter: const ColorFilter.mode(
-                //               Pallete.whiteColor,
-                //               BlendMode.srcIn,
-                //             ),
-                //           ),
-                //           hintText: search,
-                //           fillColor: Pallete.textformfieldColor,
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-
                 Positioned(
-                  top: 60.0,
+                  top: 70.0,
                   child: Container(
                     width: size.width,
                     height: size.height,
@@ -110,7 +71,7 @@ class _ListMessagesViewState extends ConsumerState<ListMessagesView> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 100),
+                  margin: EdgeInsets.only(top: 75),
                   child: Consumer(
                     builder: (context, ref, child) {
                       // Access the searchUserProvider using ref.watch

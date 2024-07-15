@@ -127,6 +127,7 @@ class _NewPostsListState extends ConsumerState<NewPostsList> {
                 ),
               ],
             ),
+            
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
