@@ -37,37 +37,43 @@ class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
               ),
-              margin: EdgeInsets.only(
+              margin: const EdgeInsets.only(
                 left: 10,
                 right: 10,
               ),
-              // child: Consumer(
-              //   builder: (context, ref, child) {
-              //     final currentUserId =
-              //         ref.watch(currentUserDetailsProvider).value?.uid;
+              child: Consumer(
+                builder: (context, ref, child) {
+                  final currentUserId =
+                      ref.watch(currentUserDetailsProvider).value?.uid;
 
-              //     if (currentUserId == null) {
-              //       return const Loader();
-              //     }
+                  if (currentUserId == null) {
+                    return const Loader();
+                  }
 
-              //     final messages = ref.watch(searchMessagesProvider(
-              //         [widget.userModel.uid, currentUserId]));
+                  // We create a state variable to control when to refresh
+                  final refreshKey = GlobalKey<RefreshIndicatorState>();
 
-              //     return messages.when(
-              //       data: (value) => RefreshIndicator(
-              //         onRefresh: () async {
-              //           ref.invalidate(searchMessagesProvider);
-              //         },
-              //         child: MessageList(messages: value),
-              //       ),
-              //       error: (error, _) => ErrorText(
-              //         error: error.toString(),
-              //       ),
-              //       loading: () => const Loader(),
-              //     );
-              //   },
-              // ),
-            )
+                  final messages = ref.watch(searchMessagesProvider(
+                      [widget.userModel.uid, currentUserId]));
+
+                  return messages.when(
+                    data: (value) => RefreshIndicator(
+                      key: refreshKey,
+                      onRefresh: () async {
+                        // Invalidate the provider only on pull to refresh
+                        ref.invalidate(searchMessagesProvider(
+                            [widget.userModel.uid, currentUserId]));
+                      },
+                      child: MessageList(messages: value),
+                    ),
+                    error: (error, _) => ErrorText(
+                      error: error.toString(),
+                    ),
+                    loading: () => const Loader(),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

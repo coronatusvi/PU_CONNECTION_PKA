@@ -41,7 +41,7 @@ class MessageGroupModel {
 
   factory MessageGroupModel.fromMap(Map<String, dynamic> map) {
     return MessageGroupModel(
-      id: map['id'] ?? '',
+      id: map['\$id'] ?? '',
       members: List<String>.from(map['members']),
       groupLeader: map['groupLeader'] ?? '',
       createdAt: map['created_at']?.toInt() ?? 0,

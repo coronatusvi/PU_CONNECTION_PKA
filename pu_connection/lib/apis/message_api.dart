@@ -108,7 +108,6 @@ class MessageAPI implements IMessageAPI {
       List<MessageGroupModel> messageGroups = documents.documents
           .map((e) => MessageGroupModel.fromMap(e.data))
           .toList();
-      print(messageGroups);
 
       // Filter message groups that contain any of the ids in their members
       List<MessageGroupModel> filteredGroups = messageGroups
@@ -127,8 +126,7 @@ class MessageAPI implements IMessageAPI {
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.messengersCollection,
         queries: [
-          Query.orderDesc("timestamp"),
-          Query.equal('id', firstGroupId),
+          Query.equal('groupId', firstGroupId),
         ],
       );
 
