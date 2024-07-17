@@ -2,7 +2,7 @@ import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pu_connnection/core/type_defs.dart';
-
+import 'dart:io';
 import '../../../apis/auth_api.dart';
 import '../../../apis/storage_api.dart';
 import '../../../apis/user_api.dart';
@@ -60,7 +60,7 @@ class AuthController extends StateNotifier<bool> {
     required String email,
     required String password,
     required String name,
-    File? profilePic,
+    // required List<File> images,
     required BuildContext context,
   }) async {
     state = true;
@@ -69,6 +69,8 @@ class AuthController extends StateNotifier<bool> {
       email: email,
       password: password,
     );
+    // List<String> imageLinks = await _storageAPI.uploadImage(images);
+
     state = false;
     res.fold(
       (l) => showSnackBar(context, l.message),
@@ -78,12 +80,13 @@ class AuthController extends StateNotifier<bool> {
           name: name == '' ? getNameFromEmail(email) : name,
           followers: const [],
           following: const [],
-          profilePic: "profileLink",
+          profilePic: '',
           bannerPic: '',
           uid: r.$id,
           bio: '',
           isTwitterBlue: false,
           educationId: 'no',
+          educationKey: 'no',
         );
         final res2 = await _userAPI.saveUserData(userModel);
         res2.fold((l) => showSnackBar(context, l.message), (r) {

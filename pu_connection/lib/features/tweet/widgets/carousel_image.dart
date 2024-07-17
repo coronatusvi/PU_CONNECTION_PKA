@@ -2,6 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:zoom_widget/zoom_widget.dart';
 
+import '../../../constants/appwrite_constant.dart';
+
 class CarouselImage extends StatefulWidget {
   final List<String> imageLinks;
   const CarouselImage({
@@ -24,6 +26,7 @@ class _CarouselImageState extends State<CarouselImage> {
             CarouselSlider(
               items: widget.imageLinks.map(
                 (link) {
+                  print(link);
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
@@ -47,7 +50,7 @@ class _CarouselImageState extends State<CarouselImage> {
                                     child: GestureDetector(
                                       onTap: () {},
                                       child: Image.network(
-                                        link,
+                                        AppwriteConstants.endPoint + link,
                                         fit: BoxFit.contain,
                                       ),
                                     ),
@@ -77,7 +80,7 @@ class _CarouselImageState extends State<CarouselImage> {
                       child: Image.network(
                         width: 500,
                         height: 800,
-                        link,
+                        AppwriteConstants.endPoint + link,
                         fit: BoxFit.contain,
                       ),
                     ),

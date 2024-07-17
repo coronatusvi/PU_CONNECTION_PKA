@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 
 import '../../../common/loading_page.dart';
 import '../../../common/rounded_small_button.dart';
@@ -26,6 +27,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
+  List<File> images = [];
   File? profilePic; // Khởi tạo biến profilePic
 
   @override
@@ -37,8 +39,8 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   }
 
   Future<void> pickImage() async {
-    final profilePic = await pickSingleImage();
-    if (profilePic == null) return;
+    images.append(profilePic!);
+    images = await pickImageOrImages();
     setState(() {});
   }
 
@@ -47,7 +49,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
           email: emailController.text,
           password: passwordController.text,
           name: usernameController.text,
-          // profilePic: new File(),
+          // images: images,
           context: context,
         );
   }
@@ -84,7 +86,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                               ),
                             ),
                             Text(
-                              'PKAUNI CONNECTION!\n',
+                              'PU CONNECTION!\n',
                               style: TextStyle(
                                 fontWeight: FontWeight.w800,
                                 fontSize: 28,
@@ -128,7 +130,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Profile',
+                                        'Phenikaa ',
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -161,7 +163,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            'Picture',
+                                            ' University',
                                             style: const TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,

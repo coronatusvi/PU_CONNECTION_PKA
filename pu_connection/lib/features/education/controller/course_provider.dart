@@ -7,6 +7,7 @@ import '../../../constants/env.dart';
 import '../../../models/auth_model.dart';
 import '../../../models/course_model.dart';
 import '../../../models/data_model.dart';
+import '../../auth/controller/auth_controller.dart';
 import 'auth_provider.dart';
 
 class CourseDataNotifier extends StateNotifier<List<CourseModel>?> {
@@ -14,8 +15,8 @@ class CourseDataNotifier extends StateNotifier<List<CourseModel>?> {
 
   Future<void> fetchData(
       WidgetRef ref, String startDate, String endDate) async {
-    AuthModel? authProvider =
-        ref.read(authDataProvider); // Access the auth data
+    AuthModel? authProvider = ref.read(authDataProvider);
+    final currentUser = ref.watch(currentUserDetailsProvider);
 
     DateTime now = DateTime.now();
     int unixTimestamp = now.millisecondsSinceEpoch ~/ 1000;

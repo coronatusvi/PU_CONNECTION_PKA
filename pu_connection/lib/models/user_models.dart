@@ -15,6 +15,7 @@ class UserModel {
   final String bio;
   final bool isTwitterBlue;
   final String educationId;
+  final String educationKey;
   UserModel({
     required this.email,
     required this.name,
@@ -26,6 +27,7 @@ class UserModel {
     required this.bio,
     required this.isTwitterBlue,
     required this.educationId,
+    required this.educationKey,
   });
 
   UserModel copyWith({
@@ -51,6 +53,7 @@ class UserModel {
       bio: bio ?? this.bio,
       isTwitterBlue: isTwitterBlue ?? this.isTwitterBlue,
       educationId: educationId ?? this.educationId,
+      educationKey: educationKey ?? this.educationKey,
     );
   }
 
@@ -66,6 +69,7 @@ class UserModel {
       'bio': bio,
       'isTwitterBlue': isTwitterBlue,
       'educationId': educationId,
+      'educationKey': educationKey,
     };
   }
 
@@ -81,12 +85,13 @@ class UserModel {
       bio: map['bio'] ?? '',
       isTwitterBlue: map['isTwitterBlue'] ?? false,
       educationId: map['educationId'] ?? '',
+      educationKey: map['educationKey'] ?? '',
     );
   }
 
   @override
   String toString() {
-    return 'UserModel(email: $email, name: $name, followers: $followers, following: $following, profilePic: $profilePic, bannerPic: $bannerPic, uid: $uid, bio: $bio, isTwitterBlue: $isTwitterBlue, educationId: $educationId,)';
+    return 'UserModel(email: $email, name: $name, followers: $followers, following: $following, profilePic: $profilePic, bannerPic: $bannerPic, uid: $uid, bio: $bio, isTwitterBlue: $isTwitterBlue, educationId: $educationId, educationKey: $educationKey,)';
   }
 
   @override
@@ -103,7 +108,8 @@ class UserModel {
         other.uid == uid &&
         other.bio == bio &&
         other.isTwitterBlue == isTwitterBlue &&
-        other.educationId == educationId;
+        other.educationId == educationId &&
+        other.educationKey == educationKey;
   }
 
   @override
@@ -117,6 +123,7 @@ class UserModel {
         uid.hashCode ^
         bio.hashCode ^
         isTwitterBlue.hashCode ^
-        educationId.hashCode;
+        educationId.hashCode ^
+        educationKey.hashCode;
   }
 }

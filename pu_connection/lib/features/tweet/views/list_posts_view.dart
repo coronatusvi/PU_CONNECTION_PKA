@@ -6,6 +6,7 @@ import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
 import '../../../constants/assets_constants.dart';
 import '../../../theme/pallete.dart';
+import '../../auth/controller/auth_controller.dart';
 import '../../notification/view/list_noti_view.dart';
 import '../controller/tweet_controller.dart';
 import '../widgets/tweet_list.dart';
@@ -127,7 +128,7 @@ class _NewPostsListState extends ConsumerState<NewPostsList> {
                 ),
               ],
             ),
-            
+
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
@@ -140,6 +141,7 @@ class _NewPostsListState extends ConsumerState<NewPostsList> {
               child: Consumer(
                 builder: (context, ref, child) {
                   final tweets = ref.watch(getTweetsProvider);
+                  ref.watch(currentUserAccountProvider);
                   ref.listen(
                     getLatestTweetProvider,
                     (previous, next) {

@@ -1,9 +1,14 @@
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pu_connnection/constants/appwrite_constant.dart';
 import 'package:pu_connnection/features/home/view/home_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../constants/env.dart';
+import '../../../models/user_models.dart';
+import '../../auth/controller/auth_controller.dart';
 import '../../setting_profile/view/setting_profile_view.dart';
 import '../../widgets/dialogCustom.dart';
 import '../controller/auth_provider.dart';
@@ -41,6 +46,22 @@ class _LoginWithMicrosoft_ViewState
       var authData = getDataHtml(response + objUserData);
 
       ref.read(authDataProvider.notifier).setAuth(authData);
+
+      UserModel? currentUser = ref.watch(currentUserDetailsProvider).value;
+      Client client = Client()
+          .setEndpoint(AppwriteConstants.endPoint) // Your API Endpoint
+          .setProject(AppwriteConstants.projectId); // Your project ID
+
+      Databases databases = Databases(client);
+      // Document result = await databases.updateDocument(
+      //   databaseId: AppwriteConstants.databaseId,
+      //   collectionId: AppwriteConstants.usersCollection,
+      //   documentId: currentUser!.uid,
+      //   data: currentUser.toMap(), // optional
+      // );
+
+      // print(result);
+
       var authDataModel = ref.read(authDataProvider);
       // Bạn có thể tiếp tục xử lý objUserData ở đây
 

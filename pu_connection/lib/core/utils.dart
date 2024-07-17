@@ -52,10 +52,3 @@ Future<List<File>> pickImageOrImages() async {
   }
   return images;
 }
-
-Future<File> pickSingleImage() async {
-  final ImagePickerPlatform picker = ImagePickerAndroid();
-  // ignore: deprecated_member_use
-  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-  return File(pickedFile!.path);
-}

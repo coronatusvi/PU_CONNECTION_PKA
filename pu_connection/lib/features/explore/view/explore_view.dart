@@ -92,7 +92,7 @@ class _ExploreViewState extends ConsumerState<ExploreView> {
               ],
             ),
             Positioned(
-              top: 160.0,
+              top: 175.0,
               child: Container(
                 width: size.width,
                 height: size.height,
