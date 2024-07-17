@@ -112,10 +112,6 @@ class AuthController extends StateNotifier<bool> {
     res.fold(
       (l) => showSnackBar(context, l.message),
       (r) async {
-        final currentUserAccount = await _authAPI.currentUserAccount();
-        final currentUserId = currentUserAccount?.$id;
-
-        ref.watch(userDetailsProvider(currentUserId!));
         Navigator.pushReplacement(context, HomeView.route());
       },
     );
