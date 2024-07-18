@@ -75,13 +75,13 @@ class MessageAPI implements IMessageAPI {
   }
 
   @override
-  FutureEitherVoid createMessage(MessageModel notification) async {
+  FutureEitherVoid createMessage(MessageModel message) async {
     try {
       await _db.createDocument(
         databaseId: AppwriteConstants.databaseId,
-        collectionId: AppwriteConstants.notificationsCollection,
+        collectionId: AppwriteConstants.messengersCollection,
         documentId: ID.unique(),
-        data: notification.toMap(),
+        data: message.toMap(),
       );
       return right(null);
     } on AppwriteException catch (e, st) {
@@ -98,8 +98,8 @@ class MessageAPI implements IMessageAPI {
 
   @override
   Future<List<Document>> searchMessages(List<String> Ids) async {
+    List<Document> messages = [];
     try {
-      List<Document> messages = [];
       final documents = await _db.listDocuments(
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.messagesGroupCollection,
@@ -116,6 +116,19 @@ class MessageAPI implements IMessageAPI {
           .toList();
 
       if (filteredGroups.isEmpty) {
+        MessageGroupModel messageGroup = MessageGroupModel(
+          id: '',
+          members: Ids,
+          groupLeader: Ids.first,
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+        );
+
+        await _db.createDocument(
+          databaseId: AppwriteConstants.databaseId,
+          collectionId: AppwriteConstants.messagesGroupCollection,
+          documentId: ID.unique(),
+          data: messageGroup.toMap(),
+        );
         return messages;
       }
 
@@ -133,7 +146,7 @@ class MessageAPI implements IMessageAPI {
       return documentsMessage.documents;
     } catch (e) {
       print('Error fetching messages: $e');
-      return [];
+      return messages;
     }
   }
 

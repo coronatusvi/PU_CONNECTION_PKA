@@ -29,14 +29,11 @@ class MessageGroupModel {
   }
 
   Map<String, dynamic> toMap() {
-    final result = <String, dynamic>{};
-
-    result.addAll({'id': id});
-    result.addAll({'members': members});
-    result.addAll({'groupLeader': groupLeader});
-    result.addAll({'createdAt': createdAt});
-
-    return result;
+    return <String, dynamic>{
+      'members': members,
+      'groupLeader': groupLeader,
+      'created_at': createdAt,
+    };
   }
 
   factory MessageGroupModel.fromMap(Map<String, dynamic> map) {

@@ -38,15 +38,13 @@ class MessageModel {
   }
 
   Map<String, dynamic> toMap() {
-    final result = <String, dynamic>{};
-
-    result.addAll({'uid': uid});
-    result.addAll({'senderId': senderId});
-    result.addAll({'messageText': messageText});
-    result.addAll({'fileIds': fileIds});
-    result.addAll({'timestamp': timestamp});
-
-    return result;
+    return <String, dynamic>{
+      'uid': uid,
+      'senderId': senderId,
+      'messageText': messageText,
+      'fileIds': fileIds,
+      'timestamp': timestamp,
+    };
   }
 
   factory MessageModel.fromMap(Map<String, dynamic> map) {

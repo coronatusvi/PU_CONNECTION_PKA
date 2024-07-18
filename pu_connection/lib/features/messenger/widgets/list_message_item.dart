@@ -23,6 +23,8 @@ class ListMessagesItem extends ConsumerStatefulWidget {
 }
 
 class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
+  final TextEditingController _messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -31,47 +33,95 @@ class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
       body: SizedBox(
         width: size.width,
         height: size.height,
-        child: Stack(
+        child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              margin: const EdgeInsets.only(
-                left: 10,
-                right: 10,
-              ),
-              child: Consumer(
-                builder: (context, ref, child) {
-                  final currentUserId =
-                      ref.watch(currentUserDetailsProvider).value?.uid;
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                margin: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                ),
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final currentUserId =
+                        ref.watch(currentUserDetailsProvider).value?.uid;
 
-                  if (currentUserId == null) {
-                    return const Loader();
-                  }
+                    if (currentUserId == null) {
+                      return const Loader();
+                    }
 
-                  // We create a state variable to control when to refresh
-                  final refreshKey = GlobalKey<RefreshIndicatorState>();
-
-                  final messages = ref.watch(searchMessagesProvider(
-                      [widget.userModel.uid, currentUserId]));
-
-                  return messages.when(
-                    data: (value) => RefreshIndicator(
-                      key: refreshKey,
-                      onRefresh: () async {
-                        // Invalidate the provider only on pull to refresh
-                        ref.invalidate(searchMessagesProvider(
-                            [widget.userModel.uid, currentUserId]));
+                    final messages = ref.watch(searchMessagesProvider(
+                        [currentUserId, widget.userModel.uid]));
+                    ref.listen(
+                      getLastMessageProvider,
+                      (previous, next) {
+                        return switch (next) {
+                          AsyncData() => ref.invalidate(searchMessagesProvider),
+                          _ => () {},
+                        };
                       },
-                      child: MessageList(messages: value),
+                    );
+
+                    return switch (messages) {
+                      AsyncData(:final value) => RefreshIndicator(
+                          onRefresh: () async =>
+                              ref.invalidate(searchMessagesProvider),
+                          child: MessageList(messages: value),
+                        ),
+                      AsyncError(:final error) => ErrorText(
+                          error: error.toString(),
+                        ),
+                      AsyncLoading() => const Loader(),
+                      _ => const SizedBox(),
+                    };
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.attach_file, color: Colors.white),
+                    onPressed: () {
+                      // Function to select and send file
+                    },
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _messageController,
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        hintText: 'Nhập tin nhắn...',
+                        hintStyle: TextStyle(color: Colors.white54),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[800],
+                      ),
                     ),
-                    error: (error, _) => ErrorText(
-                      error: error.toString(),
-                    ),
-                    loading: () => const Loader(),
-                  );
-                },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.send, color: Colors.white),
+                    onPressed: () {
+                      // Function to send message
+                      final message = _messageController.text.trim();
+                      // if (message.isNotEmpty) {
+                      //   ref.read(messageControllerProvider.notifier).sendMessage(
+                      //         currentUserId,
+                      //         widget.userModel.uid,
+                      //         message,
+                      //       );
+                      //   _messageController.clear();
+                      // }
+                    },
+                  ),
+                ],
               ),
             ),
           ],

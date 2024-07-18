@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pu_connnection/models/message_model.dart';
 
@@ -57,6 +59,11 @@ class ExploreControllerNotifier extends StateNotifier<bool> {
   }
 
   Future<List<MessageModel>> searchMessages(List<String> membersIds) async {
+    final messages = await _messageAPI.searchMessages(membersIds);
+    return messages.map((e) => MessageModel.fromMap(e.data)).toList();
+  }
+
+  Future<List<MessageModel>> createMessage(List<String> membersIds, String messageText, File messageFile) async {
     final messages = await _messageAPI.searchMessages(membersIds);
     return messages.map((e) => MessageModel.fromMap(e.data)).toList();
   }
