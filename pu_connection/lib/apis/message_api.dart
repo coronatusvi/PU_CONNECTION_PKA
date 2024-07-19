@@ -109,7 +109,6 @@ class MessageAPI implements IMessageAPI {
           .map((e) => MessageGroupModel.fromMap(e.data))
           .toList();
 
-      // Filter message groups that contain any of the ids in their members
       List<MessageGroupModel> filteredGroups = messageGroups
           .where(
               (group) => group.members.every((member) => Ids.contains(member)))
@@ -132,7 +131,6 @@ class MessageAPI implements IMessageAPI {
         return messages;
       }
 
-      // Get the first groupId from the filtered list
       String firstGroupId = filteredGroups.first.id;
 
       final documentsMessage = await _db.listDocuments(
@@ -142,8 +140,9 @@ class MessageAPI implements IMessageAPI {
           Query.equal('groupId', firstGroupId),
         ],
       );
+      messages = documentsMessage.documents;
 
-      return documentsMessage.documents;
+      return messages;
     } catch (e) {
       print('Error fetching messages: $e');
       return messages;

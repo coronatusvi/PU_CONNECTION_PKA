@@ -12,7 +12,8 @@ class MessagesDetailView extends ConsumerWidget {
         ),
       );
   final UserModel userModel;
-  MessagesDetailView({
+  const MessagesDetailView({
+    super.key,
     required this.userModel,
   });
 
@@ -22,6 +23,9 @@ class MessagesDetailView extends ConsumerWidget {
         appBar: AppBar(
           title: Text(userModel.name),
         ),
-        body: ListMessagesItem(userModel: userModel));
+        // body: ListMessagesItem(userModel: userModel));
+        body: ListMessagesItem(
+          userModel: userModel,
+        ));
   }
 }

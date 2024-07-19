@@ -28,9 +28,10 @@ final searchMessageGroupProvider =
 });
 
 final searchMessagesProvider =
-    FutureProvider.family((ref, List<String> Ids) async {
-  final exploreController = ref.watch(messageControllerProvider.notifier);
-  return exploreController.searchMessages(Ids);
+    FutureProvider.family<List<MessageModel>, List<String>>((ref, Ids) async {
+  final messages =
+      await ref.read(messageControllerProvider.notifier).searchMessages(Ids);
+  return messages;
 });
 
 final getLastMessageProvider = StreamProvider((ref) {
@@ -63,7 +64,8 @@ class ExploreControllerNotifier extends StateNotifier<bool> {
     return messages.map((e) => MessageModel.fromMap(e.data)).toList();
   }
 
-  Future<List<MessageModel>> createMessage(List<String> membersIds, String messageText, File messageFile) async {
+  Future<List<MessageModel>> createMessage(
+      List<String> membersIds, String messageText, File messageFile) async {
     final messages = await _messageAPI.searchMessages(membersIds);
     return messages.map((e) => MessageModel.fromMap(e.data)).toList();
   }
