@@ -17,7 +17,8 @@ final messageAPIProvider = Provider((ref) {
 });
 
 abstract class IMessageAPI {
-  FutureEitherVoid createMessage(MessageModel message);
+  FutureEitherVoid createMessage(
+      List<String> Ids, String Message, File? filePath);
   FutureEitherVoid createMessageGroup(MessageGroupModel messageGroup);
   Future<List<Document>> searchMessageGroup(String currentUserId);
   Future<List<Document>> searchMessages(List<String> Ids);
@@ -75,28 +76,6 @@ class MessageAPI implements IMessageAPI {
   }
 
   @override
-  FutureEitherVoid createMessage(MessageModel message) async {
-    try {
-      await _db.createDocument(
-        databaseId: AppwriteConstants.databaseId,
-        collectionId: AppwriteConstants.messengersCollection,
-        documentId: ID.unique(),
-        data: message.toMap(),
-      );
-      return right(null);
-    } on AppwriteException catch (e, st) {
-      return left(
-        Failure(
-          e.message ?? 'Some unexpected error occurred',
-          st,
-        ),
-      );
-    } catch (e, st) {
-      return left(Failure(e.toString(), st));
-    }
-  }
-
-  @override
   Future<List<Document>> searchMessages(List<String> Ids) async {
     List<Document> messages = [];
     try {
@@ -147,6 +126,58 @@ class MessageAPI implements IMessageAPI {
       print('Error fetching messages: $e');
       return messages;
     }
+  }
+
+  @override
+  FutureEitherVoid createMessage(
+      List<String> Ids, String Message, File? filePath) async {
+    List<Document> messages = [];
+    try {
+      final documents = await _db.listDocuments(
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.messagesGroupCollection,
+      );
+
+      List<MessageGroupModel> messageGroups = documents.documents
+          .map((e) => MessageGroupModel.fromMap(e.data))
+          .toList();
+
+      List<MessageGroupModel> filteredGroups = messageGroups
+          .where(
+              (group) => group.members.every((member) => Ids.contains(member)))
+          .toList();
+
+      if (filteredGroups.isEmpty) {
+        MessageGroupModel messageGroup = MessageGroupModel(
+          id: '',
+          members: Ids,
+          groupLeader: Ids.first,
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+        );
+
+        await _db.createDocument(
+          databaseId: AppwriteConstants.databaseId,
+          collectionId: AppwriteConstants.messagesGroupCollection,
+          documentId: ID.unique(),
+          data: messageGroup.toMap(),
+        );
+      }
+
+      String firstGroupId = filteredGroups.first.id;
+
+      final documentsMessage = await _db.listDocuments(
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.messengersCollection,
+        queries: [
+          Query.equal('groupId', firstGroupId),
+        ],
+      );
+      messages = documentsMessage.documents;
+      print("LOG cho API ===> ${messages.length}");
+    } catch (e) {
+      print('Error fetching messages: $e');
+    }
+    return right(null);
   }
 
   @override

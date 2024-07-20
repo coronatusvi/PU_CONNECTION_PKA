@@ -2,17 +2,14 @@ import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:like_button/like_button.dart';
 import 'package:pu_connnection/models/message_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
 import '../../../constants/assets_constants.dart';
-import '../../../core/enums/tweet_type_enum.dart';
 import '../../../theme/pallete.dart';
 import '../../auth/controller/auth_controller.dart';
-import '../../tweet/controller/tweet_controller.dart';
 import '../../tweet/widgets/carousel_image.dart';
 import '../../tweet/widgets/hashtag_text.dart';
 import '../../user_profile/view/user_profile_view.dart';
@@ -27,16 +24,19 @@ class MessageCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserDetailsProvider).value;
-
+    final ui_currentUser = currentUser?.uid == message.senderId
+        ? TextDirection.rtl
+        : TextDirection.ltr;
     return currentUser == null
         ? const SizedBox()
-        : ref.watch(userDetailsProvider(message.uid)).when(
+        : ref.watch(userDetailsProvider(message.senderId)).when(
               data: (user) {
                 return GestureDetector(
                   onTap: () {},
                   child: Column(
                     children: [
                       Row(
+                        textDirection: ui_currentUser,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
@@ -56,30 +56,11 @@ class MessageCard extends ConsumerWidget {
                           ),
                           Expanded(
                             child: Column(
+                              textDirection: ui_currentUser,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (message.senderId != null &&
-                                    message.senderId.isNotEmpty)
-                                  Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                        AssetsConstants.retweetIcon,
-                                        // ignore: deprecated_member_use
-                                        color: Pallete.greyColor,
-                                        height: 20,
-                                      ),
-                                      const SizedBox(width: 2),
-                                      Text(
-                                        '${message.senderId} replied',
-                                        style: const TextStyle(
-                                          color: Pallete.greyColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
                                 Row(
+                                  textDirection: ui_currentUser,
                                   children: [
                                     Container(
                                       margin: EdgeInsets.only(
@@ -103,7 +84,8 @@ class MessageCard extends ConsumerWidget {
                                       ),
                                     Text(
                                       '${timeago.format(
-                                        message.timestamp as DateTime,
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            message.timestamp),
                                         locale: "en_short",
                                       )}',
                                       style: const TextStyle(

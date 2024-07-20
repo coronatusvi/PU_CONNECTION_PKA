@@ -109,12 +109,10 @@ class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
                     onPressed: () {
                       final message = _messageController.text.trim();
                       if (message.isNotEmpty) {
-                        // ref.read(messageControllerProvider.notifier).sendMessage(
-                        //       currentUserId,
-                        //       widget.userModel.uid,
-                        //       message,
-                        //     );
-                        // _messageController.clear();
+                        ref
+                            .read(messageControllerProvider.notifier)
+                            .sendMessage(Ids, message);
+                        _messageController.clear();
                       }
                     },
                   ),

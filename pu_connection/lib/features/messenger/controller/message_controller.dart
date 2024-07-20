@@ -88,4 +88,8 @@ class ExploreControllerNotifier extends StateNotifier<bool> {
     final messages = await _messageAPI.searchMessages(membersIds);
     return messages.map((e) => MessageModel.fromMap(e.data)).toList();
   }
+
+  void sendMessage(List<String> Ids, String message) async {
+    await _messageAPI.createMessage(Ids, message, null);
+  }
 }
