@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pu_connnection/models/message_model.dart';
 import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
 import '../../../models/user_models.dart';
@@ -34,6 +33,8 @@ class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    String currentUserId = ref.watch(currentUserDetailsProvider).value!.uid;
+    List<String> Ids = [currentUserId, widget.userModel.uid];
     return Scaffold(
       backgroundColor: Pallete.blackColor,
       body: SizedBox(
@@ -49,44 +50,31 @@ class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 child: Consumer(
                   builder: (context, ref, child) {
-                    final currentUserId =
-                        ref.watch(currentUserDetailsProvider).value?.uid;
-
-                    final AsyncValue<List<MessageModel>> messagesAsyncValue =
-                        ref.watch(searchMessagesProvider([
-                      currentUserId!,
-                      widget.userModel.uid,
-                    ]));
-
-                    print(messagesAsyncValue.valueOrNull);
-
-                    return messagesAsyncValue.when(
-                      data: (value) {
-                        if (value.isEmpty) {
-                          return Center(
-                            child: Text(
-                              'Hãy gửi đến nhau tin nhắn đầu tiên',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                          );
-                        }
-                        return RefreshIndicator(
-                          onRefresh: () async {
-                            ref.refresh(searchMessagesProvider([
-                              currentUserId,
-                              widget.userModel.uid,
-                            ]));
-                          },
-                          child: MessageList(messages: value),
-                        );
+                    final messages = ref.watch(searchMessagesProvider(Ids));
+                    ref.watch(currentUserAccountProvider);
+                    ref.listen(
+                      getLastMessageProvider,
+                      (previous, next) {
+                        return switch (next) {
+                          AsyncData() =>
+                            ref.invalidate(searchMessagesProvider(Ids)),
+                          _ => () {},
+                        };
                       },
-                      loading: () =>
-                          const SizedBox(), // Không hiển thị loading khi đã có dữ liệu
-                      error: (error, _) => ErrorText(
-                        error: error.toString(),
-                      ),
                     );
+
+                    return switch (messages) {
+                      AsyncData(:final value) => RefreshIndicator(
+                          onRefresh: () async =>
+                              ref.invalidate(searchMessagesProvider(Ids)),
+                          child: MessageList(messages: value),
+                        ),
+                      AsyncError(:final error) => ErrorText(
+                          error: error.toString(),
+                        ),
+                      AsyncLoading() => const Loader(),
+                      _ => const SizedBox(),
+                    };
                   },
                 ),
               ),

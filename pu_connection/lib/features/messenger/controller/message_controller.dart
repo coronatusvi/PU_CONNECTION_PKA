@@ -28,10 +28,10 @@ final searchMessageGroupProvider =
 });
 
 final searchMessagesProvider =
-    FutureProvider.family<List<MessageModel>, List<String>>((ref, Ids) async {
-  final messages =
-      await ref.read(messageControllerProvider.notifier).searchMessages(Ids);
-  return messages;
+    FutureProvider.family((ref, List<String> Ids) async {
+  final messages = ref.watch(messageControllerProvider.notifier);
+
+  return messages.searchMessages(Ids);
 });
 
 final getLastMessageProvider = StreamProvider((ref) {
@@ -60,8 +60,27 @@ class ExploreControllerNotifier extends StateNotifier<bool> {
   }
 
   Future<List<MessageModel>> searchMessages(List<String> membersIds) async {
-    final messages = await _messageAPI.searchMessages(membersIds);
-    return messages.map((e) => MessageModel.fromMap(e.data)).toList();
+    List<MessageModel> messageModels = [];
+    try {
+      final messages = await _messageAPI.searchMessages(membersIds);
+
+      // Kiểm tra xem danh sách có phần tử hay không
+      if (messages.isEmpty) {
+        // print("Log cho Controller 1 ==> Danh sách tin nhắn trống");
+        return []; // Hoặc có thể trả về danh sách mặc định nếu cần
+      }
+
+      messageModels =
+          messages.map((e) => MessageModel.fromMap(e.data)).toList();
+
+      // print("Log cho Controller 2 ==> $messageModels"); // Thanh cong
+      return messageModels;
+    } catch (e, stackTrace) {
+      // Xử lý lỗi khi gọi searchMessages
+      print("Error fetching messages: $e");
+      print("Stack trace: $stackTrace");
+      return []; // Hoặc có thể trả về một danh sách mặc định nếu cần
+    }
   }
 
   Future<List<MessageModel>> createMessage(

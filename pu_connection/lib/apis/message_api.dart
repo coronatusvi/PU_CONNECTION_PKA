@@ -141,7 +141,7 @@ class MessageAPI implements IMessageAPI {
         ],
       );
       messages = documentsMessage.documents;
-
+      print("LOG cho API ===> ${messages.length}");
       return messages;
     } catch (e) {
       print('Error fetching messages: $e');

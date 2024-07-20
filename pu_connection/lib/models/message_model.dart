@@ -8,6 +8,7 @@ class MessageModel {
   final List<String> fileIds;
   final int timestamp;
   final String messageType;
+  final String groupId;
 
   const MessageModel({
     required this.uid,
@@ -16,6 +17,7 @@ class MessageModel {
     required this.messageType,
     required this.fileIds,
     required this.timestamp,
+    required this.groupId,
   });
 
   MessageModel copyWith({
@@ -34,6 +36,7 @@ class MessageModel {
       messageText: messageText ?? this.messageText,
       fileIds: fileIds ?? this.fileIds,
       timestamp: timestamp ?? this.timestamp,
+      groupId: groupId ?? this.groupId,
     );
   }
 
@@ -48,13 +51,17 @@ class MessageModel {
   }
 
   factory MessageModel.fromMap(Map<String, dynamic> map) {
+    // print("map: $map");
     return MessageModel(
       uid: map['\$id'] ?? '',
       senderId: map['senderId'] ?? '',
-      messageType: map['messageType'] ?? '',
+      messageType: map['messageText'] ?? '',
       messageText: map['messageText'] ?? '',
-      fileIds: List<String>.from(map['fileIds']),
+      fileIds: map['fileIds'] is String && map['fileIds'].isEmpty
+          ? []
+          : List<String>.from(map['fileIds']),
       timestamp: map['timestamp']?.toInt() ?? 0,
+      groupId: map['groupId'] ?? '',
     );
   }
 
