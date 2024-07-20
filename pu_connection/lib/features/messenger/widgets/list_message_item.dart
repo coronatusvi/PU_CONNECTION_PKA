@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../common/error_page.dart';
-import '../../../common/loading_page.dart';
+import 'dart:io';
+import '../../../common/common.dart';
+import '../../../core/utils.dart';
 import '../../../models/user_models.dart';
 import '../../../theme/pallete.dart';
 import '../../auth/controller/auth_controller.dart';
@@ -23,11 +24,34 @@ class ListMessagesItem extends ConsumerStatefulWidget {
 
 class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
   final TextEditingController _messageController = TextEditingController();
+  List<File> files = [];
 
   @override
   void dispose() {
     _messageController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickFiles() async {
+    files = await pickFiles();
+    setState(() {
+      files = [];
+    });
+  }
+
+  void sendMessage(List<String> Ids) {
+    final message = _messageController.text.trim();
+    if (message.isNotEmpty) {
+      ref.watch(messageControllerProvider.notifier).sendMessage(
+            Ids: Ids,
+            message: message,
+            files: files,
+          );
+      _messageController.clear();
+      setState(() {
+        files = [];
+      });
+    }
   }
 
   @override
@@ -79,15 +103,38 @@ class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
                 ),
               ),
             ),
+            if (files.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    for (var file in files)
+                      Row(
+                        children: [
+                          Text(
+                            'Selected file: ${file.path.split('/').last}',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.clear, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                files.remove(file);
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
                   IconButton(
                     icon: Icon(Icons.attach_file, color: Colors.white),
-                    onPressed: () {
-                      // Function to select and send file
-                    },
+                    onPressed: _pickFiles,
                   ),
                   Expanded(
                     child: TextField(
@@ -106,15 +153,7 @@ class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
                   ),
                   IconButton(
                     icon: Icon(Icons.send, color: Colors.white),
-                    onPressed: () {
-                      final message = _messageController.text.trim();
-                      if (message.isNotEmpty) {
-                        ref
-                            .read(messageControllerProvider.notifier)
-                            .sendMessage(Ids, message);
-                        _messageController.clear();
-                      }
-                    },
+                    onPressed: () => sendMessage(Ids),
                   ),
                 ],
               ),

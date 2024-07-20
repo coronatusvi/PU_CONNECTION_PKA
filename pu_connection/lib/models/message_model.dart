@@ -42,11 +42,12 @@ class MessageModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'uid': uid,
       'senderId': senderId,
       'messageText': messageText,
+      'messageType': messageType,
       'fileIds': fileIds,
       'timestamp': timestamp,
+      'groupId': groupId,
     };
   }
 

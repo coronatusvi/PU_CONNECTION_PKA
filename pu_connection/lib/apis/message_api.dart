@@ -18,7 +18,7 @@ final messageAPIProvider = Provider((ref) {
 
 abstract class IMessageAPI {
   FutureEitherVoid createMessage(
-      List<String> Ids, String Message, File? filePath);
+      List<String> Ids, String Message, List<String> files);
   FutureEitherVoid createMessageGroup(MessageGroupModel messageGroup);
   Future<List<Document>> searchMessageGroup(String currentUserId);
   Future<List<Document>> searchMessages(List<String> Ids);
@@ -130,7 +130,7 @@ class MessageAPI implements IMessageAPI {
 
   @override
   FutureEitherVoid createMessage(
-      List<String> Ids, String Message, File? filePath) async {
+      List<String> Ids, String Message, List<String> files) async {
     List<Document> messages = [];
     try {
       final documents = await _db.listDocuments(
@@ -149,7 +149,7 @@ class MessageAPI implements IMessageAPI {
 
       if (filteredGroups.isEmpty) {
         MessageGroupModel messageGroup = MessageGroupModel(
-          id: '',
+          id: "",
           members: Ids,
           groupLeader: Ids.first,
           createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -162,18 +162,24 @@ class MessageAPI implements IMessageAPI {
           data: messageGroup.toMap(),
         );
       }
+// Den doan nay van giu nguyen vi ca yeu cau tren
 
       String firstGroupId = filteredGroups.first.id;
-
-      final documentsMessage = await _db.listDocuments(
-        databaseId: AppwriteConstants.databaseId,
-        collectionId: AppwriteConstants.messengersCollection,
-        queries: [
-          Query.equal('groupId', firstGroupId),
-        ],
+      MessageModel messageCreate = MessageModel(
+        uid: '',
+        groupId: firstGroupId,
+        senderId: Ids.first,
+        messageText: Message,
+        fileIds: files,
+        messageType: "like",
+        timestamp: DateTime.now().millisecondsSinceEpoch,
       );
-      messages = documentsMessage.documents;
-      print("LOG cho API ===> ${messages.length}");
+
+      await _db.createDocument(
+          databaseId: AppwriteConstants.databaseId,
+          collectionId: AppwriteConstants.messengersCollection,
+          documentId: ID.unique(),
+          data: messageCreate.toMap());
     } catch (e) {
       print('Error fetching messages: $e');
     }

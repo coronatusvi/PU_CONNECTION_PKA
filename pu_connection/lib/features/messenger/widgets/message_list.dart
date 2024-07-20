@@ -14,7 +14,7 @@ class MessageList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView.builder(
-      reverse: true,
+      reverse: false,
       itemCount: messages.length,
       itemBuilder: (BuildContext context, int index) {
         final message = messages[index];

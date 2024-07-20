@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pu_connnection/models/message_model.dart';
 
 import '../../../apis/message_api.dart';
+import '../../../apis/storage_api.dart';
 import '../../../apis/user_api.dart';
 import '../../../models/user_models.dart';
 
@@ -12,6 +13,7 @@ final messageControllerProvider = StateNotifierProvider(
     return ExploreControllerNotifier(
       userAPI: ref.watch(userAPIProvider),
       messageAPI: ref.watch(messageAPIProvider),
+      storageAPI: ref.watch(storaegAPIProvider),
     );
   },
 );
@@ -42,11 +44,14 @@ final getLastMessageProvider = StreamProvider((ref) {
 class ExploreControllerNotifier extends StateNotifier<bool> {
   final UserAPI _userAPI;
   final MessageAPI _messageAPI;
+  final StorageAPI _storageAPI;
   ExploreControllerNotifier({
+    required StorageAPI storageAPI,
     required UserAPI userAPI,
     required MessageAPI messageAPI,
   })  : _userAPI = userAPI,
         _messageAPI = messageAPI,
+        _storageAPI = storageAPI,
         super(false);
 
   Future<List<UserModel>> searchUser(String name) async {
@@ -89,7 +94,12 @@ class ExploreControllerNotifier extends StateNotifier<bool> {
     return messages.map((e) => MessageModel.fromMap(e.data)).toList();
   }
 
-  void sendMessage(List<String> Ids, String message) async {
-    await _messageAPI.createMessage(Ids, message, null);
+  void sendMessage({
+    required List<String> Ids,
+    required String message,
+    required List<File> files,
+  }) async {
+    List<String> filesUrl = await _storageAPI.uploadImage(files);
+    await _messageAPI.createMessage(Ids, message, filesUrl);
   }
 }

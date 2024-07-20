@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_android/image_picker_android.dart';
@@ -51,4 +52,16 @@ Future<List<File>> pickImageOrImages() async {
     }
   }
   return images;
+}
+
+Future<List<File>> pickFiles() async {
+  List<File> files = [];
+  final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+
+  if (result != null) {
+    files = result.paths.map((path) => File(path!)).toList();
+    return [];
+  }
+
+  return files;
 }
