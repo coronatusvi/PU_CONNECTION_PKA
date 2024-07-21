@@ -55,13 +55,9 @@ Future<List<File>> pickImageOrImages() async {
 }
 
 Future<List<File>> pickFiles() async {
-  List<File> files = [];
   final result = await FilePicker.platform.pickFiles(allowMultiple: true);
-
-  if (result != null) {
-    files = result.paths.map((path) => File(path!)).toList();
-    return [];
+  if (result != null && result.files.isNotEmpty) {
+    return result.files.map((file) => File(file.path!)).toList();
   }
-
-  return files;
+  return [];
 }

@@ -29,5 +29,5 @@ class Pallete {
 
   //lightmode
   static const Color yellow500 = Color.fromRGBO(254, 240, 205, 1);
-  static const Color yellow800 = Color.fromRGBO(214, 167, 48, 1);
+  static const Color yellow800 = Color.fromRGBO(255, 230, 0, 1);
 }

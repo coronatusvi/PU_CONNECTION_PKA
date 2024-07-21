@@ -33,9 +33,9 @@ class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
   }
 
   Future<void> _pickFiles() async {
-    files = await pickFiles();
+    List<File> selectedFiles = await pickFiles();
     setState(() {
-      files = [];
+      files = selectedFiles; // Lưu các file đã chọn
     });
   }
 
@@ -59,6 +59,7 @@ class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
     Size size = MediaQuery.of(context).size;
     String currentUserId = ref.watch(currentUserDetailsProvider).value!.uid;
     List<String> Ids = [currentUserId, widget.userModel.uid];
+
     return Scaffold(
       backgroundColor: Pallete.blackColor,
       body: SizedBox(
@@ -111,9 +112,11 @@ class _ListMessagesItemState extends ConsumerState<ListMessagesItem> {
                     for (var file in files)
                       Row(
                         children: [
-                          Text(
-                            'Selected file: ${file.path.split('/').last}',
-                            style: TextStyle(color: Colors.white),
+                          Expanded(
+                            child: Text(
+                              'Selected file: ${file.path.split('/').last}',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                           IconButton(
                             icon: Icon(Icons.clear, color: Colors.white),

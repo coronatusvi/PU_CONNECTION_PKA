@@ -199,7 +199,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                                     alignment: Alignment.topRight,
                                     child: RoundedSmallButton(
                                       backgroundColor:
-                                          Color.fromARGB(255, 194, 165, 0),
+                                          Color.fromARGB(255, 255, 217, 0),
                                       onTap: onSignUp,
                                       text: 'Sign Up',
                                     ),
